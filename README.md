@@ -7,7 +7,7 @@ This repository contains a cross-platform GUI for controlling and observing stat
 To build, you'll need a handful of `Qt` packages available. On `Ubuntu` or similar, you can install these with:
 
 ```bash
-sudo apt install qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-dialogs
+sudo apt install qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-dialogs qml-module-qt-labs-platform
 ```
 
 Then build and run:

@@ -3,6 +3,8 @@
 
 int32_t main(int32_t argc, char *argv[])
 {
+    Q_INIT_RESOURCE(resources);
+
     QApplication app(argc, argv);
 
     QQmlApplicationEngine engine;

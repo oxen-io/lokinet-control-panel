@@ -3,4 +3,7 @@
         <file>main.qml</file>
         <file>TestPanel.qml</file>
     </qresource>
+    <qresource prefix="/">
+        <file>res/images/icon.png</file>
+    </qresource>
 </RCC>
