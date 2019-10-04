@@ -7,12 +7,13 @@ import Qt.labs.platform 1.1
 ApplicationWindow {
     id: window
     title: qsTr("Hello World")
-    width: 640
-    height: 480
     visible: false
+    flags: Qt.FramelessWindowHint
 
-    TestPanel {
-        id: content
+    color: "#22252E"
+
+    ControlPanel {
+        id: controlPanel
     }
 
     // TODO:
@@ -53,3 +54,8 @@ ApplicationWindow {
     }
 
 }
+
+/*##^## Designer {
+    D{i:0;autoSize:true;height:480;width:640}
+}
+ ##^##*/

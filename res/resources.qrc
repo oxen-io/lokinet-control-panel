@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="res/">
         <file>qml/main.qml</file>
-        <file>qml/TestPanel.qml</file>
+        <file>qml/ControlPanel.qml</file>
     </qresource>
     <qresource prefix="res/">
         <file>images/icon.png</file>
