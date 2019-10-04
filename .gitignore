@@ -1,7 +1,4 @@
 # build artifacts
-Makefile
-.qmake.stash
-*_qml.cpp
-lokicp
+build/
 
 tags

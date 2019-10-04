@@ -13,7 +13,9 @@ sudo apt install qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-
 Then build and run:
 
 ```bash
-qmake .
+mkdir build
+cd build
+qmake ../lokicp.pro "CONFIG+=debug"
 make
 ./lokicp
 ```
