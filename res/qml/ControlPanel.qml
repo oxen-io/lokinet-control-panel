@@ -6,19 +6,19 @@ ColumnLayout {
     anchors.fill: parent
     spacing: 1
 
+    property var isConnected: true
+
     // other colors
     // strong text: #FAF9FA
     // weak text: #7D8585
 
     ConnectionHeaderPanel {
-        connected: false
+        connected: isConnected
     }
 
     // placeholder for main on/off button
-    Rectangle {
-        color: "#323642"
-        Layout.preferredHeight: 199
-        Layout.preferredWidth: 300
+    ConnectionButtonPanel {
+        connected: isConnected
     }
 
     // placeholder for address text panel
