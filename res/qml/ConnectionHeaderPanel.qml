@@ -18,7 +18,7 @@ Container {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         text: (connected ? "CONNECTED" : "DISCONNECTED")
-        font.family: "helvetica"
+        font.family: "Ubuntu"
         color: "#FAF9FA"
         font.pointSize: 15
     }

@@ -1,12 +1,14 @@
 <RCC>
     <qresource prefix="res/">
+        <!-- QML files -->
         <file>qml/main.qml</file>
         <file>qml/ControlPanel.qml</file>
         <file>qml/ConnectionHeaderPanel.qml</file>
         <file>qml/ConnectionButtonPanel.qml</file>
         <file>qml/AddressPanel.qml</file>
-    </qresource>
-    <qresource prefix="res/">
+        <file>qml/RouteStatsPanel.qml</file>
+
+        <!-- images -->
         <file>images/icon.png</file>
         <file>images/connected_indicator.png</file>
         <file>images/disconnected_indicator.png</file>

@@ -8,6 +8,8 @@ ColumnLayout {
 
     property var isConnected: true
     property var lokiAddress: "7ai911bi38ni95u3kzgn9yfz1etos3uso7etrapb7josdjgq6cio.loki"
+    property var numPathsBuilt: 10
+    property var numRoutersKnown: 652
 
     // other colors
     // strong text: #FAF9FA
@@ -27,11 +29,10 @@ ColumnLayout {
         address: lokiAddress
     }
 
-    // placeholder for paths / routers text panel
-    Rectangle {
-        color: "#323642"
-        Layout.preferredHeight: 69
-        Layout.preferredWidth: 300
+    // router stats
+    RouteStatsPanel {
+        paths: numPathsBuilt
+        routers: numRoutersKnown
     }
 
     // placeholder for performance graph panel
