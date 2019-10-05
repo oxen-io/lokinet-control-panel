@@ -10,6 +10,8 @@ ColumnLayout {
     property var lokiAddress: "7ai911bi38ni95u3kzgn9yfz1etos3uso7etrapb7josdjgq6cio.loki"
     property var numPathsBuilt: 10
     property var numRoutersKnown: 652
+    property var downloadUsage: (7 * (2^20))
+    property var uploadUsage: (1 * (2^20))
 
     // other colors
     // strong text: #FAF9FA
@@ -42,11 +44,10 @@ ColumnLayout {
         Layout.preferredWidth: 300
     }
 
-    // placeholder for usage panel
-    Rectangle {
-        color: "#323642"
-        Layout.preferredHeight: 79
-        Layout.preferredWidth: 300
+    // usage
+    UsagePanel {
+        down: downloadUsage
+        up: uploadUsage
     }
 
     // placeholder / empty space
