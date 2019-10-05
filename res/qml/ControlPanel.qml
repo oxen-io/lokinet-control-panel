@@ -1,15 +1,17 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.11
+import QtQuick.Controls 2.5
 
 ColumnLayout {
     anchors.fill: parent
     spacing: 1
 
-    // placeholder for header
-    Rectangle {
-        color: "#55CE53"
-        Layout.preferredHeight: 59
-        Layout.preferredWidth: 300
+    // other colors
+    // strong text: #FAF9FA
+    // weak text: #7D8585
+
+    ConnectionHeaderPanel {
+        connected: false
     }
 
     // placeholder for main on/off button

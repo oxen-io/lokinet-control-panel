@@ -2,6 +2,7 @@
     <qresource prefix="res/">
         <file>qml/main.qml</file>
         <file>qml/ControlPanel.qml</file>
+        <file>qml/ConnectionHeaderPanel.qml</file>
     </qresource>
     <qresource prefix="res/">
         <file>images/icon.png</file>
