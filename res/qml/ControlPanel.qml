@@ -7,6 +7,7 @@ ColumnLayout {
     spacing: 1
 
     property var isConnected: true
+    property var lokiAddress: "7ai911bi38ni95u3kzgn9yfz1etos3uso7etrapb7josdjgq6cio.loki"
 
     // other colors
     // strong text: #FAF9FA
@@ -21,11 +22,9 @@ ColumnLayout {
         connected: isConnected
     }
 
-    // placeholder for address text panel
-    Rectangle {
-        color: "#323642"
-        Layout.preferredHeight: 79
-        Layout.preferredWidth: 300
+    // address panel
+    AddressPanel {
+        address: lokiAddress
     }
 
     // placeholder for paths / routers text panel

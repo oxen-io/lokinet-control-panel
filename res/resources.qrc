@@ -4,6 +4,7 @@
         <file>qml/ControlPanel.qml</file>
         <file>qml/ConnectionHeaderPanel.qml</file>
         <file>qml/ConnectionButtonPanel.qml</file>
+        <file>qml/AddressPanel.qml</file>
     </qresource>
     <qresource prefix="res/">
         <file>images/icon.png</file>
