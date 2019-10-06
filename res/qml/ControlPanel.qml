@@ -57,12 +57,8 @@ ColumnLayout {
         Layout.preferredWidth: 300
     }
 
-    // placeholder for dismiss-button panel
-    Rectangle {
-        color: "#323642"
-        Layout.preferredHeight: 39
-        Layout.preferredWidth: 300
-    }
+    // dismiss panel
+    DismissPanel { }
 
 }
 
