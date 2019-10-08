@@ -23,6 +23,16 @@ public:
     StatFetcher();
     ~StatFetcher();
 
+signals:
+    
+    /**
+     * Emitted when a JSON-RPC seponse containing new status information is
+     * received from the server
+     *
+     * @param payload is the payload received from the server
+     */
+    void statusAvailable(const QByteArray& payload);
+
 private:
 
     QTimer* m_timer;

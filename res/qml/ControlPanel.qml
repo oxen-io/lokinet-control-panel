@@ -6,7 +6,7 @@ ColumnLayout {
     anchors.fill: parent
     spacing: 1
 
-    property var isConnected: true
+    property var isConnected: false
     property var lokiAddress: "7ai911bi38ni95u3kzgn9yfz1etos3uso7etrapb7josdjgq6cio.loki"
     property var numPathsBuilt: 10
     property var numRoutersKnown: 652
@@ -60,5 +60,14 @@ ColumnLayout {
     // dismiss panel
     DismissPanel { }
 
+
+    Component.onCompleted: {
+        statFetcher.statusAvailable.connect(handleStats);
+    }
+
+    function handleStats(payload) {
+        console.log("Updated, payload: "+ payload);
+        isConnected = true;
+    }
 }
 

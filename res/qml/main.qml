@@ -4,6 +4,8 @@ import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 import Qt.labs.platform 1.1
 
+import StatFetcher 1.0
+
 ApplicationWindow {
     id: window
     title: qsTr("Hello World")
@@ -51,6 +53,10 @@ ApplicationWindow {
             // middle click
             console.log(reason);
         }
+    }
+
+    StatFetcher {
+        id: statFetcher
     }
 
 }

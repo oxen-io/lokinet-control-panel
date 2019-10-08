@@ -14,7 +14,7 @@ StatFetcher::StatFetcher() {
                 "params": {},
                 "id": "empty"
             })JSON";
-        m_httpClient.postJson(LOKI_DAEMON_URL, jsonRpcPayload, [](QNetworkReply* reply) {
+        m_httpClient.postJson(LOKI_DAEMON_URL, jsonRpcPayload, [=](QNetworkReply* reply) {
 
             uint64_t contentLength = reply->header(QNetworkRequest::ContentLengthHeader).toULongLong();
             int32_t status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -23,11 +23,11 @@ StatFetcher::StatFetcher() {
             qDebug() << "HTTP Response: " << status << statusMessage << "(size: " << contentLength <<")";
 
             QByteArray data = reply->readAll();
-            qDebug() << "Data: " << data;
+            emit statusAvailable(data);
         });
     });
     // m_timer->setSingleShot(true);
-    m_timer->start(10000);
+    m_timer->start(3000);
 }
 
 // StatFetcher Destructor
