@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 
 #include "QmlClipboardAdapter.hpp"
+#include "StatFetcher.hpp"
 
 int32_t main(int32_t argc, char *argv[])
 {
@@ -13,6 +14,8 @@ int32_t main(int32_t argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/res/qml/main.qml")));
+
+    StatFetcher statFetcher;
 
     return app.exec();
 }
