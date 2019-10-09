@@ -63,6 +63,9 @@ ColumnLayout {
 
     Component.onCompleted: {
         statFetcher.statusAvailable.connect(handleStats);
+        statFetcher.pollImmediately();
+        statFetcher.setIntervalMs(3000);
+        statFetcher.startPolling();
     }
 
     function handleStats(payload) {

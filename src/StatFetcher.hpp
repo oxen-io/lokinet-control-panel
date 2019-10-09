@@ -18,10 +18,35 @@ class StatFetcher : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(StatFetcher);
 
+    static constexpr int DEFAULT_POLLING_INTERVAL_MS = 3000;
+
 public:
 
     StatFetcher();
     ~StatFetcher();
+
+    /**
+     * Set the polling interval
+     *
+     * @param intervalMs is the new interval in milliseconds
+     */
+    Q_INVOKABLE void setIntervalMs(int intervalMs);
+
+    /**
+     * Start the periodic polling
+     */
+    Q_INVOKABLE void startPolling();
+
+    /**
+     * Stop the periodic polling
+     */
+    Q_INVOKABLE void stopPolling();
+
+    /**
+     * Poll immediately. This polls as soon as the underlying QTimer is able
+     * to fire its *timeout* signal. This does not affect periodic polling.
+     */
+    Q_INVOKABLE void pollImmediately();
 
 signals:
     
@@ -34,6 +59,11 @@ signals:
     void statusAvailable(const QByteArray& payload);
 
 private:
+
+    /**
+     * Poll the Loki daemon.
+     */
+    void pollDaemon();
 
     QTimer* m_timer;
     HttpClient m_httpClient;
