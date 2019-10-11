@@ -7,11 +7,12 @@ ColumnLayout {
     spacing: 1
 
     property var isConnected: false
-    property var lokiAddress: "7ai911bi38ni95u3kzgn9yfz1etos3uso7etrapb7josdjgq6cio.loki"
-    property var numPathsBuilt: 10
-    property var numRoutersKnown: 652
-    property var downloadUsage: (7 * (2^20))
-    property var uploadUsage: (1 * (2^20))
+    property var isRunning: false
+    property var lokiAddress: ""
+    property var numPathsBuilt: 0
+    property var numRoutersKnown: 0
+    property var downloadUsage: 0
+    property var uploadUsage: 0
 
     // other colors
     // strong text: #FAF9FA
@@ -19,11 +20,13 @@ ColumnLayout {
 
     ConnectionHeaderPanel {
         connected: isConnected
+        running: isRunning
     }
 
     // placeholder for main on/off button
     ConnectionButtonPanel {
         connected: isConnected
+        running: isRunning
     }
 
     // address panel
@@ -69,8 +72,27 @@ ColumnLayout {
     }
 
     function handleStats(payload) {
-        console.log("Updated, payload: "+ payload);
+        const stats = JSON.parse(payload);
+
         isConnected = true;
+
+        try {
+            isRunning = stats.result.running;
+        } catch (err) {
+            console.log("Couldn't pull running status of payload", err);
+        }
+
+        try {
+            lokiAddress = stats.result.services.default.identity;
+        } catch (err) {
+            console.log("Couldn't pull loki address out of payload", err);
+        }
+
+        try {
+            numRoutersKnown = stats.result.numNodesKnown;
+        } catch (err) {
+            console.log("Couldn't pull numNodesKnown out of payload", err);
+        }
     }
 }
 

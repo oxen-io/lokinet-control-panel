@@ -41,7 +41,7 @@ void StatFetcher::pollImmediately() {
 void StatFetcher::pollDaemon() {
     const std::string jsonRpcPayload = R"JSON({
             "jsonrpc": "2.0",
-            "method": "llarp.admin.status",
+            "method": "llarp.admin.dumpstate",
             "params": {},
             "id": "empty"
         })JSON";

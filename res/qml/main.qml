@@ -9,7 +9,7 @@ import StatFetcher 1.0
 ApplicationWindow {
     id: window
     title: qsTr("Hello World")
-    visible: false
+    visible: true
     flags: Qt.FramelessWindowHint
 
     color: "#22252E"
@@ -27,7 +27,7 @@ ApplicationWindow {
         id: systray
         tooltip: qsTr("Loki Network")
         visible: true
-        icon.source: "qrc:/res/images/icon.png"
+        icon.source: "qrc:/images/icon.png"
 
         menu: Menu {
             enabled: false

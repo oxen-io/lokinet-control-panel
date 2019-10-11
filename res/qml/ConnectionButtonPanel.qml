@@ -4,6 +4,7 @@ import QtQuick.Controls 2.5
 
 Container {
     property var connected: false
+    property var running: false
 
     Layout.preferredHeight: 199
     Layout.preferredWidth: 300
