@@ -3,12 +3,14 @@ import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.5
 import QtGraphicalEffects 1.12
 
+import "."
+
 Container {
     id: connectionButtonPanel
     property var connected: false
     property var running: false
 
-    property color tint: "#000000"
+    property color tint: null
     property bool hovering: false
 
     // bind properties that affect color to updateColor(), which will
@@ -22,7 +24,7 @@ Container {
 
     contentItem: Rectangle {
         id: backgroundRect
-        color: "#323642"
+        color: Style.panelBackgroundColor
     }
 
     // static outline
@@ -69,13 +71,13 @@ Container {
 
         let base = "";
         if (connected && running) {
-            base = "#55CE53";
+            base = Style.highlightAffirmative
         } else if (connected) {
             // connected, but not running
-            base = "#CECC53";
+            base = Style.highlightNeutral
         } else {
             // not connected
-            base = "#CE5355";
+            base = Style.highlightNegative
         }
         tint = Qt.lighter(base, lighter);
     }

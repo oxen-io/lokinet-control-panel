@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.5
 
 import QClipboard 1.0
+import "."
 
 Container {
     property var address: "unknown"
@@ -12,7 +13,7 @@ Container {
 
     contentItem: Rectangle {
         id: connectedStatusRect
-        color: "#323642"
+        color: Style.panelBackgroundColor
     }
 
     Text {
@@ -26,7 +27,7 @@ Container {
         y: 18
         text: "Lokinet Address"
         font.family: "Ubuntu"
-        color: "#7D8585"
+        color: Style.weakTextColor
         font.pointSize: 11
         font.capitalization: Font.AllUppercase
     }

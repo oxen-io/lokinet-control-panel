@@ -3,13 +3,14 @@ import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.5
 
 import QClipboard 1.0
+import "."
 
 Container {
     Layout.preferredHeight: 39
     Layout.preferredWidth: 300
 
     contentItem: Rectangle {
-        color: "#323642"
+        color: Style.panelBackgroundColor
     }
 
     Image {

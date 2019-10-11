@@ -2,6 +2,8 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.5
 
+import "."
+
 ColumnLayout {
     anchors.fill: parent
     spacing: 1
@@ -13,10 +15,6 @@ ColumnLayout {
     property var numRoutersKnown: 0
     property var downloadUsage: 0
     property var uploadUsage: 0
-
-    // other colors
-    // strong text: #FAF9FA
-    // weak text: #7D8585
 
     ConnectionHeaderPanel {
         connected: isConnected
@@ -42,7 +40,7 @@ ColumnLayout {
 
     // placeholder for performance graph panel
     Rectangle {
-        color: "#323642"
+        color: Style.panelBackgroundColor
         Layout.preferredHeight: 159
         Layout.preferredWidth: 300
     }
@@ -55,7 +53,7 @@ ColumnLayout {
 
     // placeholder / empty space
     Rectangle {
-        color: "#323642"
+        color: Style.panelBackgroundColor
         Layout.preferredHeight: 79
         Layout.preferredWidth: 300
     }

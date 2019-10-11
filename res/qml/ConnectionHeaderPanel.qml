@@ -2,11 +2,13 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.5
 
+import "."
+
 Container {
     property var connected: false
     property var running: false
 
-    property color tint: "#000000"
+    property color tint: null
     property var title: ""
 
     // bind properties that affect color to updateColor(), which will
@@ -28,26 +30,26 @@ Container {
         anchors.horizontalCenter: parent.horizontalCenter
         text: title
         font.family: "Ubuntu"
-        color: "#FAF9FA"
+        color: Style.strongTextColor
         font.pointSize: 15
     }
 
     function updateState() {
 
-        let newColor = "#000000";
+        let newColor = null;
         let newTitle = "";
 
         if (connected && running) {
             newTitle = "CONNECTED";
-            newColor = "#55CE53";
+            newColor = Style.highlightAffirmative
         } else if (connected) {
             // connected, but not running
             newTitle = "STOPPED";
-            newColor = "#CECC53";
+            newColor = Style.highlightNeutral
         } else {
             // not connected
             newTitle = "DISCONNECTED";
-            newColor = "#CE5355";
+            newColor = Style.highlightNegative
         }
 
         if (newColor !== tint) tint = newColor;

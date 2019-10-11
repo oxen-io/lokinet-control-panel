@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.5
 
 import QClipboard 1.0
+import "."
 
 Container {
     property var down: 0
@@ -12,7 +13,7 @@ Container {
     Layout.preferredWidth: 300
 
     contentItem: Rectangle {
-        color: "#323642"
+        color: Style.panelBackgroundColor
     }
 
     // "Usage" label
@@ -21,7 +22,7 @@ Container {
         y: 10
         text: "Usage"
         font.family: "Ubuntu"
-        color: "#7D8585"
+        color: Style.weakTextColor
         font.pointSize: 11
         font.capitalization: Font.AllUppercase
     }
@@ -32,7 +33,7 @@ Container {
         y: 32
         text: "Download"
         font.family: "Ubuntu Condensed"
-        color: "#FAF9FA"
+        color: Style.strongTextColor
         font.pointSize: 11
     }
     Text {
@@ -40,7 +41,7 @@ Container {
         y: 54
         text: ""+ (down / (2^20)) +" MB" // TODO: pick appropriate scale
         font.family: "Ubuntu"
-        color: "#FAF9FA"
+        color: Style.strongTextColor
         font.pointSize: 11
     }
 
@@ -50,7 +51,7 @@ Container {
         y: 32
         text: "Upload"
         font.family: "Ubuntu Condensed"
-        color: "#FAF9FA"
+        color: Style.strongTextColor
         font.pointSize: 11
     }
     Text {
@@ -58,7 +59,7 @@ Container {
         y: 54
         text: ""+ (up / (2^20)) +" MB" // TODO: pick appropriate scale
         font.family: "Ubuntu"
-        color: "#FAF9FA"
+        color: Style.strongTextColor
         font.pointSize: 11
     }
 

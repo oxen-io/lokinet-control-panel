@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 import Qt.labs.platform 1.1
 
 import StatFetcher 1.0
+import "."
 
 ApplicationWindow {
     id: window
@@ -12,7 +13,7 @@ ApplicationWindow {
     visible: true
     flags: Qt.FramelessWindowHint
 
-    color: "#22252E"
+    color: Style.panelSeparatorColor
 
     ControlPanel {
         id: controlPanel

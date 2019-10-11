@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.5
 
 import QClipboard 1.0
+import "."
 
 Container {
     property var paths: 0
@@ -12,7 +13,7 @@ Container {
     Layout.preferredWidth: 300
 
     contentItem: Rectangle {
-        color: "#323642"
+        color: Style.panelBackgroundColor
     }
 
     // "Paths built"
@@ -25,7 +26,7 @@ Container {
         y: 18
         text: "Paths built"
         font.family: "Ubuntu Condensed"
-        color: "#7D8585"
+        color: Style.weakTextColor
         font.pointSize: 11
         font.capitalization: Font.AllUppercase
     }
@@ -38,7 +39,7 @@ Container {
         y: 40
         text: ""+ paths
         font.family: "Ubuntu"
-        color: "#FAF9FA"
+        color: Style.strongTextColor
         font.pointSize: 11
     }
 
@@ -52,7 +53,7 @@ Container {
         y: 18
         text: "Lokinet routers"
         font.family: "Ubuntu Condensed"
-        color: "#7D8585"
+        color: Style.weakTextColor
         font.pointSize: 11
         font.capitalization: Font.AllUppercase
     }
@@ -65,7 +66,7 @@ Container {
         y: 40
         text: ""+ routers
         font.family: "Ubuntu"
-        color: "#FAF9FA"
+        color: Style.strongTextColor
         font.pointSize: 11
     }
 }
