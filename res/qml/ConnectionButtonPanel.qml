@@ -29,7 +29,7 @@ Container {
     Image {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "qrc:/res/images/connected_indicator_outline.png"
+        source: "qrc:/res/images/connection_indicator_outline.png"
     }
 
     // white connection image; we will colorize with LevelAdjust to indicate
@@ -39,7 +39,7 @@ Container {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         smooth: true
-        source: "qrc:/res/images/connected_indicator.png"
+        source: "qrc:/res/images/connection_indicator.png"
     }
 
     // colorize connectionIndicator
