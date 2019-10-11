@@ -74,25 +74,38 @@ ColumnLayout {
     function handleStats(payload) {
         const stats = JSON.parse(payload);
 
-        isConnected = true;
+        // calculate our new state in local scope before updating global scope
+        let newConnected = true;
+        let newRunning = false;
+        let newLokiAddress = "";
+        let newNumRouters = 0;
 
         try {
-            isRunning = stats.result.running;
+            newRunning = stats.result.running;
         } catch (err) {
             console.log("Couldn't pull running status of payload", err);
         }
 
         try {
-            lokiAddress = stats.result.services.default.identity;
+            newLokiAddress = stats.result.services.default.identity;
         } catch (err) {
             console.log("Couldn't pull loki address out of payload", err);
         }
 
         try {
-            numRoutersKnown = stats.result.numNodesKnown;
+            newNumRouters = stats.result.numNodesKnown;
         } catch (err) {
             console.log("Couldn't pull numNodesKnown out of payload", err);
         }
+
+        // only update global state if there is actually a change.
+        // this prevents propagating state change events when there aren't
+        // really changes in the first place
+        if (newConnected !== isConnected) isConnected = newConnected;
+        if (newRunning !== isRunning) isRunning = newRunning;
+        if (newLokiAddress !== lokiAddress) lokiAddress = newLokiAddress;
+        if (newNumRouters !== numRoutersKnown) numRoutersKnown = newNumRouters;
+
     }
 }
 

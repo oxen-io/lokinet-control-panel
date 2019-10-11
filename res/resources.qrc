@@ -13,7 +13,7 @@
         <!-- images -->
         <file>images/icon.png</file>
         <file>images/connected_indicator.png</file>
-        <file>images/disconnected_indicator.png</file>
+        <file>images/connected_indicator_outline.png</file>
         <file>images/up_chevron.png</file>
     </qresource>
 </RCC>
