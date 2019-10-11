@@ -55,8 +55,10 @@ signals:
      * received from the server
      *
      * @param payload is the payload received from the server
+     * @param error is a QNetworkReply::NetworkError enum representing the
+     *              error, if any
      */
-    void statusAvailable(const QByteArray& payload);
+    void statusAvailable(const QByteArray& payload, QNetworkReply::NetworkError error);
 
 private:
 

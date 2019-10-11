@@ -69,31 +69,41 @@ ColumnLayout {
         statFetcher.startPolling();
     }
 
-    function handleStats(payload) {
-        const stats = JSON.parse(payload);
+    function handleStats(payload, error) {
+        let stats = null;
+        
+        if (! error) {
+            try {
+                stats = JSON.parse(payload);
+            } catch (err) {
+                console.log("Couldn't parse JSON-RPC payload", err);
+            }
+        }
 
         // calculate our new state in local scope before updating global scope
-        let newConnected = true;
+        let newConnected = (! error && stats != null);
         let newRunning = false;
         let newLokiAddress = "";
         let newNumRouters = 0;
 
-        try {
-            newRunning = stats.result.running;
-        } catch (err) {
-            console.log("Couldn't pull running status of payload", err);
-        }
+        if (! error) {
+            try {
+                newRunning = stats.result.running;
+            } catch (err) {
+                console.log("Couldn't pull running status of payload", err);
+            }
 
-        try {
-            newLokiAddress = stats.result.services.default.identity;
-        } catch (err) {
-            console.log("Couldn't pull loki address out of payload", err);
-        }
+            try {
+                newLokiAddress = stats.result.services.default.identity;
+            } catch (err) {
+                console.log("Couldn't pull loki address out of payload", err);
+            }
 
-        try {
-            newNumRouters = stats.result.numNodesKnown;
-        } catch (err) {
-            console.log("Couldn't pull numNodesKnown out of payload", err);
+            try {
+                newNumRouters = stats.result.numNodesKnown;
+            } catch (err) {
+                console.log("Couldn't pull numNodesKnown out of payload", err);
+            }
         }
 
         // only update global state if there is actually a change.

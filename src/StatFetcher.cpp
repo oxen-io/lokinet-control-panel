@@ -46,14 +46,9 @@ void StatFetcher::pollDaemon() {
             "id": "empty"
         })JSON";
     m_httpClient.postJson(LOKI_DAEMON_URL, jsonRpcPayload, [=](QNetworkReply* reply) {
-
-        uint64_t contentLength = reply->header(QNetworkRequest::ContentLengthHeader).toULongLong();
-        int32_t status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        QString statusMessage = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
-
-        qDebug() << "HTTP Response: " << status << statusMessage << "(size: " << contentLength <<")";
-
-        QByteArray data = reply->readAll();
-        emit statusAvailable(data);
+        if (reply->error()) {
+            qDebug() << "JSON-RPC error: " << reply->error();
+        }
+        emit statusAvailable(reply->readAll(), reply->error());
     });
 }

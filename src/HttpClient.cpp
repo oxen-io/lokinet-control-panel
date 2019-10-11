@@ -41,7 +41,7 @@ void HttpClient::postJson(const std::string& url, const std::string& payload, Re
     QNetworkRequest request;
     request.setUrl(QUrl(url.c_str()));
 
-    qDebug() << "POSTing to " << url.c_str();
+    // qDebug() << "POSTing to " << url.c_str();
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QNetworkReply* reply = m_networkManager->post(request, QByteArray(payload.c_str()));
