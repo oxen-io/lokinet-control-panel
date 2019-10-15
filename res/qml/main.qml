@@ -10,8 +10,8 @@ import "."
 
 ApplicationWindow {
     id: window
-    title: qsTr("Hello World")
-    visible: true
+    title: qsTr("Lokinet Control Panel")
+    visible: false
     flags: Qt.FramelessWindowHint
 
     color: Style.panelSeparatorColor
@@ -29,7 +29,7 @@ ApplicationWindow {
         id: systray
         tooltip: qsTr("Loki Network")
         visible: true
-        icon.source: "qrc:/images/icon.png"
+        icon.source: "qrc:/res/images/icon.png"
 
         menu: Menu {
             enabled: false
