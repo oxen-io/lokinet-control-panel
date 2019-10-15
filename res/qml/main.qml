@@ -29,11 +29,22 @@ ApplicationWindow {
         id: controlPanel
     }
 
-    // TODO:
-    //  1) the "activated" signal doesn't seem to be firing in most cases, so we have a workaround
-    //     that provides a "show" menu item.
-    //  2) the provided menu shows on left-click; we would prefer to launch the control panel window
-    //     on left click (and show the menu only on right-click).
+    function display() {
+        // attempt to position at the system tray icon
+        // TODO: need to be more intelligent about this:
+        // 1) not all platforms provide proper geometry (return 0,0)
+        // 2) task bars can be in many different orientations
+        const rect = systray.geometry;
+        console.log("icon at: "+ rect.x + ", "+ rect.y);
+        window.x = rect.x - (window.width - 10);
+        window.y = rect.y - (window.height - 10);
+
+        window.show();
+        window.raise();
+        window.requestActivate();
+
+    }
+
     SystemTrayIcon {
         id: systray
         tooltip: qsTr("Loki Network")
@@ -41,14 +52,13 @@ ApplicationWindow {
         icon.source: "qrc:/res/images/icon.png"
 
         menu: Menu {
-            enabled: false
+            id: systrayMenu
+            enabled: true
 
             MenuItem {
                 text: qsTr("Show")
                 onTriggered: {
-                    window.show();
-                    window.raise();
-                    window.requestActivate();
+                    window.display();
                 }
             }
             MenuItem {
@@ -59,10 +69,33 @@ ApplicationWindow {
             }
         }
 
+        // under some Linux window managers, intercepting left click (or even any click in some
+        // cases) is not possible. in these cases, the context menu seems to be reliably shown,
+        // so interaction with the system tray icon will have to be through the context menu in
+        // these cases.
+        //
+        // this leaves our behavior as:
+        // - left/double click: show main window (if we get these events)
+        // - right click: show context menu (if we get these events)
+        // - fallback: hope the OS/WM at least gives us the context menu automatically
         onActivated: {
-            // TODO: this isn't working for left or right click and works inconsistently with
-            // middle click
-            console.log(reason);
+            switch(reason) {
+
+                // right click
+                case SystemTrayIcon.Context:
+                    systrayMenu.open();
+                    break;
+
+                // left click
+                case SystemTrayIcon.Trigger:
+                case SystemTrayIcon.DoubleClick:
+                    window.display();
+                    break;
+
+                default:
+                    console.log("systray icon 'activated', but ignoring. reason: "+ reason);
+            }
+
         }
     }
 
