@@ -16,6 +16,15 @@ ApplicationWindow {
 
     color: Style.panelSeparatorColor
 
+    // crude way to dismiss main window when it loses focus.
+    // this isn't going to work well on a "sloppy focus" window managers, but
+    // probably works well on the most common OSes
+    onActiveChanged: {
+        if (!active) {
+            window.visible = false;
+        }
+    }
+
     ControlPanel {
         id: controlPanel
     }
