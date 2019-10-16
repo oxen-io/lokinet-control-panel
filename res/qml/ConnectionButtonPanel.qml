@@ -63,9 +63,9 @@ Container {
             hovering = false;
         }
         onPressed: {
-            apiClient.llarpAdminStart(function(response, err) {
+            apiClient.llarpAdminWakeup(function(response, err) {
                 if (err) {
-                    console.log("Received error when trying to start lokinet daemon: ", err);
+                    console.log("Received error when trying to wakeup lokinet daemon: ", err);
                 }
             });
         }

@@ -29,12 +29,12 @@ class LokinetApiClient : public QObject
 public:
 
     /**
-     * Invoke the `llarp.admin.start` endpoint.
+     * Invoke the `llarp.admin.wakeup` endpoint.
      *
      * @param callback is an optional JS function to invoke on success
      * @return true if the asynchronous request could be made, false otherwise
      */
-    Q_INVOKABLE bool llarpAdminStart(QJSValue callback);
+    Q_INVOKABLE bool llarpAdminWakeup(QJSValue callback);
  
 private:
 

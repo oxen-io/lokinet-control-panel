@@ -2,8 +2,8 @@
 
 #include <stdexcept>
 
-// LokinetApiClient::llarpAdminStart
-bool LokinetApiClient::llarpAdminStart(QJSValue callback) {
+// LokinetApiClient::llarpAdminWakeup
+bool LokinetApiClient::llarpAdminWakeup(QJSValue callback) {
 
     if (! callback.isUndefined() && ! callback.isCallable()) {
         qDebug() << "callback should be a function (if present)";
@@ -12,7 +12,7 @@ bool LokinetApiClient::llarpAdminStart(QJSValue callback) {
 
     const std::string jsonRpcPayload = R"JSON({
             "jsonrpc": "2.0",
-            "method": "llarp.admin.start",
+            "method": "llarp.admin.wakeup",
             "params": {},
             "id": "empty"
         })JSON";
