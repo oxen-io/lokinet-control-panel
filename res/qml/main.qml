@@ -30,14 +30,38 @@ ApplicationWindow {
     }
 
     function display() {
-        // attempt to position at the system tray icon
-        // TODO: need to be more intelligent about this:
-        // 1) not all platforms provide proper geometry (return 0,0)
-        // 2) task bars can be in many different orientations
+
+        // position of our systray icon in its own screen coordinates (right?)
+        // TODO: this allegedly returns 0,0 for x,y in some cases (e.g. some Linux WMs)
         const rect = systray.geometry;
-        console.log("icon at: "+ rect.x + ", "+ rect.y);
-        window.x = rect.x - (window.width - 10);
-        window.y = rect.y - (window.height - 10);
+        // console.log("icon at: "+ rect.x + ", "+ rect.y);
+        // console.log("screen: "+ Screen.width +", "+ Screen.height);
+
+        // attempt to determine what quadrant the systray is positioned in
+        // and anchor the window to the opposite corner of the systray icon
+        // TODO: this technique is flawed -- it often leaves the window partially obscured
+        // by the taskbar (esp. when the taskbar is oriented horizontally)
+        let right = false;
+        if ((rect.x / Screen.width) >= 0.5) {
+            right = true;
+        }
+
+        let bottom = false;
+        if ((rect.y / Screen.height) >= 0.5) {
+            bottom = true;
+        }
+
+        // on the right side, shift left by (window width)
+        // on the left side, shift right by (systray icon width)
+        // on the bottom side, shift up by (window height)
+        // on the top side, shift down by systray icon height)
+        let winX = (right ? (rect.x - window.width) : (rect.x + rect.width));
+        let winY = (bottom ? (rect.y - window.height) : (rect.y + rect.height));
+
+        window.x = winX;
+        window.y = winY;
+
+        // console.log("updated window position: "+ window.x + ", "+ window.y);
 
         window.show();
         window.raise();
