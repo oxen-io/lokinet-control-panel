@@ -6,6 +6,7 @@ import Qt.labs.platform 1.1
 
 import StatFetcher 1.0
 import LokinetApiClient 1.0
+import PlatformDetails 1.0
 import "."
 
 ApplicationWindow {
@@ -31,37 +32,43 @@ ApplicationWindow {
 
     function display() {
 
-        // position of our systray icon in its own screen coordinates (right?)
-        // TODO: this allegedly returns 0,0 for x,y in some cases (e.g. some Linux WMs)
-        const rect = systray.geometry;
-        // console.log("icon at: "+ rect.x + ", "+ rect.y);
-        // console.log("screen: "+ Screen.width +", "+ Screen.height);
+        if (platformDetails.isLinux()) {
+            // TODO: this allegedly returns 0,0 for x,y in some cases (e.g. some Linux WMs)
+            //       so for now, we just hope the WM can do something intelligent for us
+            //       (e.g. place the window near the mouse pointer)
+        } else { 
 
-        // attempt to determine what quadrant the systray is positioned in
-        // and anchor the window to the opposite corner of the systray icon
-        // TODO: this technique is flawed -- it often leaves the window partially obscured
-        // by the taskbar (esp. when the taskbar is oriented horizontally)
-        let right = false;
-        if ((rect.x / Screen.width) >= 0.5) {
-            right = true;
+            // position of our systray icon in its own screen coordinates (right?)
+            const rect = systray.geometry;
+            console.log("icon at: "+ rect.x + ", "+ rect.y);
+            console.log("screen: "+ Screen.width +", "+ Screen.height);
+
+            // attempt to determine what quadrant the systray is positioned in
+            // and anchor the window to the opposite corner of the systray icon
+            // TODO: this technique is flawed -- it often leaves the window partially obscured
+            // by the taskbar (esp. when the taskbar is oriented horizontally)
+            let right = false;
+            if ((rect.x / Screen.width) >= 0.5) {
+                right = true;
+            }
+
+            let bottom = false;
+            if ((rect.y / Screen.height) >= 0.5) {
+                bottom = true;
+            }
+
+            // on the right side, shift left by (window width)
+            // on the left side, shift right by (systray icon width)
+            // on the bottom side, shift up by (window height)
+            // on the top side, shift down by systray icon height)
+            let winX = (right ? (rect.x - window.width) : (rect.x + rect.width));
+            let winY = (bottom ? (rect.y - window.height) : (rect.y + rect.height));
+
+            window.x = winX;
+            window.y = winY;
+
+            console.log("updated window popup position: "+ window.x + ", "+ window.y);
         }
-
-        let bottom = false;
-        if ((rect.y / Screen.height) >= 0.5) {
-            bottom = true;
-        }
-
-        // on the right side, shift left by (window width)
-        // on the left side, shift right by (systray icon width)
-        // on the bottom side, shift up by (window height)
-        // on the top side, shift down by systray icon height)
-        let winX = (right ? (rect.x - window.width) : (rect.x + rect.width));
-        let winY = (bottom ? (rect.y - window.height) : (rect.y + rect.height));
-
-        window.x = winX;
-        window.y = winY;
-
-        // console.log("updated window position: "+ window.x + ", "+ window.y);
 
         window.show();
         window.raise();
@@ -128,6 +135,9 @@ ApplicationWindow {
     }
     LokinetApiClient {
         id: apiClient
+    }
+    PlatformDetails {
+        id: platformDetails
     }
 
 }

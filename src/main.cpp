@@ -4,6 +4,7 @@
 #include "QmlClipboardAdapter.hpp"
 #include "LokinetApiClient.hpp"
 #include "StatFetcher.hpp"
+#include "PlatformDetails.hpp"
 
 int32_t main(int32_t argc, char *argv[])
 {
@@ -16,6 +17,7 @@ int32_t main(int32_t argc, char *argv[])
     qmlRegisterType<LokinetApiClient>("LokinetApiClient", 1, 0, "LokinetApiClient");
     qmlRegisterType<QmlClipboardAdapter>("QClipboard", 1, 0, "QClipboard");
     qmlRegisterType<StatFetcher>("StatFetcher", 1, 0, "StatFetcher");
+    qmlRegisterType<PlatformDetails>("PlatformDetails", 1, 0, "PlatformDetails");
 
     QApplication app(argc, argv);
 

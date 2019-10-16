@@ -7,11 +7,13 @@ SOURCES += src/main.cpp \
            src/HttpClient.cpp \
            src/LokinetApiClient.cpp \
            src/StatFetcher.cpp \
+           src/PlatformDetails.cpp \
 
 HEADERS += src/QmlClipboardAdapter.hpp \
            src/HttpClient.hpp \
            src/LokinetApiClient.hpp \
            src/StatFetcher.hpp \
+           src/PlatformDetails.hpp \
 
 RESOURCES += res/resources.qrc
 
