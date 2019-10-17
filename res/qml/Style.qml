@@ -2,13 +2,13 @@ pragma Singleton
 import QtQuick 2.0
 
 QtObject {
-    readonly property color strongTextColor: "#FAF9FA"
-    readonly property color weakTextColor: "#7D8585"
+    readonly property color strongTextColor: "#efefef"
+    readonly property color weakTextColor: "#3b7845"
 
-    readonly property color panelBackgroundColor: "#323642"
-    readonly property color panelSeparatorColor: "#22252E"
+    readonly property color panelBackgroundColor: "#31343c"
+    readonly property color panelSeparatorColor: "#1a1c20"
 
-    readonly property color highlightAffirmative: "#55CE53"
-    readonly property color highlightNeutral: "#CECC53"
-    readonly property color highlightNegative: "#CE5355"
+    readonly property color highlightAffirmative: "#32b10e"
+    readonly property color highlightNeutral: "#746c53"
+    readonly property color highlightNegative: "#cc163d"
 }
