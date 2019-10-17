@@ -29,7 +29,7 @@ Container {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         text: title
-        font.family: "Ubuntu"
+        font.family: Style.strongTextFont
         color: Style.strongTextColor
         font.pointSize: 15
     }

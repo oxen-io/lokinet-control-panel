@@ -26,9 +26,9 @@ Container {
 
         y: 18
         text: "Lokinet Address"
-        font.family: "Ubuntu"
+        font.family: Style.weakTextFont
         color: Style.weakTextColor
-        font.pointSize: 11
+        font.pointSize: Style.weakTextSize
         font.capitalization: Font.AllUppercase
     }
 
@@ -42,9 +42,9 @@ Container {
 
         y: 40
         text: address
-        font.family: "Ubuntu"
-        color: "#FAF9FA"
-        font.pointSize: 11
+        font.family: Style.weakTextFont
+        color: Style.strongTextColor
+        font.pointSize: Style.weakTextSize
         elide: Text.ElideMiddle
     }
 

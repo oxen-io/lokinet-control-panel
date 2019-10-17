@@ -25,9 +25,9 @@ Container {
 
         y: 18
         text: "Paths built"
-        font.family: "Ubuntu Condensed"
+        font.family: Style.weakTextFont
         color: Style.weakTextColor
-        font.pointSize: 11
+        font.pointSize: Style.weakTextSize
         font.capitalization: Font.AllUppercase
     }
     Text {
@@ -38,9 +38,9 @@ Container {
 
         y: 40
         text: ""+ paths
-        font.family: "Ubuntu"
+        font.family: Style.weakTextFont
         color: Style.strongTextColor
-        font.pointSize: 11
+        font.pointSize: Style.weakTextSize
     }
 
     // "Lokinet Routers"
@@ -52,9 +52,9 @@ Container {
 
         y: 18
         text: "Lokinet routers"
-        font.family: "Ubuntu Condensed"
+        font.family: Style.weakTextFont
         color: Style.weakTextColor
-        font.pointSize: 11
+        font.pointSize: Style.weakTextSize
         font.capitalization: Font.AllUppercase
     }
     Text {
@@ -65,9 +65,9 @@ Container {
 
         y: 40
         text: ""+ routers
-        font.family: "Ubuntu"
+        font.family: Style.weakTextFont
         color: Style.strongTextColor
-        font.pointSize: 11
+        font.pointSize: Style.weakTextSize
     }
 }
 
