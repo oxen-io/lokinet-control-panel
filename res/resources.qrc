@@ -5,7 +5,7 @@
         <file>qml/Style.qml</file>
         <file>qml/main.qml</file>
         <file>qml/ControlPanel.qml</file>
-        <file>qml/ConnectionHeaderPanel.qml</file>
+        <file>qml/LogoHeaderPanel.qml</file>
         <file>qml/ConnectionButtonPanel.qml</file>
         <file>qml/AddressPanel.qml</file>
         <file>qml/RouteStatsPanel.qml</file>

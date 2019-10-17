@@ -16,9 +16,7 @@ ColumnLayout {
     property var downloadUsage: 0
     property var uploadUsage: 0
 
-    ConnectionHeaderPanel {
-        connected: isConnected
-        running: isRunning
+    LogoHeaderPanel {
     }
 
     // placeholder for main on/off button
