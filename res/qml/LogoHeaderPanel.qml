@@ -32,8 +32,8 @@ Container {
         Text {
             text: "LOKI"
             font.family: Style.weakTextFont
-            color: "#eeefef"
-            font.pointSize: 24
+            color: Style.logoTextcolor
+            font.pointSize: Style.logoTextSize
             font.capitalization: Font.AllUppercase
         }
     }
