@@ -10,7 +10,7 @@ Container {
     property var up: 0
 
     Layout.preferredHeight: 79
-    Layout.preferredWidth: 300
+    Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
         color: Style.panelBackgroundColor

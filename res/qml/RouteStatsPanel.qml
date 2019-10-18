@@ -10,7 +10,7 @@ Container {
     property var routers: 0
 
     Layout.preferredHeight: 69
-    Layout.preferredWidth: 300
+    Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
         color: Style.panelBackgroundColor

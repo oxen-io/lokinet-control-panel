@@ -7,7 +7,7 @@ import "."
 
 Container {
     Layout.preferredHeight: 59
-    Layout.preferredWidth: 300
+    Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
         color: "#101010"

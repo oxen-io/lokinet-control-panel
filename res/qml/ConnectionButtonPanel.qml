@@ -22,7 +22,7 @@ Container {
     onHoveringChanged: updateState();
 
     Layout.preferredHeight: 59
-    Layout.preferredWidth: 300
+    Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
         id: backgroundRect

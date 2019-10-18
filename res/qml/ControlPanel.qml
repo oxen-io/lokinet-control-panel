@@ -40,7 +40,7 @@ ColumnLayout {
     Rectangle {
         color: Style.panelBackgroundColor
         Layout.preferredHeight: 159
-        Layout.preferredWidth: 300
+        Layout.preferredWidth: Style.appWidth
     }
 
     // usage
@@ -53,7 +53,7 @@ ColumnLayout {
     Rectangle {
         color: Style.panelBackgroundColor
         Layout.preferredHeight: 79
-        Layout.preferredWidth: 300
+        Layout.preferredWidth: Style.appWidth
     }
 
     // dismiss panel
