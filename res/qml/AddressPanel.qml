@@ -6,7 +6,7 @@ import QClipboard 1.0
 import "."
 
 Container {
-    property var address: "unknown"
+    property var address: ""
 
     Layout.preferredHeight: 79
     Layout.preferredWidth: 300
@@ -61,7 +61,10 @@ Container {
     MouseArea {
         id: ma
         anchors.fill: parent
-        hoverEnabled: true
+        hoverEnabled: (address && address != "")
+        cursorShape: ((address && address != "")
+                        ? Qt.PointingHandCursor
+                        : Qt.ArrowCursor)
         onClicked: {
             clipboard.setText(address);
         }
