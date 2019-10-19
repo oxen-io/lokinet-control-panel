@@ -102,6 +102,12 @@ ColumnLayout {
             } catch (err) {
                 console.log("Couldn't pull numNodesKnown out of payload", err);
             }
+
+            try {
+                numPathsBuilt = stats.result.services.default.numPaths;
+            } catch (err) {
+                console.log("Couldn't pull services.numPaths out of payload", err);
+            }
         }
 
         // only update global state if there is actually a change.
