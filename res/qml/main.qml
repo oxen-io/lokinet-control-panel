@@ -4,7 +4,7 @@ import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 import Qt.labs.platform 1.1
 
-import StatFetcher 1.0
+import ApiPoller 1.0
 import LokinetApiClient 1.0
 import PlatformDetails 1.0
 import "."
@@ -130,8 +130,11 @@ ApplicationWindow {
         }
     }
 
-    StatFetcher {
-        id: statFetcher
+    ApiPoller {
+        id: stateApiPoller
+        Component.onCompleted: {
+            stateApiPoller.setApiEndpoint("llarp.admin.dumpstate");
+        }
     }
     LokinetApiClient {
         id: apiClient

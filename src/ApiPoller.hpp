@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <functional>
 #include <mutex>
+#include <string>
  
 #include <QObject>
 #include <QTimer>
@@ -11,19 +12,27 @@
 #include "HttpClient.hpp"
  
 /**
- * The StatFetcher periodically requests stats from the Loki daemon.
+ * The ApiPoller periodically requests a JSON-RPC endpoint from the Loki daemon.
  */
-class StatFetcher : public QObject
+class ApiPoller : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(StatFetcher);
+    Q_DISABLE_COPY(ApiPoller);
 
     static constexpr int DEFAULT_POLLING_INTERVAL_MS = 3000;
 
 public:
 
-    StatFetcher();
-    ~StatFetcher();
+    ApiPoller();
+    ~ApiPoller();
+
+    /**
+     * Set the API endpoint.
+     *
+     * NOTE: must be called before any polling occurs. The QML engine prevents
+     * us from being able to pass this in the constructor.
+     */
+    Q_INVOKABLE void setApiEndpoint(const QString& endpoint);
 
     /**
      * Set the polling interval
@@ -69,6 +78,7 @@ private:
 
     QTimer* m_timer;
     HttpClient m_httpClient;
+    std::string m_rpcPayload;
 };
  
 #endif // __LOKI_STAT_FETCHER_H__

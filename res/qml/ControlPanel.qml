@@ -61,13 +61,13 @@ ColumnLayout {
 
 
     Component.onCompleted: {
-        statFetcher.statusAvailable.connect(handleStats);
-        statFetcher.pollImmediately();
-        statFetcher.setIntervalMs(3000);
-        statFetcher.startPolling();
+        stateApiPoller.statusAvailable.connect(handleStateResults);
+        stateApiPoller.pollImmediately();
+        stateApiPoller.setIntervalMs(3000);
+        stateApiPoller.startPolling();
     }
 
-    function handleStats(payload, error) {
+    function handleStateResults(payload, error) {
         let stats = null;
         
         if (! error) {
