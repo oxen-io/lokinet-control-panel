@@ -29,7 +29,7 @@ void ApiPoller::setApiEndpoint(const QString& endpoint) {
             "params": {},
             "id": "empty"
         })JSON",
-        endpoint.data());
+        endpoint.toStdString().data());
     m_rpcPayload = buffer;
 }
 
