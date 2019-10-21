@@ -2,7 +2,6 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.11
 import QtQuick.Controls 2.5
 import QtGraphicalEffects 1.12
-import QtQuick.Layouts 1.11
 
 import "."
 
@@ -10,19 +9,16 @@ Container {
     id: connectionButtonPanel
     property var connected: false
     property var running: false
-    property var version: ""
 
     property color tint: null
     property bool hovering: false
-    property url iconUrl: null
-    property string status: "Unknown"
     property string tooltip: ""
 
     onConnectedChanged: updateState();
     onRunningChanged: updateState();
     onHoveringChanged: updateState();
 
-    Layout.preferredHeight: 69
+    Layout.preferredHeight: 199
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -30,70 +26,35 @@ Container {
         color: Style.panelBackgroundColor
     }
 
-    ColumnLayout {
-        id: statusTextGroup
-        anchors.left: parent.left
-        anchors.top: parent.top
-        spacing: 4
-        anchors.margins: 16
-
-
-        // "Status"
-        Text {
-            id: statusLabelText
-
-            text: "Status"
-            font.family: Style.weakTextFont
-            color: Style.weakTextColor
-            font.pointSize: Style.weakTextSize
-            font.capitalization: Font.AllUppercase
-        }
-        // status text
-        Text {
-            id: statusText
-
-            text: status
-            font.family: Style.weakTextFont
-            color: tint
-            font.pointSize: Style.weakTextSize
-        }
-    }
-
-    // tooltip
-    ToolTip {
-        id: statusTooltip
-        text: tooltip
-        delay: 250
-        visible: panelMa.containsMouse
+    // static outline
+    Image {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        source: "qrc:/res/images/connection_button_outline.png"
     }
 
     // white connection image; we will colorize with LevelAdjust to indicate
     // status
     Image {
-        id: connectionIndicator
+        id: connectionButtonImage
         anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
-        anchors.rightMargin: 16
-        width: 32
-        height: 32
+        anchors.horizontalCenter: parent.horizontalCenter
         smooth: true
-        source: iconUrl
+        source: "qrc:/res/images/connection_button.png"
     }
 
-    // colorize connectionIndicator
+    // colorize connectionButtonImage
     LevelAdjust {
         id: level
-        anchors.fill: connectionIndicator
-        source: connectionIndicator
+        anchors.fill: connectionButtonImage
+        source: connectionButtonImage
         maximumOutput: tint
     }
 
     // handle user interaction
     MouseArea {
         id: panelMa
-        anchors.fill: parent
-        cursorShape: (connected ? Qt.PointingHandCursor : Qt.ArrowCursor)
-        enabled: true
+        anchors.fill: connectionButtonImage
         hoverEnabled: true
         onEntered: {
             hovering = true;
@@ -102,18 +63,19 @@ Container {
             hovering = false;
         }
         onPressed: {
-            if (connected) {
-                if (running) {
-                    console.log("TODO: implement suspending lokinet");
-                } else {
-                    apiClient.llarpAdminWakeup(function(response, err) {
-                        if (err) {
-                            console.log("Received error when trying to wakeup lokinet daemon: ", err);
-                        }
-                    });
+            apiClient.llarpAdminWakeup(function(response, err) {
+                if (err) {
+                    console.log("Received error when trying to wakeup lokinet daemon: ", err);
                 }
-            }
+            });
         }
+    }
+    ToolTip {
+        id: statusTooltip
+        parent: connectionButtonImage
+        text: tooltip
+        delay: 250
+        visible: panelMa.containsMouse
     }
 
     function updateState() {
@@ -124,24 +86,17 @@ Container {
 
         let base = "";
         if (connected && running) {
-            base = Style.highlightAffirmative
-            iconUrl = "qrc:/res/images/pause-circle.svg"
-            status = "Connected"
+            base = Style.highlightAffirmative;
             tooltip = "Currently connected.\nPress to pause connection to the Loki Network.\n(not yet implemented)"
         } else if (connected) {
             // connected, but not running
-            base = Style.highlightNeutral
-            iconUrl = "qrc:/res/images/play-circle.svg"
-            status = "Paused"
+            base = Style.highlightNeutral;
             tooltip = "Currently paused.\nPress to resume connection to the Loki Network."
         } else {
             // not connected
             base = Style.highlightNegative
-            iconUrl = "qrc:/res/images/warning.svg"
-            status = "Disconnected"
-            tooltip = "Unable to connect to the Loki\nNetwork daemon, is it running?"
+            tooltip = "Unable to connect to the Loki\nNetwork daemon, is it running?";
         }
         tint = Qt.lighter(base, lighter);
     }
 }
-

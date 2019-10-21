@@ -21,7 +21,7 @@ ColumnLayout {
     LogoHeaderPanel {
     }
 
-    // connection status panel
+    // connection button panel
     ConnectionButtonPanel {
         connected: isConnected
         running: isRunning
@@ -59,13 +59,6 @@ ColumnLayout {
     UsagePanel {
         down: downloadUsage
         up: uploadUsage
-    }
-
-    // placeholder / empty space
-    Rectangle {
-        color: Style.panelBackgroundColor
-        Layout.preferredHeight: 79
-        Layout.preferredWidth: Style.appWidth
     }
 
     // dismiss panel

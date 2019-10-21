@@ -17,10 +17,8 @@
         <!-- images -->
         <file>images/icon.png</file>
         <file>images/connection_indicator.png</file>
-        <file>images/connection_indicator_outline.png</file>
+        <file>images/connection_button.png</file>
+        <file>images/connection_button_outline.png</file>
         <file>images/up_chevron.png</file>
-        <file>images/warning.svg</file>
-        <file>images/play-circle.svg</file>
-        <file>images/pause-circle.svg</file>
     </qresource>
 </RCC>
