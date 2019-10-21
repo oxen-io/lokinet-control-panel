@@ -83,20 +83,24 @@ ColumnLayout {
         statusApiPoller.setIntervalMs(3000);
         statusApiPoller.startPolling();
 
-        // query daemon version
-        apiClient.llarpVersion(function(response, err) {
-            if (err) {
-                console.log("Received error when trying to wakeup lokinet daemon: ", err);
-            } else {
-                try {
-                     const msg = JSON.parse(response);
-                     lokiVersion = msg.result.version;
-                 } catch (err) {
-                     console.log("Couldn't pull version out of payload", err);
-                 }
-            }
-        });
+    }
 
+    onIsConnectedChanged: function() {
+        if (! isConnected) {
+            console.log("Detected disconnection");
+            // zero-out values that would otherwise be stale in the UI
+            isRunning = false;
+            lokiVersion = "";
+            lokiAddress = "";
+            lokiUptime = 0;
+            numPathsBuilt = 0;
+            numRoutersKnown = 0;
+            downloadUsage = 0;
+            uploadUsage = 0;
+        } else {
+            console.log("Detected [re-]connection");
+            queryVersion();
+        }
     }
 
     function handleStateResults(payload, error) {
@@ -162,6 +166,23 @@ ColumnLayout {
         } catch (err) {
             console.log("Couldn't parse 'status' JSON-RPC payload", err);
         }
+    }
+
+    function queryVersion() {
+
+        // query daemon version
+        apiClient.llarpVersion(function(response, err) {
+            if (err) {
+                console.log("Received error when trying to wakeup lokinet daemon: ", err);
+            } else {
+                try {
+                     const msg = JSON.parse(response);
+                     lokiVersion = msg.result.version;
+                 } catch (err) {
+                     console.log("Couldn't pull version out of payload", err);
+                 }
+            }
+        });
     }
 }
 
