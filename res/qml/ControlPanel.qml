@@ -20,10 +20,14 @@ ColumnLayout {
     LogoHeaderPanel {
     }
 
-    // placeholder for main on/off button
+    // connection status panel
     ConnectionButtonPanel {
         connected: isConnected
         running: isRunning
+    }
+
+    // version panel
+    VersionPanel {
         version: lokiVersion
     }
 

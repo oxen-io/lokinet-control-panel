@@ -22,7 +22,7 @@ Container {
     onRunningChanged: updateState();
     onHoveringChanged: updateState();
 
-    Layout.preferredHeight: 129
+    Layout.preferredHeight: 69
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -56,35 +56,6 @@ Container {
             font.family: Style.weakTextFont
             color: tint
             font.pointSize: Style.weakTextSize
-        }
-    }
-
-    ColumnLayout {
-        id: versionTextGroup
-        anchors.left: parent.left
-        anchors.top: statusTextGroup.bottom
-        spacing: 4
-        anchors.margins: 16
-
-
-        // "version"
-        Text {
-            id: versionLabelText
-
-            text: "Version"
-            font.family: Style.weakTextFont
-            color: Style.weakTextColor
-            font.pointSize: Style.weakTextSize
-            font.capitalization: Font.AllUppercase
-        }
-        // version text
-        Text {
-            id: versionText
-
-            text: version
-            font.family: Style.strongTextFont
-            color: Style.strongTextColor
-            font.pointSize: Style.strongTextSize
         }
     }
 
