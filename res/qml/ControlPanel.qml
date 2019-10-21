@@ -12,6 +12,7 @@ ColumnLayout {
     property var isRunning: false
     property var lokiVersion: ""
     property var lokiAddress: ""
+    property int lokiUptime: 0
     property var numPathsBuilt: 0
     property var numRoutersKnown: 0
     property var downloadUsage: 0
@@ -29,6 +30,11 @@ ColumnLayout {
     // version panel
     VersionPanel {
         version: lokiVersion
+    }
+
+    // uptime panel
+    UptimePanel {
+        uptime: lokiUptime
     }
 
     // address panel
@@ -72,6 +78,11 @@ ColumnLayout {
         stateApiPoller.setIntervalMs(3000);
         stateApiPoller.startPolling();
 
+        statusApiPoller.statusAvailable.connect(handleStatusResults);
+        statusApiPoller.pollImmediately();
+        statusApiPoller.setIntervalMs(3000);
+        statusApiPoller.startPolling();
+
         // query daemon version
         apiClient.llarpVersion(function(response, err) {
             if (err) {
@@ -95,7 +106,7 @@ ColumnLayout {
             try {
                 stats = JSON.parse(payload);
             } catch (err) {
-                console.log("Couldn't parse JSON-RPC payload", err);
+                console.log("Couldn't parse 'dumpState' JSON-RPC payload", err);
             }
         }
 
@@ -139,6 +150,18 @@ ColumnLayout {
         if (newLokiAddress !== lokiAddress) lokiAddress = newLokiAddress;
         if (newNumRouters !== numRoutersKnown) numRoutersKnown = newNumRouters;
 
+    }
+
+    function handleStatusResults(payload, error) {
+        if (error) {
+            console.log("Error requesting status: ", error);
+        }
+        try {
+            const responseObj = JSON.parse(payload);
+            lokiUptime = responseObj.result.uptime;
+        } catch (err) {
+            console.log("Couldn't parse 'status' JSON-RPC payload", err);
+        }
     }
 }
 

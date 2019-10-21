@@ -136,6 +136,12 @@ ApplicationWindow {
             stateApiPoller.setApiEndpoint("llarp.admin.dumpstate");
         }
     }
+    ApiPoller {
+        id: statusApiPoller
+        Component.onCompleted: {
+            statusApiPoller.setApiEndpoint("llarp.admin.status");
+        }
+    }
     LokinetApiClient {
         id: apiClient
     }

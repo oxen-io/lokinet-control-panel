@@ -21,6 +21,9 @@
  *     }
  * });
  * ```
+ *
+ * TODO: abstract this and just take a string as the endpoint. let QML/Javascript
+ *       do the JSON-y things.
  */
 class LokinetApiClient : public QObject
 {
@@ -43,6 +46,14 @@ public:
      * @return true if the asynchronous request could be made, false otherwise
      */
     Q_INVOKABLE bool llarpVersion(QJSValue callback);
+
+    /**
+     * Invoke the `llarp.admin.status` endpoint.
+     *
+     * @param callback is an optional JS function to invoke on success
+     * @return true if the asynchronous request could be made, false otherwise
+     */
+    Q_INVOKABLE bool llarpAdminStatus(QJSValue callback);
  
 private:
 
