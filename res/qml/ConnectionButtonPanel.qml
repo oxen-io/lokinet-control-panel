@@ -1,7 +1,7 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.11
-import QtQuick.Controls 2.5
-import QtGraphicalEffects 1.12
+import QtQuick 2.7
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.0
+import QtGraphicalEffects 1.0
 
 import "."
 
@@ -84,7 +84,7 @@ Container {
         // highlight on hover
         const lighter = (hovering ? 1.25 : 1.0);
 
-        let base = "";
+        var base = "";
         if (connected && running) {
             base = Style.highlightAffirmative;
             tooltip = "Currently connected.\nPress to pause connection to the Loki Network.\n(not yet implemented)"

@@ -2,7 +2,7 @@ import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
-import Qt.labs.platform 1.1
+import Qt.labs.platform 1.0
 
 import ApiPoller 1.0
 import LokinetApiClient 1.0
@@ -47,12 +47,12 @@ ApplicationWindow {
             // and anchor the window to the opposite corner of the systray icon
             // TODO: this technique is flawed -- it often leaves the window partially obscured
             // by the taskbar (esp. when the taskbar is oriented horizontally)
-            let right = false;
+            var right = false;
             if ((rect.x / Screen.width) >= 0.5) {
                 right = true;
             }
 
-            let bottom = false;
+            var bottom = false;
             if ((rect.y / Screen.height) >= 0.5) {
                 bottom = true;
             }
@@ -61,8 +61,8 @@ ApplicationWindow {
             // on the left side, shift right by (systray icon width)
             // on the bottom side, shift up by (window height)
             // on the top side, shift down by systray icon height)
-            let winX = (right ? (rect.x - window.width) : (rect.x + rect.width));
-            let winY = (bottom ? (rect.y - window.height) : (rect.y + rect.height));
+            var winX = (right ? (rect.x - window.width) : (rect.x + rect.width));
+            var winY = (bottom ? (rect.y - window.height) : (rect.y + rect.height));
 
             window.x = winX;
             window.y = winY;
@@ -80,7 +80,7 @@ ApplicationWindow {
         id: systray
         tooltip: qsTr("Loki Network")
         visible: true
-        icon.source: "qrc:/res/images/icon.png"
+        iconSource: "qrc:/res/images/icon.png"
 
         menu: Menu {
             id: systrayMenu

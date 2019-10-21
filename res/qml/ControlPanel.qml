@@ -1,6 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.11
-import QtQuick.Controls 2.5
+import QtQuick 2.7
+import QtQuick.Layouts 1.0
+import QtQuick.Controls 2.0
 
 import "."
 
@@ -97,7 +97,7 @@ ColumnLayout {
     }
 
     function handleStateResults(payload, error) {
-        let stats = null;
+        var stats = null;
         
         if (! error) {
             try {
@@ -108,10 +108,10 @@ ColumnLayout {
         }
 
         // calculate our new state in local scope before updating global scope
-        let newConnected = (! error && stats != null);
-        let newRunning = false;
-        let newLokiAddress = "";
-        let newNumRouters = 0;
+        var newConnected = (! error && stats != null);
+        var newRunning = false;
+        var newLokiAddress = "";
+        var newNumRouters = 0;
 
         if (! error) {
             try {

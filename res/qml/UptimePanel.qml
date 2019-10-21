@@ -1,8 +1,6 @@
 import QtQuick 2.0
-import QtQuick.Layouts 1.11
-import QtQuick.Controls 2.5
-import QtGraphicalEffects 1.12
-import QtQuick.Layouts 1.11
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.0
 
 import "."
 
@@ -26,7 +24,7 @@ Container {
         const hours = Math.floor(uptime / (3600 * 1000)) % 24;
         const minutes = Math.floor(uptime / (60 * 1000)) % 60;
 
-        let uptimeStr = ""+ days + "d "
+        var uptimeStr = ""+ days + "d "
                           + hours + "h "
                           + minutes + "m";
         return uptimeStr;
