@@ -10,6 +10,7 @@ ColumnLayout {
 
     property var isConnected: false
     property var isRunning: false
+    property var lokiVersion: ""
     property var lokiAddress: ""
     property var numPathsBuilt: 0
     property var numRoutersKnown: 0
@@ -23,6 +24,7 @@ ColumnLayout {
     ConnectionButtonPanel {
         connected: isConnected
         running: isRunning
+        version: lokiVersion
     }
 
     // address panel
@@ -65,6 +67,21 @@ ColumnLayout {
         stateApiPoller.pollImmediately();
         stateApiPoller.setIntervalMs(3000);
         stateApiPoller.startPolling();
+
+        // query daemon version
+        apiClient.llarpVersion(function(response, err) {
+            if (err) {
+                console.log("Received error when trying to wakeup lokinet daemon: ", err);
+            } else {
+                try {
+                     const msg = JSON.parse(response);
+                     lokiVersion = msg.result.version;
+                 } catch (err) {
+                     console.log("Couldn't pull version out of payload", err);
+                 }
+            }
+        });
+
     }
 
     function handleStateResults(payload, error) {

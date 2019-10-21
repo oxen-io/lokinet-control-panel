@@ -35,6 +35,14 @@ public:
      * @return true if the asynchronous request could be made, false otherwise
      */
     Q_INVOKABLE bool llarpAdminWakeup(QJSValue callback);
+
+    /**
+     * Invoke the `llarp.version` endpoint.
+     *
+     * @param callback is an optional JS function to invoke on success
+     * @return true if the asynchronous request could be made, false otherwise
+     */
+    Q_INVOKABLE bool llarpVersion(QJSValue callback);
  
 private:
 
