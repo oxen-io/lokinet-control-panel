@@ -28,4 +28,11 @@ Q_INVOKABLE bool PlatformDetails::isMacOS() {
 #endif
 }
 
- 
+// PlatformDetails::isDebug
+Q_INVOKABLE bool PlatformDetails::isDebug() {
+#if defined(QT_DEBUG)
+	return true;
+#else
+	return false;
+#endif
+}

@@ -15,6 +15,8 @@ public:
     Q_INVOKABLE static bool isWindows();
     Q_INVOKABLE static bool isLinux();
     Q_INVOKABLE static bool isMacOS();
+
+    Q_INVOKABLE static bool isDebug();
 };
  
 #endif // __LOKI_PLATFORM_DETAILS_HPP__
