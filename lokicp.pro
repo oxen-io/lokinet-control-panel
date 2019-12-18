@@ -8,6 +8,7 @@ SOURCES += src/main.cpp \
            src/LokinetApiClient.cpp \
            src/ApiPoller.cpp \
            src/PlatformDetails.cpp \
+           src/process/LokinetProcessManager.cpp \
            src/process/LinuxLokinetProcessManager.cpp \
 
 HEADERS += src/QmlClipboardAdapter.hpp \

@@ -54,6 +54,11 @@ public:
      *         error
      */
     virtual ProcessStatus queryProcessStatus() = 0;
+
+    /**
+     * Returns an appropriate platform-specific instance of this class.
+     */
+    static LokinetProcessManager* instance();
 };
  
 #endif // __LOKI_LOKINET_PROCESS_MANAGER_HPP__

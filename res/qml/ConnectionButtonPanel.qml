@@ -63,11 +63,19 @@ Container {
             hovering = false;
         }
         onPressed: {
-            apiClient.llarpAdminWakeup(function(response, err) {
-                if (err) {
-                    console.log("Received error when trying to wakeup lokinet daemon: ", err);
+            if (! connected) {
+                platformDetails.startLokinetProcess();
+            } else {
+                if (! running) {
+                    apiClient.llarpAdminWakeup(function(response, err) {
+                        if (err) {
+                            console.log("Received error when trying to wakeup lokinet daemon: ", err);
+                        }
+                    });
+                } else {
+                    // TODO: tell daemon to pause
                 }
-            });
+            }
         }
     }
     ToolTip {
