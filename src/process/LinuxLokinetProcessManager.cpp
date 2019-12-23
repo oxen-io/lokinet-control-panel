@@ -1,56 +1,19 @@
 #include "LinuxLokinetProcessManager.hpp"
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <QProcess>
 #include <QDebug>
 
-#include <chrono>
-
-using namespace std::chrono_literals;
-
-bool LinuxLokinetProcessManager::startLokinetProcess()
+bool LinuxLokinetProcessManager::doStartLokinetProcess()
 {
-    // ensure that we're stopped and haven't recently started
-    ProcessStatus status = queryProcessStatus();
-    if (status != ProcessStatus::Stopped)
-    {
-        qDebug("Can't start lokinet process when status != Stopped");
-        qDebug() << "(status: " << (int)status << ")";
-        return false;
-    }
-    if (getLastKnownStatus() == ProcessStatus::Starting)
-    {
-        qDebug("lokinet process is already starting");
-        return false;
-    }
-
     bool success = QProcess::startDetached("lokinet");
     if (! success)
-    {
-        qDebug("Failed to launch 'lokinet' process");
-        return false;
-    }
+        qDebug("QProcess::startDetached() failed");
 
-    setLastKnownStatus(ProcessStatus::Starting);
-    return true;
+    return success;
 }
 
-bool LinuxLokinetProcessManager::stopLokinetProcess()
+bool LinuxLokinetProcessManager::doStopLokinetProcess()
 {
-    // ensure that we're running and haven't recently stopped
-    ProcessStatus status = queryProcessStatus();
-    if (status != ProcessStatus::Running)
-    {
-        qDebug("Can't stop lokinet process when status != Running");
-        return false;
-    }
-    if (getLastKnownStatus() == ProcessStatus::Stopping)
-    {
-        qDebug("lokinet process is already stopping");
-        return false;
-    }
-
     QStringList args = { "lokinet" };
     int result = QProcess::execute("killall", args);
     if (result)
@@ -59,21 +22,11 @@ bool LinuxLokinetProcessManager::stopLokinetProcess()
         return false;
     }
 
-    setLastKnownStatus(ProcessStatus::Stopping);
     return true;
 }
 
-bool LinuxLokinetProcessManager::forciblyStopLokinetProcess()
+bool LinuxLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    // for forcibly kill, we don't care about 'last known status' but do
-    // want to ensure that there is a running process to kill
-    ProcessStatus status = queryProcessStatus();
-    if (status != ProcessStatus::Running)
-    {
-        qDebug("Can't forcibly stop lokinet process when status != Running");
-        return false;
-    }
-
     QStringList args = { "-9", "lokinet" };
     int result = QProcess::execute("killall", args);
     if (result)
@@ -82,13 +35,11 @@ bool LinuxLokinetProcessManager::forciblyStopLokinetProcess()
         return false;
     }
 
-    setLastKnownStatus(ProcessStatus::Stopping);
     return true;
 }
 
-LokinetProcessManager::ProcessStatus LinuxLokinetProcessManager::queryProcessStatus()
+bool LinuxLokinetProcessManager::doGetProcessPid(int& pid)
 {
-
     QProcess proc;
     proc.setProgram("pidof");
     proc.setArguments({"-s", "lokinet"});
@@ -97,40 +48,26 @@ LokinetProcessManager::ProcessStatus LinuxLokinetProcessManager::queryProcessSta
     if (!success)
     {
         qDebug("Could not exec pidof");
-        return ProcessStatus::Unknown;
+        return false;
     }
 
     QString output = QString(proc.readAllStandardOutput());
     if (output.isEmpty())
     {
-        return ProcessStatus::Stopped;
+        qDebug("lokinet is not running (pid = 0)");
+        pid = 0;
+        return true;
     }
 
-    pid_t pid = output.toInt(&success);
+    int tmp = output.toInt(&success);
     if (!success)
     {
         qDebug() << "Unrecognized 'pidof' output: " << output;
-        return ProcessStatus::Unknown;
+        return false;
     }
 
-    qDebug() << "lokinet pid: " << pid;
-
-    return ProcessStatus::Running;
+    pid = tmp;
+    qDebug("lokinet pid: %d", pid);
+    return true;
 }
 
-LokinetProcessManager::ProcessStatus LinuxLokinetProcessManager::getLastKnownStatus()
-{
-    constexpr auto expiry = 60s;
-
-    auto now = std::chrono::system_clock::now();
-    if (now - m_lastStatusTime > expiry)
-        return ProcessStatus::Unknown;
-    else
-        return m_lastKnownStatus;
-}
-
-void LinuxLokinetProcessManager::setLastKnownStatus(ProcessStatus status)
-{
-    m_lastKnownStatus = status;
-    m_lastStatusTime = std::chrono::system_clock::now();
-}
