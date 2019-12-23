@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <QProcess>
+#include <QDebug>
 
 #include <chrono>
 
@@ -14,6 +16,7 @@ bool LinuxLokinetProcessManager::startLokinetProcess()
     if (status != ProcessStatus::Stopped)
     {
         qDebug("Can't start lokinet process when status != Stopped");
+        qDebug() << "(status: " << (int)status << ")";
         return false;
     }
     if (getLastKnownStatus() == ProcessStatus::Starting)
@@ -22,11 +25,10 @@ bool LinuxLokinetProcessManager::startLokinetProcess()
         return false;
     }
 
-    // TODO: properly daemonize (and don't use system)
-    int result = system("lokinet &");
-    if (result)
+    bool success = QProcess::startDetached("lokinet");
+    if (! success)
     {
-        qDebug("Failed to launch 'lokinet' process: %d", result);
+        qDebug("Failed to launch 'lokinet' process");
         return false;
     }
 
@@ -49,7 +51,8 @@ bool LinuxLokinetProcessManager::stopLokinetProcess()
         return false;
     }
 
-    int result = system("killall lokinet");
+    QStringList args = { "lokinet" };
+    int result = QProcess::execute("killall", args);
     if (result)
     {
         qDebug("Failed to 'killall lokinet': %d", result);
@@ -71,7 +74,8 @@ bool LinuxLokinetProcessManager::forciblyStopLokinetProcess()
         return false;
     }
 
-    int result = system("killall -9 lokinet");
+    QStringList args = { "-9", "lokinet" };
+    int result = QProcess::execute("killall", args);
     if (result)
     {
         qDebug("Failed to 'killall -9 lokinet': %d", result);
@@ -84,18 +88,34 @@ bool LinuxLokinetProcessManager::forciblyStopLokinetProcess()
 
 LokinetProcessManager::ProcessStatus LinuxLokinetProcessManager::queryProcessStatus()
 {
-    char buf[512];
-    FILE *cmd_pipe = popen("pidof -s lokinet", "r");
 
-    fgets(buf, 512, cmd_pipe);
-    pid_t pid = strtoul(buf, NULL, 10);
+    QProcess proc;
+    proc.setProgram("pidof");
+    proc.setArguments({"-s", "lokinet"});
+    proc.start();
+    bool success = proc.waitForFinished(5000);
+    if (!success)
+    {
+        qDebug("Could not exec pidof");
+        return ProcessStatus::Unknown;
+    }
 
-    pclose( cmd_pipe ); 
+    QString output = QString(proc.readAllStandardOutput());
+    if (output.isEmpty())
+    {
+        return ProcessStatus::Stopped;
+    }
 
-    // TODO: check error
-    return pid
-        ? ProcessStatus::Running
-        : ProcessStatus::Stopped;
+    pid_t pid = output.toInt(&success);
+    if (!success)
+    {
+        qDebug() << "Unrecognized 'pidof' output: " << output;
+        return ProcessStatus::Unknown;
+    }
+
+    qDebug() << "lokinet pid: " << pid;
+
+    return ProcessStatus::Running;
 }
 
 LokinetProcessManager::ProcessStatus LinuxLokinetProcessManager::getLastKnownStatus()

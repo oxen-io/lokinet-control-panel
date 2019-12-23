@@ -26,7 +26,7 @@ public:
     Q_INVOKABLE static bool startLokinetProcess();
     Q_INVOKABLE static bool stopLokinetProcess();
     Q_INVOKABLE static bool forciblyStopLokinetProcess();
-    Q_INVOKABLE static LokinetProcessManager::ProcessStatus getLokinetProcessStatus();
+    Q_INVOKABLE static bool isLokinetRunning();
 };
  
 #endif // __LOKI_PLATFORM_DETAILS_HPP__
