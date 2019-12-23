@@ -3,7 +3,7 @@
 #include <chrono>
 #include <QDebug>
 
-using namespace std::chrono_literals;
+using namespace std::literals::chrono_literals;
 
 bool LokinetProcessManager::startLokinetProcess()
 {
@@ -116,6 +116,11 @@ void LokinetProcessManager::setLastKnownStatus(ProcessStatus status)
 #if defined(Q_OS_LINUX)
 #include "LinuxLokinetProcessManager.hpp"
 LinuxLokinetProcessManager g_processManager;
+
+#elif defined(Q_OS_WIN)
+#include "WindowsLokinetProcessManager.hpp"
+WindowsLokinetProcessManager g_processManager;
+
 #endif
 
 LokinetProcessManager* LokinetProcessManager::instance()
