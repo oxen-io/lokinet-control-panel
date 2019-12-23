@@ -6,6 +6,10 @@
 
 /**
  * An abstract class for dealing with the lokinet process.
+ *
+ * This class provides a public interface for starting and stopping the lokinet
+ * process and delegates to platform-specific subclasses for implementation of
+ * actual process management.
  */
 class LokinetProcessManager : public QObject
 {
@@ -66,24 +70,34 @@ protected:
     /**
      * Subclasses should provide platform-specific means of starting the
      * lokinet process.
+     *
+     * @return true on success; false otherwise
      */
     virtual bool doStartLokinetProcess() = 0;
     
     /**
      * Subclasses should provide platform-specific means of stopping the
      * lokinet process.
+     *
+     * @return true on success; false otherwise
      */
     virtual bool doStopLokinetProcess() = 0;
     
     /**
      * Subclasses should provide platform-specific means of forcibly stopping
      * the lokinet process.
+     *
+     * @return true on success; false otherwise
      */
     virtual bool doForciblyStopLokinetProcess() = 0;
 
     /**
      * Subclasses should provide platform-specific means of querying the pid
      * of the lokinet process (or 0 if there is no such process)
+     *
+     * @param (out) pid should be filled out with the pid of the lokinet process
+     *              or 0 if there is no running process.
+     * @return true on success; false otherwise
      */
     virtual bool doGetProcessPid(int& pid) = 0;
 
