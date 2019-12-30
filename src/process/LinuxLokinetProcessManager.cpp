@@ -1,3 +1,5 @@
+#ifdef Q_OS_LINUX
+
 #include "LinuxLokinetProcessManager.hpp"
 
 #include <QProcess>
@@ -71,3 +73,4 @@ bool LinuxLokinetProcessManager::doGetProcessPid(int& pid)
     return true;
 }
 
+#endif // Q_OS_LINUX

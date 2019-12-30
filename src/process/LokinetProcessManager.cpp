@@ -121,6 +121,10 @@ LinuxLokinetProcessManager g_processManager;
 #include "WindowsLokinetProcessManager.hpp"
 WindowsLokinetProcessManager g_processManager;
 
+#elif defined(Q_OS_MACOS)
+#include "MacOSLokinetProcessManager.hpp"
+MacOSLokinetProcessManager g_processManager;
+
 #endif
 
 LokinetProcessManager* LokinetProcessManager::instance()

@@ -1,3 +1,5 @@
+#ifdef Q_OS_WIN
+
 #include "WindowsLokinetProcessManager.hpp"
 
 #include <QProcess>
@@ -83,3 +85,4 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
     return true;
 }
 
+#endif // Q_OS_WIN
