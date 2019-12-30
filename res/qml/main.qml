@@ -102,12 +102,6 @@ ApplicationWindow {
             MenuSeparator { }
 
             MenuItem {
-                text: qsTr("Is running?")
-                onTriggered: {
-                    platformDetails.isLokinetRunning();
-                }
-            }
-            MenuItem {
                 text: qsTr("Start lokinet")
                 onTriggered: {
                     platformDetails.startLokinetProcess();
