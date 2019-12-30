@@ -1,9 +1,9 @@
-#ifdef Q_OS_WIN
-
 #include "WindowsLokinetProcessManager.hpp"
 
 #include <QProcess>
 #include <QDebug>
+
+#ifdef Q_OS_WIN
 
 #include <cstdio>
 #include <windows.h>

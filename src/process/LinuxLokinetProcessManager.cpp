@@ -1,9 +1,9 @@
-#ifdef Q_OS_LINUX
-
 #include "LinuxLokinetProcessManager.hpp"
 
 #include <QProcess>
 #include <QDebug>
+
+#ifdef Q_OS_LINUX
 
 bool LinuxLokinetProcessManager::doStartLokinetProcess()
 {

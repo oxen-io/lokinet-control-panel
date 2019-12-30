@@ -1,10 +1,11 @@
-#ifdef Q_OS_LINUX
 #ifndef __LOKI_LINUX_LOKINET_PROCESS_MANAGER_HPP__
 #define __LOKI_LINUX_LOKINET_PROCESS_MANAGER_HPP__
 
 #include "LokinetProcessManager.hpp"
 
 #include <QObject>
+
+#ifdef Q_OS_LINUX
 
 /**
  * A Linux version of the Lokinet process manager.
@@ -22,5 +23,5 @@ protected:
 
 };
 
-#endif // __LOKI_LINUX_LOKINET_PROCESS_MANAGER_HPP__
 #endif // Q_OS_LINUX
+#endif // __LOKI_LINUX_LOKINET_PROCESS_MANAGER_HPP__
