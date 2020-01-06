@@ -21,7 +21,7 @@ ApplicationWindow {
     // this isn't going to work well on a "sloppy focus" window managers, but
     // probably works well on the most common OSes
     onActiveChanged: {
-        if (!active && !platformDetails.isDebug()) {
+        if (!active && !platformDetails.isDebug() && !platformDetails.isLinux()) {
             window.visible = false;
         }
     }
@@ -92,6 +92,13 @@ ApplicationWindow {
                 text: qsTr("Show")
                 onTriggered: {
                     window.display();
+                }
+            }
+            MenuItem {
+                text: qsTr("Hide")
+                visible: (PlatformDetails.isDebug() || PlatformDetails.isLinux())
+                onTriggered: {
+                    window.visible = false;
                 }
             }
             MenuItem {
