@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "process/LokinetProcessManager.hpp"
+
 /**
  * A class for exposing platform-specific details to QML
  */
@@ -17,6 +19,14 @@ public:
     Q_INVOKABLE static bool isMacOS();
 
     Q_INVOKABLE static bool isDebug();
+
+    /**
+     * The following functions are intended to be invoked from QML in a static way.
+     */
+    Q_INVOKABLE static bool startLokinetProcess();
+    Q_INVOKABLE static bool stopLokinetProcess();
+    Q_INVOKABLE static bool forciblyStopLokinetProcess();
+    Q_INVOKABLE static bool isLokinetRunning();
 };
  
 #endif // __LOKI_PLATFORM_DETAILS_HPP__

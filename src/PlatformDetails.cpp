@@ -36,3 +36,21 @@ Q_INVOKABLE bool PlatformDetails::isDebug() {
 	return false;
 #endif
 }
+
+Q_INVOKABLE bool PlatformDetails::startLokinetProcess() {
+	return LokinetProcessManager::instance()->startLokinetProcess();
+}
+
+Q_INVOKABLE bool PlatformDetails::stopLokinetProcess() {
+	return LokinetProcessManager::instance()->stopLokinetProcess();
+}
+
+Q_INVOKABLE bool PlatformDetails::forciblyStopLokinetProcess() {
+	return LokinetProcessManager::instance()->forciblyStopLokinetProcess();
+}
+
+Q_INVOKABLE bool PlatformDetails::isLokinetRunning() {
+	auto status = LokinetProcessManager::instance()->queryProcessStatus();
+	return (status == LokinetProcessManager::ProcessStatus::Running);
+}
+

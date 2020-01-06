@@ -100,6 +100,27 @@ ApplicationWindow {
                     Qt.quit();
                 }
             }
+
+            MenuSeparator { }
+
+            MenuItem {
+                text: qsTr("Start lokinet")
+                onTriggered: {
+                    platformDetails.startLokinetProcess();
+                }
+            }
+            MenuItem {
+                text: qsTr("Kill lokinet")
+                onTriggered: {
+                    platformDetails.stopLokinetProcess();
+                }
+            }
+            MenuItem {
+                text: qsTr("Force-kill lokinet")
+                onTriggered: {
+                    platformDetails.forciblyStopLokinetProcess();
+                }
+            }
         }
 
         // under some Linux window managers, intercepting left click (or even any click in some
