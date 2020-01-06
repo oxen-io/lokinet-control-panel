@@ -36,9 +36,11 @@ ApplicationWindow {
             // TODO: this allegedly returns 0,0 for x,y in some cases (e.g. some Linux WMs)
             //       so for now, we just hope the WM can do something intelligent for us
             //       (e.g. place the window near the mouse pointer)
-        } else { 
 
-            // position of our systray icon in its own screen coordinates (right?)
+        } else if (systray.geometry) { 
+
+            // if Qt / our OS will at least give us systray geometry, use it to set the
+            // position of our systray icon in its own screen coordinates
             const rect = systray.geometry;
             console.log("icon at: "+ rect.x + ", "+ rect.y);
             console.log("screen: "+ Screen.width +", "+ Screen.height);
