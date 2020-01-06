@@ -40,7 +40,7 @@ Container {
         x: 20
         y: 54
         // text: ""+ (down / (2^20)) +" MB" // TODO: pick appropriate scale
-        text: "TODO"
+        text: ""
         font.family: Style.weakTextFont
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
@@ -59,7 +59,7 @@ Container {
         x: 150
         y: 54
         // text: ""+ (up / (2^20)) +" MB" // TODO: pick appropriate scale
-        text: "TODO"
+        text: ""
         font.family: Style.weakTextFont
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
