@@ -96,7 +96,7 @@ ApplicationWindow {
             }
             MenuItem {
                 text: qsTr("Hide")
-                visible: (PlatformDetails.isDebug() || PlatformDetails.isLinux())
+                visible: (platformDetails.isDebug() || platformDetails.isLinux())
                 onTriggered: {
                     window.visible = false;
                 }
