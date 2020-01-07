@@ -117,15 +117,9 @@ ApplicationWindow {
                 }
             }
             MenuItem {
-                text: qsTr("Kill lokinet")
+                text: qsTr("Stop lokinet")
                 onTriggered: {
-                    platformDetails.stopLokinetProcess();
-                }
-            }
-            MenuItem {
-                text: qsTr("Force-kill lokinet")
-                onTriggered: {
-                    platformDetails.forciblyStopLokinetProcess();
+                    platformDetails.managedStopLokinetProcess();
                 }
             }
         }

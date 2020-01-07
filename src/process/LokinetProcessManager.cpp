@@ -2,8 +2,17 @@
 
 #include <chrono>
 #include <QDebug>
+#include <memory>
+#include <mutex>
 
 using namespace std::literals::chrono_literals;
+
+constexpr auto MANAGED_KILL_WAIT = 5s;
+
+LokinetProcessManager::LokinetProcessManager()
+    : m_managedThreadRunning(false)
+{
+}
 
 bool LokinetProcessManager::startLokinetProcess()
 {
@@ -77,6 +86,56 @@ bool LokinetProcessManager::forciblyStopLokinetProcess()
     }
 
     setLastKnownStatus(ProcessStatus::Stopping);
+    return true;
+}
+
+bool LokinetProcessManager::managedStopLokinetProcess()
+{
+    std::lock_guard<std::mutex> guard(m_managedStopMutex);
+
+    if (m_managedThreadRunning)
+    {
+        qDebug("Cannot create a managed stop thread; one already exists");
+        return false;
+    }
+
+    if (queryProcessStatus() != ProcessStatus::Running)
+    {
+        // TODO: should tolerate status == Starting
+        qDebug("Cannot create a managed stop thread when lokinet is not running");
+        return false;
+    }
+
+    m_managedThreadRunning = true;
+
+    std::thread t([this]() {
+        if (not stopLokinetProcess())
+        {
+            m_managedThreadRunning = false;
+            qDebug("stopLokinetProcess() failed in managed stop thread");
+            return;
+        }
+
+        qDebug() << "Waiting for "
+                 << std::chrono::milliseconds(MANAGED_KILL_WAIT).count()
+                 << "ms for graceful lokinet exit...";
+        std::this_thread::sleep_for(MANAGED_KILL_WAIT);
+
+        if (queryProcessStatus() == ProcessStatus::Running)
+        {
+            qDebug("lokinet did not exit gracefully, forcefully stopping it...");
+            doForciblyStopLokinetProcess();
+        }
+        else
+        {
+            qDebug("lokinet exited gracefully");
+        }
+
+        m_managedThreadRunning = false;
+
+    });
+    t.detach();
+
     return true;
 }
 

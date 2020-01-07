@@ -26,6 +26,7 @@ public:
     Q_INVOKABLE static bool startLokinetProcess();
     Q_INVOKABLE static bool stopLokinetProcess();
     Q_INVOKABLE static bool forciblyStopLokinetProcess();
+    Q_INVOKABLE static bool managedStopLokinetProcess();
     Q_INVOKABLE static bool isLokinetRunning();
 };
  
