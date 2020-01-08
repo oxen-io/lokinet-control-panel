@@ -1,5 +1,8 @@
 #include "PlatformDetails.hpp"
 
+#include <QPoint>
+#include <QCursor>
+
 // PlatformDetails::isWindows
 Q_INVOKABLE bool PlatformDetails::isWindows() {
 #if defined(Q_OS_WINDOWS)
@@ -58,3 +61,6 @@ Q_INVOKABLE bool PlatformDetails::isLokinetRunning() {
 	return (status == LokinetProcessManager::ProcessStatus::Running);
 }
 
+Q_INVOKABLE QPoint PlatformDetails::getAbsoluteCursorPosition() {
+    return QCursor::pos();
+}
