@@ -113,17 +113,18 @@ void LokinetProcessManager::setLastKnownStatus(ProcessStatus status)
 
 // define a global instance of the platform-specific process manager at
 // compile-time
-#if defined(Q_OS_LINUX)
-#include "LinuxLokinetProcessManager.hpp"
-LinuxLokinetProcessManager g_processManager;
 
-#elif defined(Q_OS_WIN)
+#if defined(Q_OS_WIN)
 #include "WindowsLokinetProcessManager.hpp"
 WindowsLokinetProcessManager g_processManager;
 
 #elif defined(Q_OS_MACOS)
 #include "MacOSLokinetProcessManager.hpp"
 MacOSLokinetProcessManager g_processManager;
+
+#else
+#include "LinuxLokinetProcessManager.hpp"
+LinuxLokinetProcessManager g_processManager;
 
 #endif
 
