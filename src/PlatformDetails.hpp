@@ -2,6 +2,7 @@
 #define __LOKI_PLATFORM_DETAILS_HPP__
 
 #include <QObject>
+#include <QPoint>
 
 #include "process/LokinetProcessManager.hpp"
 
@@ -26,7 +27,10 @@ public:
     Q_INVOKABLE static bool startLokinetProcess();
     Q_INVOKABLE static bool stopLokinetProcess();
     Q_INVOKABLE static bool forciblyStopLokinetProcess();
+    Q_INVOKABLE static bool managedStopLokinetProcess();
     Q_INVOKABLE static bool isLokinetRunning();
+
+    Q_INVOKABLE static QPoint getAbsoluteCursorPosition();
 };
  
 #endif // __LOKI_PLATFORM_DETAILS_HPP__

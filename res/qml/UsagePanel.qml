@@ -16,6 +16,18 @@ Container {
         color: Style.panelBackgroundColor
     }
 
+    function makeRate(value)
+    {
+      var unit_idx = 0;
+      var units = ["B", "KB", "MB"];
+      while(value > 1024.0 && ( unit_idx + 1 ) < units.length)
+      {
+        value /= 1024.0;
+        unit_idx += 1;
+      }
+      return "" + Math.round(value) + units[unit_idx] + "/s";
+    }
+
     // "Usage" label
     Text {
         x: 20
@@ -39,8 +51,7 @@ Container {
     Text {
         x: 20
         y: 54
-        // text: ""+ (down / (2^20)) +" MB" // TODO: pick appropriate scale
-        text: "TODO"
+        text: makeRate(down)
         font.family: Style.weakTextFont
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
@@ -58,8 +69,7 @@ Container {
     Text {
         x: 150
         y: 54
-        // text: ""+ (up / (2^20)) +" MB" // TODO: pick appropriate scale
-        text: "TODO"
+        text: makeRate(up)
         font.family: Style.weakTextFont
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize

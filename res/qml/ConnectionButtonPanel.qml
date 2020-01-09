@@ -73,7 +73,7 @@ Container {
                         }
                     });
                 } else {
-                    // TODO: tell daemon to pause
+                    platformDetails.managedStopLokinetProcess();
                 }
             }
         }

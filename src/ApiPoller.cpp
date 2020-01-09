@@ -60,11 +60,16 @@ void ApiPoller::pollDaemon() {
         return;
     }
     m_httpClient.postJson(LOKI_DAEMON_URL, m_rpcPayload, [=](QNetworkReply* reply) {
+        static bool lastAttemptWasError = false;
         if (reply->error()) {
-            qDebug() << "JSON-RPC error: " << reply->error();
-            qDebug() << "         in response to query: " << m_rpcPayload.c_str();
+            if (! lastAttemptWasError) {
+                qDebug() << "JSON-RPC error: " << reply->error();
+                qDebug() << "         in response to query: " << m_rpcPayload.c_str();
+            }
+            lastAttemptWasError = true;
             emit statusAvailable("", reply->error());
         } else {
+            lastAttemptWasError = false;
             emit statusAvailable(reply->readAll(), reply->error());
         }
     });

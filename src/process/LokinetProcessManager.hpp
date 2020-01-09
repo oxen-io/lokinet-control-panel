@@ -3,6 +3,9 @@
 
 #include <QObject>
 #include <chrono>
+#include <memory>
+#include <mutex>
+#include <thread>
 
 /**
  * An abstract class for dealing with the lokinet process.
@@ -25,6 +28,11 @@ public:
         Stopping,
         Stopped,
     };
+
+    /**
+     * Constructor
+     */
+    LokinetProcessManager();
     
     /**
      * Start the lokinet process.
@@ -50,6 +58,20 @@ public:
      *         true otherwise
      */
     bool forciblyStopLokinetProcess();
+
+    /**
+     * Stop the process in a managed way. The process will immediately be stopped
+     * and will be given a short amount of time to gracefully exit, after which
+     * it will be forcefully terminated.
+     *
+     * This will spawn a thread which will manage the termination process. Only
+     * one thread may exist at a time; the function will return false if there
+     * is already an outstanding thread.
+     *
+     * @return false if an error occurs or the process is not running or there
+     *         is already managed stop process, true otherwise
+     */
+    bool managedStopLokinetProcess();
 
     /**
      * Query the status of the process. This should query the OS for a realtime
@@ -115,6 +137,9 @@ private:
 
     ProcessStatus m_lastKnownStatus = ProcessStatus::Unknown;
     std::chrono::system_clock::time_point m_lastStatusTime;
+
+    std::mutex m_managedStopMutex; // prevents more than one concurrent call to managedStopLokinetProcess()
+    std::atomic_bool m_managedThreadRunning;
 };
  
 #endif // __LOKI_LOKINET_PROCESS_MANAGER_HPP__

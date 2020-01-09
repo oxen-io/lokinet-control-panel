@@ -17,7 +17,6 @@ Container {
     }
 
     function convertUptimeToHumanReadable(uptime) {
-        console.log("uptime: "+ uptime);
         const dayMillis = (24 * 3600 * 1000);
 
         const days = Math.floor(uptime / dayMillis);

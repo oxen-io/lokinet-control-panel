@@ -17,6 +17,7 @@ ColumnLayout {
     property var numRoutersKnown: 0
     property var downloadUsage: 0
     property var uploadUsage: 0
+    property var numPeersConnected: 0
 
     LogoHeaderPanel {
     }
@@ -68,12 +69,12 @@ ColumnLayout {
     Component.onCompleted: {
         stateApiPoller.statusAvailable.connect(handleStateResults);
         stateApiPoller.pollImmediately();
-        stateApiPoller.setIntervalMs(3000);
+        stateApiPoller.setIntervalMs(500);
         stateApiPoller.startPolling();
 
         statusApiPoller.statusAvailable.connect(handleStatusResults);
         statusApiPoller.pollImmediately();
-        statusApiPoller.setIntervalMs(3000);
+        statusApiPoller.setIntervalMs(500);
         statusApiPoller.startPolling();
 
     }
@@ -90,6 +91,7 @@ ColumnLayout {
             numRoutersKnown = 0;
             downloadUsage = 0;
             uploadUsage = 0;
+            numPeersConnected = 0;
         } else {
             console.log("Detected [re-]connection");
             queryVersion();
@@ -106,14 +108,53 @@ ColumnLayout {
                 console.log("Couldn't parse 'dumpState' JSON-RPC payload", err);
             }
         }
-
+        var forEachSession = function(visit) {
+           var st = stats.result;
+           for(var idx in st.links)
+           {
+             if(!st.links[idx])
+               continue;
+             else
+             {
+               var links = st.links[idx];
+               for(var l_idx in links)
+               {
+                 var link = links[l_idx];
+                 if(!link)
+                   continue;
+                 var peers = link.sessions.established;
+                 for(var p_idx in peers)
+                 {
+                   visit(peers[p_idx]);
+                 }
+               }
+             }
+           }
+        };
         // calculate our new state in local scope before updating global scope
         var newConnected = (! error && stats != null);
         var newRunning = false;
         var newLokiAddress = "";
         var newNumRouters = 0;
-
+        var txRate = 0;
+        var rxRate = 0;
+        var peers = 0;
         if (! error) {
+            try {
+                forEachSession(function(s) {
+                   txRate += s.tx;
+                   rxRate += s.rx;
+                   peers += 1;
+                });
+            } catch (err) {
+                txRate = 0;
+                rxRate = 0;
+                peers = 0;
+                console.log("Couldn't pull tx/rx of payload", err);
+            }
+            uploadUsage = txRate;
+            downloadUsage = rxRate;
+            numPeersConnected = peers;
             try {
                 newRunning = stats.result.running;
             } catch (err) {
@@ -146,18 +187,16 @@ ColumnLayout {
         if (newRunning !== isRunning) isRunning = newRunning;
         if (newLokiAddress !== lokiAddress) lokiAddress = newLokiAddress;
         if (newNumRouters !== numRoutersKnown) numRoutersKnown = newNumRouters;
-
     }
 
     function handleStatusResults(payload, error) {
-        if (error) {
-            console.log("Error requesting status: ", error);
-        }
-        try {
-            const responseObj = JSON.parse(payload);
-            lokiUptime = responseObj.result.uptime;
-        } catch (err) {
-            console.log("Couldn't parse 'status' JSON-RPC payload", err);
+        if (! error) {
+            try {
+                const responseObj = JSON.parse(payload);
+                lokiUptime = responseObj.result.uptime;
+            } catch (err) {
+                console.log("Couldn't parse 'status' JSON-RPC payload", err);
+            }
         }
     }
 
