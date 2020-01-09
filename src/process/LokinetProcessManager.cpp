@@ -122,6 +122,9 @@ WindowsLokinetProcessManager g_processManager;
 #include "MacOSLokinetProcessManager.hpp"
 MacOSLokinetProcessManager g_processManager;
 
+// tested: Linux, NetBSD, FreeBSD, Solaris
+// netbsd dev reimplemented pkill and all the other
+// FOSS kernels ship it
 #else
 #include "LinuxLokinetProcessManager.hpp"
 LinuxLokinetProcessManager g_processManager;
