@@ -82,17 +82,6 @@ ApplicationWindow {
             id: systrayMenu
             enabled: true
 
-            Component.onCompleted: {
-                // Qt on MacOS only gives us one event to work with, namely
-                // onActivated() where action == Trigger. It will also try to
-                // show the context menu at the same time.
-                // We don't want both, and we only get one, so we disable the
-                // menu.
-                if (platformDetails.isMacOS()) {
-                    systray.menu = null;
-                }
-            }
-
             MenuItem {
                 text: qsTr("Show")
                 onTriggered: {
@@ -149,7 +138,15 @@ ApplicationWindow {
                 // left click
                 case SystemTrayIcon.Trigger:
                 case SystemTrayIcon.DoubleClick:
-                    window.display();
+
+                    // Qt on MacOS only gives us one event to work with, namely
+                    // onActivated() where action == Trigger. It will also try to
+                    // show the context menu at the same time.
+                    // We don't want both, and we only get one, so we let Qt show
+                    // the context menu.
+                    if (! platformDetails.isMacOS()) {
+                        window.display();
+                    }
                     break;
 
                 default:
