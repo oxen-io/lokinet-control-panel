@@ -5,7 +5,7 @@
 
 #include <QObject>
 
-#ifdef Q_OS_LINUX
+#if !defined(Q_OS_WIN) && !defined(Q_OS_MACOS)
 
 /**
  * A Linux version of the Lokinet process manager.

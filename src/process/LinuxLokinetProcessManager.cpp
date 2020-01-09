@@ -3,7 +3,7 @@
 #include <QProcess>
 #include <QDebug>
 
-#ifdef Q_OS_LINUX
+#if !defined(Q_OS_WIN) && !defined(Q_OS_MACOS)
 
 bool LinuxLokinetProcessManager::doStartLokinetProcess()
 {
@@ -17,10 +17,10 @@ bool LinuxLokinetProcessManager::doStartLokinetProcess()
 bool LinuxLokinetProcessManager::doStopLokinetProcess()
 {
     QStringList args = { "lokinet" };
-    int result = QProcess::execute("killall", args);
+    int result = QProcess::execute("pkill", args);
     if (result)
     {
-        qDebug("Failed to 'killall lokinet': %d", result);
+        qDebug("Failed to 'pkill lokinet': %d", result);
         return false;
     }
 
@@ -30,10 +30,10 @@ bool LinuxLokinetProcessManager::doStopLokinetProcess()
 bool LinuxLokinetProcessManager::doForciblyStopLokinetProcess()
 {
     QStringList args = { "-9", "lokinet" };
-    int result = QProcess::execute("killall", args);
+    int result = QProcess::execute("pkill", args);
     if (result)
     {
-        qDebug("Failed to 'killall -9 lokinet': %d", result);
+        qDebug("Failed to 'pkill -9 lokinet': %d", result);
         return false;
     }
 
@@ -43,13 +43,13 @@ bool LinuxLokinetProcessManager::doForciblyStopLokinetProcess()
 bool LinuxLokinetProcessManager::doGetProcessPid(int& pid)
 {
     QProcess proc;
-    proc.setProgram("pidof");
-    proc.setArguments({"-s", "lokinet"});
+    proc.setProgram("pgrep");
+    proc.setArguments({"lokinet"});
     proc.start();
     bool success = proc.waitForFinished(5000);
     if (!success)
     {
-        qDebug("Could not exec pidof");
+        qDebug("Could not exec pgrep");
         return false;
     }
 
@@ -64,7 +64,7 @@ bool LinuxLokinetProcessManager::doGetProcessPid(int& pid)
     int tmp = output.toInt(&success);
     if (!success)
     {
-        qDebug() << "Unrecognized 'pidof' output: " << output;
+        qDebug() << "Unrecognized 'pgrep' output: " << output;
         return false;
     }
 
