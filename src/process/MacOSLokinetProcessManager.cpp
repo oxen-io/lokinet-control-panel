@@ -30,9 +30,43 @@ bool sudo(const std::string& cmd, const char* args[])
     return (status == errAuthorizationSuccess);
 }
 
+MacOSLokinetProcessManager::~MacOSLokinetProcessManager()
+{
+    if (m_dnsClaimed)
+    {
+        unclaimDNS();
+    }
+}
+
+bool MacOSLokinetProcessManager::claimDNS()
+{
+    int result = system("dns_claim.sh");
+    if (result)
+        qDebug() << "warning: failed to claim dns: " << result;
+    else
+        m_dnsClaimed = true;
+
+    return (result == 0);
+}
+
+bool MacOSLokinetProcessManager::unclaimDNS()
+{
+    int result = system("dns_unclaim.sh");
+    if (result)
+        qDebug() << "warning: failed to unclaim dns: " << result;
+    else
+        m_dnsClaimed = false;
+
+    return (result == 0);
+}
+
 bool MacOSLokinetProcessManager::doStartLokinetProcess()
 {
-    bool success = sudo("/usr/local/bin/lokinet", {NULL});
+    bool success = claimDNS();
+    if (! success)
+        qDebug("dns claim failed, starting lokinet anyway");
+
+    success = sudo("lokinet", {NULL});
     if (! success)
         qDebug("failed to launch lokinet via AuthorizationExecuteWithPrivileges");
 
@@ -41,8 +75,12 @@ bool MacOSLokinetProcessManager::doStartLokinetProcess()
 
 bool MacOSLokinetProcessManager::doStopLokinetProcess()
 {
+    bool success = unclaimDNS();
+    if (! success)
+        qDebug("dns unclaim failed, killing lokinet anyway");
+
     const char* args[] = {"lokinet", NULL};
-    bool success = sudo("/usr/bin/killall", args);
+    success = sudo("/usr/bin/killall", args);
     if (! success)
         qDebug("failed to launch lokinet via AuthorizationExecuteWithPrivileges");
 

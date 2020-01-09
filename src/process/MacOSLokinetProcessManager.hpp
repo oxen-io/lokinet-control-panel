@@ -14,6 +14,9 @@ class MacOSLokinetProcessManager : public LokinetProcessManager
 {
     Q_OBJECT
 
+public:
+    ~MacOSLokinetProcessManager();
+
 protected:
     
     bool doStartLokinetProcess() override;
@@ -21,6 +24,12 @@ protected:
     bool doForciblyStopLokinetProcess() override;
     bool doGetProcessPid(int& pid) override;
 
+private:
+
+    bool claimDNS();
+    bool unclaimDNS();
+    
+    bool m_dnsClaimed = false;
 };
 
 #endif // __LOKI_MACOS_LOKINET_PROCESS_MANAGER_HPP__
