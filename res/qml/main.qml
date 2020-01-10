@@ -95,12 +95,6 @@ ApplicationWindow {
                     window.visible = false;
                 }
             }
-            MenuItem {
-                text: qsTr("Exit")
-                onTriggered: {
-                    Qt.quit();
-                }
-            }
 
             MenuSeparator { }
 
@@ -116,6 +110,27 @@ ApplicationWindow {
                     platformDetails.managedStopLokinetProcess();
                 }
             }
+
+            MenuSeparator { }
+            MenuItem {
+                text: qsTr("About Lokinet")
+                onTriggered: {
+                    var component = Qt.createComponent("about.qml")
+                    if( component.status != Component.Ready ) {
+                      console.debug("Error:"+ component.errorString() );
+                      return
+                    }
+                    var aboutWindow = component.createObject(window)
+                    aboutWindow.show()
+                }
+            }
+            MenuItem {
+                text: qsTr("Exit")
+                onTriggered: {
+                    Qt.quit();
+                }
+            }
+
         }
 
         // under some Linux window managers, intercepting left click (or even any click in some
