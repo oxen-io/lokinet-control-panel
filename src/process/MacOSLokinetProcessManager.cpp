@@ -146,12 +146,12 @@ bool MacOSLokinetProcessManager::doStartLokinetProcess()
 bool MacOSLokinetProcessManager::doStopLokinetProcess()
 {
     const char* args[] = {LOKINET_BINARY_NAME, NULL};
-    success = sudo("/usr/bin/killall", args);
+    bool success = sudo("/usr/bin/killall", args);
     if (not success) {
         qDebug("failed to kill lokinet via AuthorizationExecuteWithPrivileges");
         return false;
     }
-    bool success = unclaimDNS();
+    success = unclaimDNS();
     if (not success)
         qDebug("dns unclaim failed, killing lokinet anyway");
 
