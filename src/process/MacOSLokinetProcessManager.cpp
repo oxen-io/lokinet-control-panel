@@ -7,6 +7,33 @@
 
 #ifdef Q_OS_MACOS
 
+#include "CoreFoundation/CoreFoundation.h"
+
+#define LOKINET_BINARY_NAME    "lokinet"
+
+// these paths are all relative to the app bundle root
+#define BINARY_PATH            "Contents/MacOS/"
+#define DNS_CLAIM_FILEPATH     BINARY_PATH "/dns_claim.sh"
+#define DNS_UNCLAIM_FILEPATH   BINARY_PATH "/dns_unclaim.sh"
+#define LOKINET_FILEPATH       BINARY_PATH "/" LOKINET_BINARY_NAME
+
+#define RESOURCES_PATH         "Contents/Resources/"
+#define DISABLE_DNS_FILE       RESOURCES_PATH "/disable_auto_dns"
+
+void resetMacPwd() {
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
+    char path[PATH_MAX];
+    if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
+    {
+        qDebug("Couldn't reset mac PWD, good luck");
+    }
+    CFRelease(resourcesURL);
+
+    chdir(path);
+    qDebug() << "Current Path: " << path;
+}
+
 // utility to run a process as root
 // Note that 'args' should be NULL-terminated
 bool sudo(const std::string& cmd, const char* args[])
@@ -30,9 +57,43 @@ bool sudo(const std::string& cmd, const char* args[])
     return (status == errAuthorizationSuccess);
 }
 
+MacOSLokinetProcessManager::~MacOSLokinetProcessManager()
+{
+    if (m_dnsClaimed)
+    {
+        unclaimDNS();
+    }
+}
+
+bool MacOSLokinetProcessManager::claimDNS()
+{
+    int result = system(DNS_CLAIM_FILEPATH);
+    if (result)
+        qDebug() << "warning: failed to claim dns: " << result;
+    else
+        m_dnsClaimed = true;
+
+    return (result == 0);
+}
+
+bool MacOSLokinetProcessManager::unclaimDNS()
+{
+    int result = system(DNS_UNCLAIM_FILEPATH);
+    if (result)
+        qDebug() << "warning: failed to unclaim dns: " << result;
+    else
+        m_dnsClaimed = false;
+
+    return (result == 0);
+}
+
 bool MacOSLokinetProcessManager::doStartLokinetProcess()
 {
-    bool success = sudo("/usr/local/bin/lokinet", {NULL});
+    bool success = claimDNS();
+    if (! success)
+        qDebug("dns claim failed, starting lokinet anyway");
+
+    success = sudo(LOKINET_FILEPATH, {NULL});
     if (! success)
         qDebug("failed to launch lokinet via AuthorizationExecuteWithPrivileges");
 
@@ -41,8 +102,12 @@ bool MacOSLokinetProcessManager::doStartLokinetProcess()
 
 bool MacOSLokinetProcessManager::doStopLokinetProcess()
 {
-    const char* args[] = {"lokinet", NULL};
-    bool success = sudo("/usr/bin/killall", args);
+    bool success = unclaimDNS();
+    if (! success)
+        qDebug("dns unclaim failed, killing lokinet anyway");
+
+    const char* args[] = {LOKINET_BINARY_NAME, NULL};
+    success = sudo("/usr/bin/killall", args);
     if (! success)
         qDebug("failed to launch lokinet via AuthorizationExecuteWithPrivileges");
 
@@ -51,7 +116,7 @@ bool MacOSLokinetProcessManager::doStopLokinetProcess()
 
 bool MacOSLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    const char* args[] = {"-9", "lokinet", NULL};
+    const char* args[] = {"-9", LOKINET_BINARY_NAME, NULL};
     bool success = sudo("/usr/bin/killall", args);
     if (! success)
         qDebug("failed to launch lokinet via AuthorizationExecuteWithPrivileges");
@@ -63,7 +128,7 @@ bool MacOSLokinetProcessManager::doGetProcessPid(int& pid)
 {
     QProcess proc;
     proc.setProgram("pgrep");
-    proc.setArguments({"lokinet"});
+    proc.setArguments({LOKINET_BINARY_NAME});
     proc.start();
     bool success = proc.waitForFinished(5000);
     if (!success)
