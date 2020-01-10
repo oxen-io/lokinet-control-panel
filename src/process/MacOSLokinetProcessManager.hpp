@@ -15,10 +15,11 @@ class MacOSLokinetProcessManager : public LokinetProcessManager
     Q_OBJECT
 
 public:
+    MacOSLokinetProcessManager();
     ~MacOSLokinetProcessManager();
 
 protected:
-    
+
     bool doStartLokinetProcess() override;
     bool doStopLokinetProcess() override;
     bool doForciblyStopLokinetProcess() override;
@@ -28,7 +29,8 @@ private:
 
     bool claimDNS();
     bool unclaimDNS();
-    
+
+    bool m_dnsClaimEnabled = true;
     bool m_dnsClaimed = false;
 };
 
