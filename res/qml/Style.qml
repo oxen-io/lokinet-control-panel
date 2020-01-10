@@ -20,6 +20,8 @@ QtObject {
     readonly property color highlightNeutral: "#746c53"
     readonly property color highlightNegative: "#cc163d"
 
+    readonly property color linkColor: "#2C9B0C"
+
     // app dimensions -- TODO: components should be sized dynamically,
     // this should either be defined/used in one place or implied by
     // the desired size of widgets
