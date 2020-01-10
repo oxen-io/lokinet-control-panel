@@ -7,6 +7,8 @@
 
 #ifdef Q_OS_MACOS
 
+#include "CoreFoundation/CoreFoundation.h"
+
 #define LOKINET_BINARY_NAME    "lokinet"
 
 // these paths are all relative to the app bundle root
@@ -17,6 +19,20 @@
 
 #define RESOURCES_PATH         "Contents/Resources/"
 #define DISABLE_DNS_FILE       RESOURCES_PATH "/disable_auto_dns"
+
+void resetMacPwd() {
+    CFBundleRef mainBundle = CFBundleGetMainBundle();
+    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
+    char path[PATH_MAX];
+    if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
+    {
+        qDebug("Couldn't reset mac PWD, good luck");
+    }
+    CFRelease(resourcesURL);
+
+    chdir(path);
+    qDebug() << "Current Path: " << path;
+}
 
 // utility to run a process as root
 // Note that 'args' should be NULL-terminated
