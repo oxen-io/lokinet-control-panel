@@ -11,6 +11,11 @@ constexpr auto MANAGED_KILL_WAIT = 5s;
 
 LokinetProcessManager::LokinetProcessManager()
     : m_managedThreadRunning(false)
+    , m_didLaunchProcess(false)
+{
+}
+
+LokinetProcessManager::~LokinetProcessManager()
 {
 }
 
@@ -36,6 +41,8 @@ bool LokinetProcessManager::startLokinetProcess()
         qDebug("Failed to launch 'lokinet' process");
         return false;
     }
+
+    m_didLaunchProcess = true;
 
     setLastKnownStatus(ProcessStatus::Starting);
     return true;
@@ -63,6 +70,10 @@ bool LokinetProcessManager::stopLokinetProcess()
         return false;
     }
 
+    // note that we don't touch m_didLaunchProcess here because we don't
+    // know whether or not lokinet will gracefully exit (and it often doesn't
+    // on non-linux platforms)
+
     setLastKnownStatus(ProcessStatus::Stopping);
     return true;
 }
@@ -85,7 +96,9 @@ bool LokinetProcessManager::forciblyStopLokinetProcess()
         return false;
     }
 
+    m_didLaunchProcess = false;
     setLastKnownStatus(ProcessStatus::Stopping);
+
     return true;
 }
 
@@ -119,7 +132,14 @@ bool LokinetProcessManager::managedStopLokinetProcess()
         qDebug() << "Waiting for "
                  << std::chrono::milliseconds(MANAGED_KILL_WAIT).count()
                  << "ms for graceful lokinet exit...";
-        std::this_thread::sleep_for(MANAGED_KILL_WAIT);
+
+        // check status frequently until lokinet dies or we timeout
+        auto start = std::chrono::system_clock::now();
+        while ((std::chrono::system_clock::now() - start) < MANAGED_KILL_WAIT
+                && queryProcessStatus() == ProcessStatus::Running)
+        {
+            std::this_thread::sleep_for(50ms);
+        }
 
         if (queryProcessStatus() == ProcessStatus::Running)
         {
@@ -131,10 +151,45 @@ bool LokinetProcessManager::managedStopLokinetProcess()
             qDebug("lokinet exited gracefully");
         }
 
+        m_didLaunchProcess = false;
         m_managedThreadRunning = false;
 
     });
     t.detach();
+
+    return true;
+}
+
+bool LokinetProcessManager::stopLokinetIfWeStartedIt(bool block)
+{
+    if (m_didLaunchProcess)
+    {
+        qDebug("stopLokinetIfWeStartedIt() killing lokinet process since we launched it");
+        bool success = managedStopLokinetProcess();
+        if (not success)
+        {
+            qDebug("managedStopLokinetProcess() failed inside stopLokinetIfWeStartedIt()");
+            return false;
+        }
+
+        // check status frequently until lokinet dies or we timeout (where timeout
+        // is slightly longer here than in managedStopLokinetProcess())
+        if (block)
+        {
+            // wait slightly longer than managedStopLokinetProcess() to account for other
+            // calls that it makes, otherwise it might not make its force-kill call
+            constexpr auto timeout = MANAGED_KILL_WAIT + 1s;
+
+            auto start = std::chrono::system_clock::now();
+            while ((std::chrono::system_clock::now() - start) < timeout
+                    && queryProcessStatus() == ProcessStatus::Running)
+            {
+                std::this_thread::sleep_for(50ms);
+            }
+
+            return (queryProcessStatus() != ProcessStatus::Running);
+        }
+    }
 
     return true;
 }

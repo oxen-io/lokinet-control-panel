@@ -33,6 +33,11 @@ public:
      * Constructor
      */
     LokinetProcessManager();
+
+    /**
+     * Destructor
+     */
+    virtual ~LokinetProcessManager();
     
     /**
      * Start the lokinet process.
@@ -44,6 +49,11 @@ public:
     
     /**
      * Stop the lokinet process.
+     *
+     * Note that this will not update m_didLaunchProcess as it doesn't know
+     * whether or not the lokinet process exits gracefully. This may result in
+     * an error condition being returned when calling stopLokinetIfWeStartedIt()
+     * but this is harmless.
      *
      * @return false if an error occurs or the process is not running,
      *         true otherwise
@@ -72,6 +82,20 @@ public:
      *         is already managed stop process, true otherwise
      */
     bool managedStopLokinetProcess();
+
+    /**
+     * Invokes managedStopLokinetProcess() iff we launched the process in the first
+     * place. Effectively this allows us to fully manage the lokinet process in the
+     * normal case but won't touch the process on exit if it was launched by some
+     * other mechanism.
+     *
+     * @param block determines whether or not we block until the managed process
+     *        terminates.
+     * @return false if any error occurs, true if we don't invoke
+     *         managedStopLokinetProcess(), true if the process actually died
+     *         within the timeout (MANAGED_KILL_WAIT)
+     */
+    bool stopLokinetIfWeStartedIt(bool block = true);
 
     /**
      * Query the status of the process. This should query the OS for a realtime
@@ -140,6 +164,8 @@ private:
 
     std::mutex m_managedStopMutex; // prevents more than one concurrent call to managedStopLokinetProcess()
     std::atomic_bool m_managedThreadRunning;
+
+    std::atomic_bool m_didLaunchProcess;
 };
  
 #endif // __LOKI_LOKINET_PROCESS_MANAGER_HPP__

@@ -56,6 +56,10 @@ Q_INVOKABLE bool PlatformDetails::managedStopLokinetProcess() {
 	return LokinetProcessManager::instance()->managedStopLokinetProcess();
 }
 
+Q_INVOKABLE bool PlatformDetails::stopLokinetIfWeStartedIt() {
+	return LokinetProcessManager::instance()->stopLokinetIfWeStartedIt();
+}
+
 Q_INVOKABLE bool PlatformDetails::isLokinetRunning() {
 	auto status = LokinetProcessManager::instance()->queryProcessStatus();
 	return (status == LokinetProcessManager::ProcessStatus::Running);
