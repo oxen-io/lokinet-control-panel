@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE static bool stopLokinetProcess();
     Q_INVOKABLE static bool forciblyStopLokinetProcess();
     Q_INVOKABLE static bool managedStopLokinetProcess();
+    Q_INVOKABLE static bool stopLokinetIfWeStartedIt();
     Q_INVOKABLE static bool isLokinetRunning();
 
     Q_INVOKABLE static QPoint getAbsoluteCursorPosition();

@@ -98,6 +98,9 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("Exit")
                 onTriggered: {
+                    if (! platformDetails.isDebug()) {
+                        platformDetails.stopLokinetIfWeStartedIt();
+                    }
                     Qt.quit();
                 }
             }
