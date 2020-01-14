@@ -21,6 +21,8 @@ HttpClient::HttpClient() {
         lock.unlock();
 
         callback(reply);
+
+        reply->deleteLater();
     });
 }
 
