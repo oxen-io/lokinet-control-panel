@@ -21,9 +21,9 @@
 #define DNS_CLAIM_FILEPATH     "./dns_claim.sh"
 #define DNS_UNCLAIM_FILEPATH   "./dns_unclaim.sh"
 
-#define DISABLE_DNS_FILE       "disable_auto_dns"
+#define DISABLE_DNS_FILE       "/disable_auto_dns"
 
-char *getExecutablePath() {
+std::string getExecutablePath() {
     CFBundleRef mainBundle = CFBundleGetMainBundle();
     CFURLRef executeablesURL = CFBundleCopyExecutableURL(mainBundle);
     char path[PATH_MAX];
@@ -32,10 +32,10 @@ char *getExecutablePath() {
         qDebug("Couldn't getExecutablePath, good luck");
     }
     CFRelease(executeablesURL);
-    return strdup(dirname(path));
+    return std::string(dirname(path));
 }
 
-char *getResourcesPath() {
+std::string getResourcesPath() {
     CFBundleRef mainBundle = CFBundleGetMainBundle();
     CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
     char path[PATH_MAX];
@@ -45,7 +45,7 @@ char *getResourcesPath() {
     }
     CFRelease(resourcesURL);
 
-    return strdup(path);
+    return std::string(path);
 }
 
 // utility to run a process as root
@@ -73,11 +73,8 @@ bool sudo(const std::string& cmd, const char* args[])
 
 MacOSLokinetProcessManager::MacOSLokinetProcessManager()
 {
-    char *resourcePath = getResourcesPath();
-    qDebug() << "Resource Path: " << resourcePath;
-    std::string dtd_path(resourcePath);
-    free(resourcePath);
-    dtd_path.append(std::string(DISABLE_DNS_FILE));
+    std::string dtd_path = getResourcesPath() + DISABLE_DNS_FILE;
+    qDebug() << "DNS Claim check: " << dtd_path.c_str();
     struct stat buffer;
     if (stat(dtd_path.c_str(), & buffer) == 0) {
       qDebug("DNS Claim disabled");
@@ -85,10 +82,9 @@ MacOSLokinetProcessManager::MacOSLokinetProcessManager()
     } else {
       qDebug("DNS Claim enabled");
     }
-    char *execPath = getExecutablePath();
-    chdir(execPath);
-    qDebug() << "Executable Path: " << execPath;
-    free(execPath);
+    std::string execPath = getExecutablePath();
+    chdir(execPath.c_str());
+    qDebug() << "Executable Path: " << execPath.c_str();
 }
 
 MacOSLokinetProcessManager::~MacOSLokinetProcessManager()
