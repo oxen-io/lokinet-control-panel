@@ -2,12 +2,16 @@
 
 #include <chrono>
 #include <QDebug>
+#include <QFile>
+#include <QStandardPaths>
 #include <memory>
 #include <mutex>
 
 using namespace std::literals::chrono_literals;
 
 constexpr auto MANAGED_KILL_WAIT = 5s;
+
+constexpr auto BOOTSTRAP_URL = "https://seed.lokinet.org/lokinet.signed";
 
 LokinetProcessManager::LokinetProcessManager()
     : m_managedThreadRunning(false)
@@ -194,6 +198,26 @@ bool LokinetProcessManager::stopLokinetIfWeStartedIt(bool block)
     return true;
 }
 
+void LokinetProcessManager::downloadBootstrapFile()
+{
+    m_httpClient.get(BOOTSTRAP_URL, [=](QNetworkReply* reply) {
+
+        // TODO: check headers, response status, etc.
+
+        qDebug() << "Received bootstrap file";
+
+        QString filepath = getDefaultBootstrapFileLocation();
+
+        qDebug() << "Writing bootstrap file to " << filepath;
+
+        // TODO: should be done in different thread?
+        QFile file(filepath);
+        file.open(QIODevice::WriteOnly);
+        file.write(reply->readAll());
+        file.close();
+    });
+}
+
 LokinetProcessManager::ProcessStatus LokinetProcessManager::queryProcessStatus()
 {
     int pid = 0;
@@ -206,6 +230,12 @@ LokinetProcessManager::ProcessStatus LokinetProcessManager::queryProcessStatus()
     return pid
         ? ProcessStatus::Running
         : ProcessStatus::Stopped;
+}
+
+QString LokinetProcessManager::getDefaultBootstrapFileLocation()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+        + "/.lokinet/bootstrap.signed";
 }
 
 LokinetProcessManager::ProcessStatus LokinetProcessManager::getLastKnownStatus()

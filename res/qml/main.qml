@@ -119,6 +119,15 @@ ApplicationWindow {
                     platformDetails.managedStopLokinetProcess();
                 }
             }
+
+            MenuSeparator { }
+
+            MenuItem {
+                text: qsTr("Bootstrap Client from Web")
+                onTriggered: {
+                    platformDetails.downloadBootstrapFile();
+                }
+            }
         }
 
         // under some Linux window managers, intercepting left click (or even any click in some

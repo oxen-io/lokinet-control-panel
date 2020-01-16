@@ -2,6 +2,7 @@
 
 #include <QProcess>
 #include <QDebug>
+#include <QStandardPaths>
 
 #ifdef Q_OS_WIN
 
@@ -83,6 +84,12 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
     qDebug() << "No lokinet.exe found";
 
     return true;
+}
+
+QString getDefaultBootstrapFileLocation()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+        + "\\AppData\\Roaming\\.lokinet\\bootstrap.signed";
 }
 
 #endif // Q_OS_WIN

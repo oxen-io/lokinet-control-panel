@@ -65,6 +65,10 @@ Q_INVOKABLE bool PlatformDetails::isLokinetRunning() {
 	return (status == LokinetProcessManager::ProcessStatus::Running);
 }
 
+Q_INVOKABLE void PlatformDetails::downloadBootstrapFile() {
+	LokinetProcessManager::instance()->downloadBootstrapFile();
+}
+
 Q_INVOKABLE QPoint PlatformDetails::getAbsoluteCursorPosition() {
     return QCursor::pos();
 }
