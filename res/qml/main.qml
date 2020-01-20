@@ -30,6 +30,11 @@ ApplicationWindow {
         id: controlPanel
     }
 
+    MessageDialog {
+        id: dialog
+        visible: false
+    }
+
     function display() {
 
         var rect = platformDetails.getAbsoluteCursorPosition();
@@ -125,7 +130,16 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("Bootstrap Client from Web")
                 onTriggered: {
-                    platformDetails.downloadBootstrapFile();
+                    console.log("Downloading bootstrap...");
+                    platformDetails.downloadBootstrapFile(function(err, msg) {
+                        if (err) {
+                            dialog.title = "Bootstrap error "+ err;
+                        } else {
+                            dialog.title = "Bootstrap results";
+                        }
+                        dialog.text = msg;
+                        dialog.visible = true;
+                    });
                 }
             }
         }

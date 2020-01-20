@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QStandardPaths>
+#include <sstream>
 #include <memory>
 #include <mutex>
 
@@ -198,23 +199,38 @@ bool LokinetProcessManager::stopLokinetIfWeStartedIt(bool block)
     return true;
 }
 
-void LokinetProcessManager::downloadBootstrapFile()
+void LokinetProcessManager::downloadBootstrapFile(BootstrapCallback callback)
 {
     m_httpClient.get(BOOTSTRAP_URL, [=](QNetworkReply* reply) {
 
-        // TODO: check headers, response status, etc.
+        std::stringstream ss;
 
-        qDebug() << "Received bootstrap file";
+        // inspect error
+        // https://doc.qt.io/qt-5/qnetworkreply.html#NetworkError-enum
+        auto error = reply->error();
+        if (error)
+        {
+            // if < 200, we didn't talk to server
+            if (error < 200)
+                ss << "Failed to contact server: " << error;
+            else
+                ss << "Server replied: " << error;
+        }
+        else
+        {
 
-        QString filepath = getDefaultBootstrapFileLocation();
+            QString filepath = getDefaultBootstrapFileLocation();
 
-        qDebug() << "Writing bootstrap file to " << filepath;
+            // TODO: should be done in different thread?
+            QFile file(filepath);
+            file.open(QIODevice::WriteOnly);
+            file.write(reply->readAll());
+            file.close();
 
-        // TODO: should be done in different thread?
-        QFile file(filepath);
-        file.open(QIODevice::WriteOnly);
-        file.write(reply->readAll());
-        file.close();
+            ss << "Bootstrap file written to " << filepath.toStdString();
+        }
+
+        callback(error, ss.str());
     });
 }
 

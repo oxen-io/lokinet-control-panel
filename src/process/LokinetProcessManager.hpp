@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <chrono>
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <thread>
@@ -113,10 +114,9 @@ public:
      * dependent location.
      *
      * This is a non-blocking/asynchronous call.
-     *
-     * TODO: should take callback so that UI can convey results
      */
-    void downloadBootstrapFile();
+    using BootstrapCallback = std::function<void(int error, const std::string& msg)>;
+    void downloadBootstrapFile(BootstrapCallback callback);
 
     /**
      * Returns an appropriate platform-specific instance of this class.
