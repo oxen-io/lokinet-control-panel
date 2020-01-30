@@ -22,9 +22,6 @@ LokinetProcessManager::LokinetProcessManager()
     : m_managedThreadRunning(false)
     , m_didLaunchProcess(false)
 {
-#ifdef Q_OS_WIN
-    ::CreateMutex(nullptr, FALSE, "lokinet_qt5_ui");
-#endif
 }
 
 LokinetProcessManager::~LokinetProcessManager()
@@ -300,5 +297,8 @@ LinuxLokinetProcessManager g_processManager;
 
 LokinetProcessManager* LokinetProcessManager::instance()
 {
+#ifdef Q_OS_WIN
+    ::CreateMutex(nullptr, FALSE, "lokinet_qt5_ui");
+#endif
     return &g_processManager;
 }
