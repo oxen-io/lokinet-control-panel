@@ -8,6 +8,10 @@
 #include <memory>
 #include <mutex>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 using namespace std::literals::chrono_literals;
 
 constexpr auto MANAGED_KILL_WAIT = 5s;
@@ -18,6 +22,9 @@ LokinetProcessManager::LokinetProcessManager()
     : m_managedThreadRunning(false)
     , m_didLaunchProcess(false)
 {
+#ifdef Q_OS_WIN
+    ::CreateMutex(nullptr, FALSE, "lokinet_qt5_ui");
+#endif
 }
 
 LokinetProcessManager::~LokinetProcessManager()
