@@ -15,6 +15,11 @@
 #define LOKINET_PATH LOKINET_DIR "\\lokinet.exe"
 #define LOKINET_EXE_STR "\"" LOKINET_PATH "\""
 
+WindowsLokinetProcessManager::WindowsLokinetProcessManager()
+{
+    ::CreateMutex(nullptr, FALSE, "lokinet_qt5_ui");
+}
+
 bool WindowsLokinetProcessManager::doStartLokinetProcess()
 {
     bool success = QProcess::startDetached(LOKINET_EXE_STR);
