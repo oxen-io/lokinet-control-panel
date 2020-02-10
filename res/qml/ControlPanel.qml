@@ -174,9 +174,9 @@ ColumnLayout {
             }
 
             try {
-                numPathsBuilt = stats.result.services.default.numPaths;
+                numPathsBuilt = stats.result.services.default.buildStats.success;
             } catch (err) {
-                console.log("Couldn't pull services.numPaths out of payload", err);
+                console.log("Couldn't pull buildStats out of payload", err);
             }
         }
 
