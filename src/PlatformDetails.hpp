@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QPoint>
+#include <QJSValue>
 
 #include "process/LokinetProcessManager.hpp"
 
@@ -30,6 +31,8 @@ public:
     Q_INVOKABLE static bool managedStopLokinetProcess();
     Q_INVOKABLE static bool stopLokinetIfWeStartedIt();
     Q_INVOKABLE static bool isLokinetRunning();
+
+    Q_INVOKABLE static void downloadBootstrapFile(const QJSValue& callback);
 
     Q_INVOKABLE static QPoint getAbsoluteCursorPosition();
 };

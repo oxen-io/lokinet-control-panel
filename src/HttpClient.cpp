@@ -52,4 +52,23 @@ void HttpClient::postJson(const std::string& url, const std::string& payload, Re
     reply->setProperty("callbackId", QVariant(m_lastCallbackId));
 
 }
+
+// HttpClient::request
+void HttpClient::get(const std::string& url, ReplyCallback callback) {
+
+    std::lock_guard<std::mutex> guard(m_callbackMutex);
+
+    // TODO: DRY
+    m_lastCallbackId++;
+    m_callbackMap[m_lastCallbackId] = callback;
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(url.c_str()));
+
+    QNetworkReply* reply = m_networkManager->get(request);
+
+    // set our callbackId on this reply so that we can correlate the response with the callback
+    reply->setProperty("callbackId", QVariant(m_lastCallbackId));
+
+}
  

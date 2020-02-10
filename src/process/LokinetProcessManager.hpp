@@ -3,9 +3,12 @@
 
 #include <QObject>
 #include <chrono>
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <thread>
+
+#include "../HttpClient.hpp"
 
 /**
  * An abstract class for dealing with the lokinet process.
@@ -107,6 +110,15 @@ public:
     ProcessStatus queryProcessStatus();
 
     /**
+     * Download the lokinet bootstrap file and place it at the proper platform-
+     * dependent location.
+     *
+     * This is a non-blocking/asynchronous call.
+     */
+    using BootstrapCallback = std::function<void(int error, const std::string& msg)>;
+    void downloadBootstrapFile(BootstrapCallback callback);
+
+    /**
      * Returns an appropriate platform-specific instance of this class.
      */
     static LokinetProcessManager* instance();
@@ -147,6 +159,16 @@ protected:
      */
     virtual bool doGetProcessPid(int& pid) = 0;
 
+    /**
+     * Subclasses should provide the platform-specific location of the bootstrap
+     * file. This is used internally by downloadBootstrapFile() to save the down-
+     * loaded file.
+     *
+     * The default is Qt's QStandardPaths::HomeLocation + "/.lokinet/bootstrap.signed"
+     * which corresponds to ~/.lokinet/bootstrap.signed on Linux/MacOS.
+     */
+    virtual QString getDefaultBootstrapFileLocation();
+
 private:
 
     /**
@@ -158,6 +180,8 @@ private:
      * Update the last known status and its timestamp
      */
     void setLastKnownStatus(ProcessStatus status);
+
+    HttpClient m_httpClient;
 
     ProcessStatus m_lastKnownStatus = ProcessStatus::Unknown;
     std::chrono::system_clock::time_point m_lastStatusTime;

@@ -14,9 +14,6 @@
  * for responses and requests to be correlated (something that
  * QNetworkAccessManager doesn't explicitly do). Callers need only provide a
  * callback with a given request.
- *
- * As this is intended to be used in a JSON-RPC 2.0 application, the client only
- * supports HTTP POST via 'postJson()'.
  */
 class HttpClient : public QObject
 {
@@ -42,6 +39,15 @@ public:
      *
      */
     void postJson(const std::string& url, const std::string& payload, ReplyCallback callback);
+
+    /**
+     * Make a HTTP GET request to the given URL.
+     *
+     * @param url is the URL to GET
+     * @param callback is a function that will be called when a response or
+     *                 error is received
+     */
+    void get(const std::string& url, ReplyCallback callback);
  
 private:
     QNetworkAccessManager* m_networkManager = nullptr;

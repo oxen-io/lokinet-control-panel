@@ -2,12 +2,17 @@
 
 #include <chrono>
 #include <QDebug>
+#include <QFile>
+#include <QStandardPaths>
+#include <sstream>
 #include <memory>
 #include <mutex>
 
 using namespace std::literals::chrono_literals;
 
 constexpr auto MANAGED_KILL_WAIT = 5s;
+
+constexpr auto BOOTSTRAP_URL = "https://seed.lokinet.org/lokinet.signed";
 
 LokinetProcessManager::LokinetProcessManager()
     : m_managedThreadRunning(false)
@@ -194,6 +199,41 @@ bool LokinetProcessManager::stopLokinetIfWeStartedIt(bool block)
     return true;
 }
 
+void LokinetProcessManager::downloadBootstrapFile(BootstrapCallback callback)
+{
+    m_httpClient.get(BOOTSTRAP_URL, [=](QNetworkReply* reply) {
+
+        std::stringstream ss;
+
+        // inspect error
+        // https://doc.qt.io/qt-5/qnetworkreply.html#NetworkError-enum
+        auto error = reply->error();
+        if (error)
+        {
+            // if < 200, we didn't talk to server
+            if (error < 200)
+                ss << "Failed to contact server: " << error;
+            else
+                ss << "Server replied: " << error;
+        }
+        else
+        {
+
+            QString filepath = getDefaultBootstrapFileLocation();
+
+            // TODO: should be done in different thread?
+            QFile file(filepath);
+            file.open(QIODevice::WriteOnly);
+            file.write(reply->readAll());
+            file.close();
+
+            ss << "Bootstrap file written to " << filepath.toStdString();
+        }
+
+        callback(error, ss.str());
+    });
+}
+
 LokinetProcessManager::ProcessStatus LokinetProcessManager::queryProcessStatus()
 {
     int pid = 0;
@@ -206,6 +246,12 @@ LokinetProcessManager::ProcessStatus LokinetProcessManager::queryProcessStatus()
     return pid
         ? ProcessStatus::Running
         : ProcessStatus::Stopped;
+}
+
+QString LokinetProcessManager::getDefaultBootstrapFileLocation()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+        + "/.lokinet/bootstrap.signed";
 }
 
 LokinetProcessManager::ProcessStatus LokinetProcessManager::getLastKnownStatus()

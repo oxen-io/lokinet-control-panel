@@ -2,6 +2,9 @@
 
 #include <QPoint>
 #include <QCursor>
+#include <QJSEngine>
+
+#include "process/LokinetProcessManager.hpp"
 
 // PlatformDetails::isWindows
 Q_INVOKABLE bool PlatformDetails::isWindows() {
@@ -63,6 +66,28 @@ Q_INVOKABLE bool PlatformDetails::stopLokinetIfWeStartedIt() {
 Q_INVOKABLE bool PlatformDetails::isLokinetRunning() {
 	auto status = LokinetProcessManager::instance()->queryProcessStatus();
 	return (status == LokinetProcessManager::ProcessStatus::Running);
+}
+
+Q_INVOKABLE void PlatformDetails::downloadBootstrapFile(const QJSValue& callback) {
+
+    if (! callback.isUndefined() && ! callback.isCallable()) {
+        qDebug() << "callback should be a function";
+    	return;
+    }
+
+    auto manager = LokinetProcessManager::instance();
+    manager->downloadBootstrapFile([=](int error, const std::string& msg) {
+
+    	QJSValue callbackCopy(callback);
+
+        QJSValue result = callbackCopy.call({
+            callbackCopy.engine()->toScriptValue(error),
+            callbackCopy.engine()->toScriptValue(QString(msg.c_str()))
+        });
+        if (result.isError()) {
+            qDebug() << "Error attempting callback";
+        }
+    });
 }
 
 Q_INVOKABLE QPoint PlatformDetails::getAbsoluteCursorPosition() {
