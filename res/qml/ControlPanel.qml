@@ -49,13 +49,6 @@ ColumnLayout {
         routers: numRoutersKnown
     }
 
-    // placeholder for performance graph panel
-    Rectangle {
-        color: Style.panelBackgroundColor
-        Layout.preferredHeight: 159
-        Layout.preferredWidth: Style.appWidth
-    }
-
     // usage
     UsagePanel {
         down: downloadUsage
