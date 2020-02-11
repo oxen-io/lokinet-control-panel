@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.0
-import QtCharts 2.0
+import QtCharts 2.1
 
 import QClipboard 1.0
 import BandwidthChartData 1.0
@@ -10,6 +10,8 @@ import "."
 Container {
     property var down: 0
     property var up: 0
+
+    property var lastCategoryLabel: null
 
     BandwidthChartData {
         id: chartData
@@ -25,6 +27,7 @@ Container {
         // console.log("new 'down' value: "+ down);
         chartData.addDownloadSample(down);
         chartData.updateDownloadSeries(rxData.upperSeries);
+        recalculateGraphScale(chartData.getHighestSample());
     }
 
     Layout.preferredHeight: 249
@@ -32,6 +35,24 @@ Container {
 
     contentItem: Rectangle {
         color: Style.panelBackgroundColor
+    }
+
+    function recalculateGraphScale(highestSample) {
+        yAxis.max = highestSample;
+        const label = makeRate(highestSample);
+
+        // if we need a new label, remove and re-add. ughly hack.
+        // essentially, we use a single CategoryAxis category because this lets us position
+        // a tick interval at a specific location with a specific label.
+        // ValueAxis has no way of doing this.
+        if (! lastCategoryLabel) {
+            yAxis.append(label, highestSample);
+            lastCategoryLabel = label;
+        } else if (lastCategoryLabel != label) {
+            yAxis.remove(lastCategoryLabel);
+            yAxis.append(label, highestSample);
+            lastCategoryLabel = label;
+        }
     }
 
     function makeRate(value)
@@ -113,7 +134,7 @@ Container {
 
         ValueAxis {
             id: xAxis
-            labelFormat: "%d"
+            labelFormat: "%e"
             min: 0
             max: 128
             labelsVisible: false
@@ -121,13 +142,11 @@ Container {
             titleVisible: false
         }
 
-        ValueAxis {
+        CategoryAxis {
             id: yAxis
             min: 0
             max: 10000
-            gridVisible: false
-            labelFormat: "%d"
-            titleVisible: false
+            labelsPosition: CategoryAxis.AxisLabelsPositionOnValue
         }
 
         AreaSeries {

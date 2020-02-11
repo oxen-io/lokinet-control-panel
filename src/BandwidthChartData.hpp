@@ -31,11 +31,25 @@ public:
     Q_INVOKABLE void updateUploadSeries(QtCharts::QAbstractSeries *series);
     Q_INVOKABLE void updateDownloadSeries(QtCharts::QAbstractSeries *series);
 
+    /**
+     * Get the highest samples currently being tracked
+     */
+    Q_INVOKABLE int getHighestUploadSample();
+    Q_INVOKABLE int getHighestDownloadSample();
+
+    /**
+     * Get the greater of the highest upload or highest download samples
+     */
+    Q_INVOKABLE int getHighestSample();
+
 private:
 
     uint64_t m_numSamples;
     QVector<QPointF> m_uploadSamples;
     QVector<QPointF> m_downloadSamples;
+
+    int64_t m_highestUploadSample = 0;
+    int64_t m_highestDownloadSample = 0;
 
 };
 
