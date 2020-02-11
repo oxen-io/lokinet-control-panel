@@ -145,8 +145,13 @@ ColumnLayout {
                 peers = 0;
                 console.log("Couldn't pull tx/rx of payload", err);
             }
-            uploadUsage = txRate;
-            downloadUsage = rxRate;
+
+            // we're polling every 500ms, so our per-second rate is half of the
+            // rate we tallied up in this sample
+            // TODO: don't be so sloppy
+            uploadUsage = (txRate / 2);
+            downloadUsage = (rxRate / 2);
+
             numPeersConnected = peers;
             try {
                 newRunning = stats.result.running;
