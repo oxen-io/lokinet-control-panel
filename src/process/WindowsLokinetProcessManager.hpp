@@ -14,6 +14,9 @@ class WindowsLokinetProcessManager : public LokinetProcessManager
 {
     Q_OBJECT
 
+public:
+    WindowsLokinetProcessManager();
+
 protected:
     
     bool doStartLokinetProcess() override;

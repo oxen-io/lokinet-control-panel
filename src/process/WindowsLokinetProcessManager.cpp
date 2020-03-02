@@ -11,13 +11,13 @@
 #include <tlhelp32.h>
 
 // TODO: don't hard-code these paths
-#define LOKINET_DIR "C:\\Program Files\\Loki Project\\Lokinet"
+#define LOKINET_DIR "C:\\Program Files\\Loki Project\\loki-network"
 #define LOKINET_PATH LOKINET_DIR "\\lokinet.exe"
 #define LOKINET_EXE_STR "\"" LOKINET_PATH "\""
 
 WindowsLokinetProcessManager::WindowsLokinetProcessManager()
 {
-    ::CreateMutex(nullptr, FALSE, "lokinet_qt5_ui");
+    ::CreateMutexA(nullptr, FALSE, "lokinet_qt5_ui");
 }
 
 bool WindowsLokinetProcessManager::doStartLokinetProcess()
@@ -91,7 +91,7 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
     return true;
 }
 
-QString getDefaultBootstrapFileLocation()
+QString WindowsLokinetProcessManager::getDefaultBootstrapFileLocation()
 {
     return QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
         + "\\AppData\\Roaming\\.lokinet\\bootstrap.signed";
