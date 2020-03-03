@@ -4,8 +4,9 @@
 #include <QtCharts/QAreaSeries>
 #include <QtQuick/QQuickItem>
 #include <QtCore/QDebug>
-#include <QtCore/QRandomGenerator>
 #include <QtCore/QtMath>
+
+#include <cassert>
 
 constexpr uint64_t NUM_SAMPLES = 128;
 
