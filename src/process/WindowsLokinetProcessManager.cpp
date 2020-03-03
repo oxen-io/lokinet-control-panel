@@ -22,10 +22,15 @@ WindowsLokinetProcessManager::WindowsLokinetProcessManager()
 
 bool WindowsLokinetProcessManager::doStartLokinetProcess()
 {
+    // try searching one level up from CWD
     bool success = QProcess::startDetached(LOKINET_EXE_STR);
     if (! success)
-        qDebug("QProcess::startDetached() failed");
-
+    {
+        success = QProcess::startDetached("..\\lokinet.exe");
+        if (! success)
+            qDebug("QProcess::startDetached() failed");
+    }
+    
     return success;
 }
 
