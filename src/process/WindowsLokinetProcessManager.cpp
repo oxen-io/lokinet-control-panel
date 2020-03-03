@@ -11,16 +11,29 @@
 #include <tlhelp32.h>
 
 // TODO: don't hard-code these paths
-#define LOKINET_DIR "C:\\Program Files\\Loki Project\\Lokinet"
+#define LOKINET_DIR "C:\\Program Files\\Loki Project\\loki-network"
 #define LOKINET_PATH LOKINET_DIR "\\lokinet.exe"
 #define LOKINET_EXE_STR "\"" LOKINET_PATH "\""
 
+WindowsLokinetProcessManager::WindowsLokinetProcessManager()
+{
+    ::CreateMutexA(nullptr, FALSE, "lokinet_qt5_ui");
+}
+
 bool WindowsLokinetProcessManager::doStartLokinetProcess()
 {
+    // try searching one level up from CWD
     bool success = QProcess::startDetached(LOKINET_EXE_STR);
     if (! success)
-        qDebug("QProcess::startDetached() failed");
+    {
+        // when upgraded from old installations (before 0.5.x), lokinet.exe would be one
+        // directory higher
+        success = QProcess::startDetached("..\\lokinet.exe");
 
+        if (! success)
+            qDebug("QProcess::startDetached() failed");
+    }
+    
     return success;
 }
 
@@ -40,8 +53,10 @@ bool WindowsLokinetProcessManager::doStopLokinetProcess()
 
 bool WindowsLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    // cmd: taskkill /T /F /IM lokinet.exe
-    QStringList args = { "/T", "/F", "/IM", "lokinet.exe" };
+    // cmd: taskkill /F /PID [pid]
+    int p;
+    doGetProcessPid(p);
+    QStringList args = { "/F", "/PID", QString::number(p,10) };
     int result = QProcess::execute("taskkill", args);
     if (result)
     {
@@ -86,7 +101,7 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
     return true;
 }
 
-QString getDefaultBootstrapFileLocation()
+QString WindowsLokinetProcessManager::getDefaultBootstrapFileLocation()
 {
     return QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
         + "\\AppData\\Roaming\\.lokinet\\bootstrap.signed";
