@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick widgets
+QT += qml quick widgets charts
 
 CONFIG += c++14
 
@@ -10,6 +10,7 @@ SOURCES += src/main.cpp \
            src/LokinetApiClient.cpp \
            src/ApiPoller.cpp \
            src/PlatformDetails.cpp \
+           src/BandwidthChartData.cpp \
            src/process/LokinetProcessManager.cpp \
 
 HEADERS += src/QmlClipboardAdapter.hpp \
@@ -17,6 +18,7 @@ HEADERS += src/QmlClipboardAdapter.hpp \
            src/LokinetApiClient.hpp \
            src/ApiPoller.hpp \
            src/PlatformDetails.hpp \
+           src/BandwidthChartData.hpp \
            src/process/LokinetProcessManager.hpp \
 
 RESOURCES += res/resources.qrc

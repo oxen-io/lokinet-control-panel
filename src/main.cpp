@@ -5,6 +5,7 @@
 #include "LokinetApiClient.hpp"
 #include "ApiPoller.hpp"
 #include "PlatformDetails.hpp"
+#include "BandwidthChartData.hpp"
 
 int32_t main(int32_t argc, char *argv[])
 {
@@ -18,6 +19,7 @@ int32_t main(int32_t argc, char *argv[])
     qmlRegisterType<QmlClipboardAdapter>("QClipboard", 1, 0, "QClipboard");
     qmlRegisterType<ApiPoller>("ApiPoller", 1, 0, "ApiPoller");
     qmlRegisterType<PlatformDetails>("PlatformDetails", 1, 0, "PlatformDetails");
+    qmlRegisterType<BandwidthChartData>("BandwidthChartData", 1, 0, "BandwidthChartData");
 
     QApplication app(argc, argv);
 
