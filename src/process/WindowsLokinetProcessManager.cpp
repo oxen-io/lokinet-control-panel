@@ -53,8 +53,10 @@ bool WindowsLokinetProcessManager::doStopLokinetProcess()
 
 bool WindowsLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    // cmd: taskkill /T /F /IM lokinet.exe
-    QStringList args = { "/T", "/F", "/IM", "lokinet.exe" };
+    // cmd: taskkill /F /PID [pid]
+    int p;
+    doGetProcessPid(p);
+    QStringList args = { "/F", "/PID", QString::number(p,10) };
     int result = QProcess::execute("taskkill", args);
     if (result)
     {
