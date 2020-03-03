@@ -26,7 +26,10 @@ bool WindowsLokinetProcessManager::doStartLokinetProcess()
     bool success = QProcess::startDetached(LOKINET_EXE_STR);
     if (! success)
     {
+        // when upgraded from old installations (before 0.5.x), lokinet.exe would be one
+        // directory higher
         success = QProcess::startDetached("..\\lokinet.exe");
+
         if (! success)
             qDebug("QProcess::startDetached() failed");
     }
