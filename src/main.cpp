@@ -22,6 +22,7 @@ int32_t main(int32_t argc, char *argv[])
     qmlRegisterType<BandwidthChartData>("BandwidthChartData", 1, 0, "BandwidthChartData");
 
     QApplication app(argc, argv);
+    app.setQuitOnLastWindowClosed(false);
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/res/qml/main.qml")));

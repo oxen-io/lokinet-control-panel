@@ -114,9 +114,11 @@ public:
      * dependent location.
      *
      * This is a non-blocking/asynchronous call.
+     *
+     * @param url is the URL of the bootstrap file to download
      */
     using BootstrapCallback = std::function<void(int error, const std::string& msg)>;
-    void downloadBootstrapFile(BootstrapCallback callback);
+    void downloadBootstrapFile(const std::string& url, BootstrapCallback callback);
 
     /**
      * Returns an appropriate platform-specific instance of this class.

@@ -68,7 +68,7 @@ Q_INVOKABLE bool PlatformDetails::isLokinetRunning() {
 	return (status == LokinetProcessManager::ProcessStatus::Running);
 }
 
-Q_INVOKABLE void PlatformDetails::downloadBootstrapFile(const QJSValue& callback) {
+Q_INVOKABLE void PlatformDetails::downloadBootstrapFile(const QString& url, const QJSValue& callback) {
 
     if (! callback.isUndefined() && ! callback.isCallable()) {
         qDebug() << "callback should be a function";
@@ -76,7 +76,7 @@ Q_INVOKABLE void PlatformDetails::downloadBootstrapFile(const QJSValue& callback
     }
 
     auto manager = LokinetProcessManager::instance();
-    manager->downloadBootstrapFile([=](int error, const std::string& msg) {
+    manager->downloadBootstrapFile(url.toStdString(), [=](int error, const std::string& msg) {
 
     	QJSValue callbackCopy(callback);
 

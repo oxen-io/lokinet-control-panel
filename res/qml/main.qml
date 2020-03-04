@@ -1,7 +1,6 @@
 import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
-import QtQuick.Dialogs 1.2
 import Qt.labs.platform 1.0
 
 import ApiPoller 1.0
@@ -30,8 +29,8 @@ ApplicationWindow {
         id: controlPanel
     }
 
-    MessageDialog {
-        id: dialog
+    BootstrapDownloadDialog {
+        id: bootstrapDialog
         visible: false
     }
 
@@ -130,16 +129,7 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("Bootstrap Client from Web")
                 onTriggered: {
-                    console.log("Downloading bootstrap...");
-                    platformDetails.downloadBootstrapFile(function(err, msg) {
-                        if (err) {
-                            dialog.title = "Bootstrap error "+ err;
-                        } else {
-                            dialog.title = "Bootstrap results";
-                        }
-                        dialog.text = msg;
-                        dialog.visible = true;
-                    });
+                    bootstrapDialog.visible = true;
                 }
             }
         }
