@@ -39,30 +39,24 @@ bool WindowsLokinetProcessManager::doStartLokinetProcess()
 
 bool WindowsLokinetProcessManager::doStopLokinetProcess()
 {
-    // cmd: taskkill /T /IM lokinet.exe
-    QStringList args = { "/T", "/IM", "lokinet.exe" };
-    int result = QProcess::execute("taskkill", args);
-    if (result)
-    {
-        qDebug("Failed to taskkill lokinet: %d", result);
-        return false;
-    }
-
-    return true;
+    // not supported on this platform
+    return false;
 }
 
 bool WindowsLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    // cmd: taskkill /F /PID [pid]
     int p;
-    doGetProcessPid(p);
-    QStringList args = { "/F", "/PID", QString::number(p,10) };
-    int result = QProcess::execute("taskkill", args);
-    if (result)
-    {
-        qDebug("Failed to taskkill /F lokinet: %d", result);
+    HANDLE lokinetProcess;
+    
+    if (doGetProcessPid(p))
+        lokinetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD)p);
+    else
         return false;
-    }
+    
+    if (TerminateProcess(lokinetProcess, 0))
+        return true;
+    else
+        return false;
 
     return true;
 }
