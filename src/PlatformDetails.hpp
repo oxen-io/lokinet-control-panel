@@ -32,7 +32,7 @@ public:
     Q_INVOKABLE static bool stopLokinetIfWeStartedIt();
     Q_INVOKABLE static bool isLokinetRunning();
 
-    Q_INVOKABLE static void downloadBootstrapFile(const QJSValue& callback);
+    Q_INVOKABLE static void downloadBootstrapFile(const QString& url, const QJSValue& callback);
 
     Q_INVOKABLE static QPoint getAbsoluteCursorPosition();
 };

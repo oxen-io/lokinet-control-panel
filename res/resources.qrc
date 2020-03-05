@@ -13,6 +13,7 @@
         <file>qml/UsagePanel.qml</file>
         <file>qml/DismissPanel.qml</file>
         <file>qml/UptimePanel.qml</file>
+        <file>qml/BootstrapDownloadDialog.qml</file>
 
         <!-- images -->
         <file>images/icon.png</file>

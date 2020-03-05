@@ -12,8 +12,6 @@ using namespace std::literals::chrono_literals;
 
 constexpr auto MANAGED_KILL_WAIT = 5s;
 
-constexpr auto BOOTSTRAP_URL = "https://seed.lokinet.org/lokinet.signed";
-
 LokinetProcessManager::LokinetProcessManager()
     : m_managedThreadRunning(false)
     , m_didLaunchProcess(false)
@@ -210,9 +208,9 @@ bool LokinetProcessManager::stopLokinetIfWeStartedIt(bool block)
     return true;
 }
 
-void LokinetProcessManager::downloadBootstrapFile(BootstrapCallback callback)
+void LokinetProcessManager::downloadBootstrapFile(const std::string& url, BootstrapCallback callback)
 {
-    m_httpClient.get(BOOTSTRAP_URL, [=](QNetworkReply* reply) {
+    m_httpClient.get(url, [=](QNetworkReply* reply) {
 
         std::stringstream ss;
 
