@@ -62,8 +62,7 @@ bool LokinetProcessManager::stopLokinetProcess()
     }
     if (getLastKnownStatus() == ProcessStatus::Stopping)
     {
-        qDebug("lokinet process is already stopping");
-        return false;
+        qDebug("warning, lokinet process is already stopping, we'll try to stop again anyway");
     }
 
     bool success = m_apiClient.llarpAdminDie([](QNetworkReply* reply) {
