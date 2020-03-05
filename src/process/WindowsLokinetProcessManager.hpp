@@ -20,7 +20,6 @@ public:
 protected:
     
     bool doStartLokinetProcess() override;
-    bool isGracefulKillSupported() const override { return false; };
     bool doForciblyStopLokinetProcess() override;
     bool doGetProcessPid(int& pid) override;
     QString getDefaultBootstrapFileLocation() override;

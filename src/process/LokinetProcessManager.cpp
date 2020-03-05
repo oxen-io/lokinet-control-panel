@@ -108,17 +108,6 @@ bool LokinetProcessManager::forciblyStopLokinetProcess()
 
 bool LokinetProcessManager::managedStopLokinetProcess()
 {
-    if (not isGracefulKillSupported())
-    {
-        qDebug("Platform doesn't support graceful kill, death will be swift and merciless");
-        if (not doForciblyStopLokinetProcess())
-        {
-            qDebug("doForciblyStopLokinetProcess() failed, good luck");
-            return false;
-        }
-        return true;
-    }
-
     std::lock_guard<std::mutex> guard(m_managedStopMutex);
 
     if (m_managedThreadRunning)

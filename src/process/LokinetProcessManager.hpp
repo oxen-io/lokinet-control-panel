@@ -137,17 +137,6 @@ protected:
      * @return true on success; false otherwise
      */
     virtual bool doStartLokinetProcess() = 0;
-
-    /**
-     * Subclasses should return whether or not the platform supports a graceful
-     * kill. A graceful kill would indicate that a non-forceful kill should
-     * successfully cause the lokinet process to terminate, though not necessarily
-     * immediately. If a graceful kill isn't supported, managedStopLokinetProcess()
-     * will immediately resort to a forceful kill.
-     *
-     * @return whether or not the platform supports a graceful kill
-     */
-    virtual bool isGracefulKillSupported() const { return true; };
     
     /**
      * Subclasses should provide platform-specific means of forcibly stopping
