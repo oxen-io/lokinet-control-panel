@@ -32,28 +32,37 @@ class LokinetApiClient : public QObject
 public:
 
     /**
-     * Invoke the `llarp.admin.wakeup` endpoint.
+     * Invoke an endpoint.
      *
-     * @param callback is an optional JS function to invoke on success
-     * @return true if the asynchronous request could be made, false otherwise
+     * TODO: provide argument to be used for JSON-RPC params (if/when needed)
+     *
+     * @param endpoint should be the full API endpoint (e.g. "llarp.admin.status")
+     *        to invoke
+     * @param callback is a callback that will receive the reply or error
+     * @return true on success, false otherwise
      */
-    Q_INVOKABLE bool llarpAdminWakeup(QJSValue callback);
+    bool invoke(const std::string& endpoint, HttpClient::ReplyCallback callback);
+    Q_INVOKABLE bool invoke(const std::string& endpoint, QJSValue callback);
 
     /**
-     * Invoke the `llarp.version` endpoint.
+     * The following functions are conveniences for invoking particular API
+     * endpoints. Internally, they delegate to the above 'invoke()' functions.
      *
      * @param callback is an optional JS function to invoke on success
      * @return true if the asynchronous request could be made, false otherwise
      */
-    Q_INVOKABLE bool llarpVersion(QJSValue callback);
 
-    /**
-     * Invoke the `llarp.admin.status` endpoint.
-     *
-     * @param callback is an optional JS function to invoke on success
-     * @return true if the asynchronous request could be made, false otherwise
-     */
-    Q_INVOKABLE bool llarpAdminStatus(QJSValue callback);
+    Q_INVOKABLE bool llarpAdminWakeup(QJSValue callback) {
+        return invoke("llarp.admin.wakeup", callback);
+    }
+
+    Q_INVOKABLE bool llarpVersion(QJSValue callback) {
+        return invoke("llarp.version", callback);
+    }
+
+    Q_INVOKABLE bool llarpAdminStatus(QJSValue callback) {
+        return invoke("llarp.admin.status", callback);
+    }
  
 private:
 
