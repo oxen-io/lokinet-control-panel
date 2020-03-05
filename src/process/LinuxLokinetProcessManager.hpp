@@ -17,7 +17,6 @@ class LinuxLokinetProcessManager : public LokinetProcessManager
 protected:
     
     bool doStartLokinetProcess() override;
-    bool doStopLokinetProcess() override;
     bool doForciblyStopLokinetProcess() override;
     bool doGetProcessPid(int& pid) override;
 

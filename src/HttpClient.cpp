@@ -1,10 +1,17 @@
 #include "HttpClient.hpp"
 
 #include <QObject>
+#include <QNetworkConfiguration>
 
 // HttpClient Constructor
 HttpClient::HttpClient() {
     m_networkManager = new QNetworkAccessManager();
+
+    // update QNAM's config with a much lower timeout value since this goes over localhost
+    QNetworkConfiguration qnamConf = m_networkManager->activeConfiguration();
+    qnamConf.setConnectTimeout(250); // in milliseconds
+    m_networkManager->setConfiguration(qnamConf);
+
     QObject::connect(m_networkManager, &QNetworkAccessManager::finished, this, [=](QNetworkReply *reply) {
 
         uint32_t callbackId = reply->property("callbackId").toUInt();
@@ -45,6 +52,7 @@ void HttpClient::postJson(const std::string& url, const std::string& payload, Re
 
     // qDebug() << "POSTing to " << url.c_str();
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("Host", "localhost");
 
     QNetworkReply* reply = m_networkManager->post(request, QByteArray(payload.c_str()));
 
@@ -64,6 +72,8 @@ void HttpClient::get(const std::string& url, ReplyCallback callback) {
 
     QNetworkRequest request;
     request.setUrl(QUrl(url.c_str()));
+
+    request.setRawHeader("Host", "localhost");
 
     QNetworkReply* reply = m_networkManager->get(request);
 

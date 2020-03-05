@@ -14,19 +14,6 @@ bool LinuxLokinetProcessManager::doStartLokinetProcess()
     return success;
 }
 
-bool LinuxLokinetProcessManager::doStopLokinetProcess()
-{
-    QStringList args = { "lokinet" };
-    int result = QProcess::execute("pkill", args);
-    if (result)
-    {
-        qDebug("Failed to 'pkill lokinet': %d", result);
-        return false;
-    }
-
-    return true;
-}
-
 bool LinuxLokinetProcessManager::doForciblyStopLokinetProcess()
 {
     QStringList args = { "-9", "lokinet" };
@@ -69,7 +56,6 @@ bool LinuxLokinetProcessManager::doGetProcessPid(int& pid)
     }
 
     pid = tmp;
-    qDebug("lokinet pid: %d", pid);
     return true;
 }
 

@@ -62,20 +62,20 @@ bool LokinetProcessManager::stopLokinetProcess()
     }
     if (getLastKnownStatus() == ProcessStatus::Stopping)
     {
-        qDebug("lokinet process is already stopping");
-        return false;
+        qDebug("warning, lokinet process is already stopping, we'll try to stop again anyway");
     }
 
-    bool success = doStopLokinetProcess();
+    bool success = m_apiClient.llarpAdminDie([](QNetworkReply* reply) {
+        qDebug() << "llarp.admin.die response: " << reply->readAll();
+    });
     if (!success)
     {
-        qDebug("Failed to stop lokinet process");
+        qDebug("Failed to stop lokinet process with llarp.admin.die API call");
         return false;
     }
 
     // note that we don't touch m_didLaunchProcess here because we don't
-    // know whether or not lokinet will gracefully exit (and it often doesn't
-    // on non-linux platforms)
+    // know whether or not lokinet will gracefully exit
 
     setLastKnownStatus(ProcessStatus::Stopping);
     return true;
@@ -107,17 +107,6 @@ bool LokinetProcessManager::forciblyStopLokinetProcess()
 
 bool LokinetProcessManager::managedStopLokinetProcess()
 {
-    if (not isGracefulKillSupported())
-    {
-        qDebug("Platform doesn't support graceful kill, death will be swift and merciless");
-        if (not doForciblyStopLokinetProcess())
-        {
-            qDebug("doForciblyStopLokinetProcess() failed, good luck");
-            return false;
-        }
-        return true;
-    }
-
     std::lock_guard<std::mutex> guard(m_managedStopMutex);
 
     if (m_managedThreadRunning)
@@ -135,13 +124,14 @@ bool LokinetProcessManager::managedStopLokinetProcess()
 
     m_managedThreadRunning = true;
 
+    if (not stopLokinetProcess())
+    {
+        m_managedThreadRunning = false;
+        qDebug("stopLokinetProcess() failed in managed stop thread");
+        return false;
+    }
+
     std::thread t([this]() {
-        if (not stopLokinetProcess())
-        {
-            m_managedThreadRunning = false;
-            qDebug("stopLokinetProcess() failed in managed stop thread");
-            return;
-        }
 
         qDebug() << "Waiting for "
                  << std::chrono::milliseconds(MANAGED_KILL_WAIT).count()

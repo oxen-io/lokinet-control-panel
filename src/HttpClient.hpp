@@ -20,9 +20,9 @@ class HttpClient : public QObject
     Q_OBJECT
     Q_DISABLE_COPY(HttpClient);
 
-    using ReplyCallback = std::function<void(QNetworkReply*)>;
-
 public:
+
+    using ReplyCallback = std::function<void(QNetworkReply*)>;
 
     HttpClient();
     ~HttpClient();
