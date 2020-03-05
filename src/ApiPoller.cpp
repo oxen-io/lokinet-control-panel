@@ -65,6 +65,10 @@ void ApiPoller::pollDaemon() {
             if (! lastAttemptWasError) {
                 qDebug() << "JSON-RPC error: " << reply->error();
                 qDebug() << "         in response to query: " << m_rpcPayload.c_str();
+                if (reply->error() > 100)
+                {
+                    qDebug() << "         server replied: " << reply->readAll();
+                }
             }
             lastAttemptWasError = true;
             emit statusAvailable("", reply->error());
