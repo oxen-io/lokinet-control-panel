@@ -63,6 +63,10 @@ public:
     Q_INVOKABLE bool llarpAdminStatus(QJSValue callback) {
         return invoke("llarp.admin.status", callback);
     }
+
+    bool llarpAdminDie(HttpClient::ReplyCallback callback) {
+        return invoke("llarp.admin.die", callback);
+    }
  
 private:
 
