@@ -22,6 +22,7 @@ protected:
 
     bool doStartLokinetProcess() override;
     bool doStopLokinetProcess() override;
+    bool isGracefulKillSupported() const override { return false; };
     bool doForciblyStopLokinetProcess() override;
     bool doGetProcessPid(int& pid) override;
 
