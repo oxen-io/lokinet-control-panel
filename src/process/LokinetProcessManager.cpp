@@ -66,16 +66,17 @@ bool LokinetProcessManager::stopLokinetProcess()
         return false;
     }
 
-    bool success = doStopLokinetProcess();
+    bool success = m_apiClient.llarpAdminDie([](QNetworkReply* reply) {
+        qDebug() << "llarp.admin.die response: " << reply->readAll();
+    });
     if (!success)
     {
-        qDebug("Failed to stop lokinet process");
+        qDebug("Failed to stop lokinet process with llarp.admin.die API call");
         return false;
     }
 
     // note that we don't touch m_didLaunchProcess here because we don't
-    // know whether or not lokinet will gracefully exit (and it often doesn't
-    // on non-linux platforms)
+    // know whether or not lokinet will gracefully exit
 
     setLastKnownStatus(ProcessStatus::Stopping);
     return true;

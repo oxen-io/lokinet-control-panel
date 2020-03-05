@@ -9,6 +9,7 @@
 #include <thread>
 
 #include "../HttpClient.hpp"
+#include "../LokinetApiClient.hpp"
 
 /**
  * An abstract class for dealing with the lokinet process.
@@ -51,7 +52,9 @@ public:
     bool startLokinetProcess();
     
     /**
-     * Stop the lokinet process.
+     * Stop the lokinet process. Attempts to gracefully stop the procses by
+     * using lokinet's 'llarp.admin.die' API call, which should cause the
+     * process to stop gracefully.
      *
      * Note that this will not update m_didLaunchProcess as it doesn't know
      * whether or not the lokinet process exits gracefully. This may result in
@@ -134,17 +137,6 @@ protected:
      * @return true on success; false otherwise
      */
     virtual bool doStartLokinetProcess() = 0;
-    
-    /**
-     * Subclasses should provide platform-specific means of stopping the
-     * lokinet process.
-     *
-     * The return value should indicate whether the lokinet process was
-     * successfully told to stop, though it does not have to stop immediately.
-     *
-     * @return true on success; false otherwise
-     */
-    virtual bool doStopLokinetProcess() = 0;
 
     /**
      * Subclasses should return whether or not the platform supports a graceful
@@ -198,6 +190,7 @@ private:
     void setLastKnownStatus(ProcessStatus status);
 
     HttpClient m_httpClient;
+    LokinetApiClient m_apiClient;
 
     ProcessStatus m_lastKnownStatus = ProcessStatus::Unknown;
     std::chrono::system_clock::time_point m_lastStatusTime;

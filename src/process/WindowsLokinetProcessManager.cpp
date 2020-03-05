@@ -37,12 +37,6 @@ bool WindowsLokinetProcessManager::doStartLokinetProcess()
     return success;
 }
 
-bool WindowsLokinetProcessManager::doStopLokinetProcess()
-{
-    // not supported on this platform
-    return false;
-}
-
 bool WindowsLokinetProcessManager::doForciblyStopLokinetProcess()
 {
     int p;

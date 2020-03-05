@@ -50,11 +50,12 @@ public:
     void get(const std::string& url, ReplyCallback callback);
  
 private:
-    QNetworkAccessManager* m_networkManager = nullptr;
+    static std::mutex m_callbackMutex;
+    static uint32_t m_lastCallbackId;
+    static std::unordered_map<uint32_t, ReplyCallback> m_callbackMap;
 
-    std::mutex m_callbackMutex;
-    uint32_t m_lastCallbackId = 0;
-    std::unordered_map<uint32_t, ReplyCallback> m_callbackMap;
+    QNetworkAccessManager* networkManager();
+    void handleResponse(QNetworkReply* reply);
 
 };
  
