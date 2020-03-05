@@ -136,13 +136,14 @@ bool LokinetProcessManager::managedStopLokinetProcess()
 
     m_managedThreadRunning = true;
 
+    if (not stopLokinetProcess())
+    {
+        m_managedThreadRunning = false;
+        qDebug("stopLokinetProcess() failed in managed stop thread");
+        return false;
+    }
+
     std::thread t([this]() {
-        if (not stopLokinetProcess())
-        {
-            m_managedThreadRunning = false;
-            qDebug("stopLokinetProcess() failed in managed stop thread");
-            return;
-        }
 
         qDebug() << "Waiting for "
                  << std::chrono::milliseconds(MANAGED_KILL_WAIT).count()
