@@ -1,10 +1,17 @@
 #include "HttpClient.hpp"
 
 #include <QObject>
+#include <QNetworkConfiguration>
 
 // HttpClient Constructor
 HttpClient::HttpClient() {
     m_networkManager = new QNetworkAccessManager();
+
+    // update QNAM's config with a much lower timeout value since this goes over localhost
+    QNetworkConfiguration qnamConf = m_networkManager->activeConfiguration();
+    qnamConf.setConnectTimeout(250); // in milliseconds
+    m_networkManager->setConfiguration(qnamConf);
+
     QObject::connect(m_networkManager, &QNetworkAccessManager::finished, this, [=](QNetworkReply *reply) {
 
         uint32_t callbackId = reply->property("callbackId").toUInt();
