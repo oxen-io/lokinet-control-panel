@@ -45,6 +45,7 @@ void HttpClient::postJson(const std::string& url, const std::string& payload, Re
 
     // qDebug() << "POSTing to " << url.c_str();
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("Host", "localhost");
 
     QNetworkReply* reply = m_networkManager->post(request, QByteArray(payload.c_str()));
 
@@ -64,6 +65,8 @@ void HttpClient::get(const std::string& url, ReplyCallback callback) {
 
     QNetworkRequest request;
     request.setUrl(QUrl(url.c_str()));
+
+    request.setRawHeader("Host", "localhost");
 
     QNetworkReply* reply = m_networkManager->get(request);
 
