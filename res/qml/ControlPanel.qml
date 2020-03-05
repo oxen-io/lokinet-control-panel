@@ -208,8 +208,8 @@ ColumnLayout {
                 try {
                      const msg = JSON.parse(response);
                      lokiVersion = msg.result.version;
-                 } catch (err) {
-                     console.log("Couldn't pull version out of payload", err);
+                 } catch (e) {
+                     console.log("Couldn't pull version out of payload", e);
                  }
             }
         });
