@@ -17,6 +17,7 @@
 
         <!-- images -->
         <file>images/icon.png</file>
+        <file>images/logo.png</file>
         <file>images/connection_indicator.png</file>
         <file>images/connection_button.png</file>
         <file>images/connection_button_outline.png</file>
