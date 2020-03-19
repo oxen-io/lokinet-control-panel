@@ -12,31 +12,18 @@ Container {
     contentItem: Rectangle {
         color: "#101010"
     }
-
-    RowLayout {
+    Image {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 4
-        Layout.fillWidth: false
 
-        Image {
-            Layout.minimumWidth: 36
-            Layout.preferredWidth: 36
-            Layout.minimumHeight: 36
-            Layout.preferredHeight: 36
+		anchors.fill: parent
+        anchors.topMargin: 6
+        anchors.bottomMargin: 6
 
-            source: "qrc:/res/images/icon.png"
-        }
+        fillMode: Image.PreserveAspectFit
 
-        // "LOKI"
-        Text {
-            text: "LOKI"
-            font.family: Style.weakTextFont
-            color: Style.logoTextcolor
-            font.pointSize: Style.logoTextSize
-            font.capitalization: Font.AllUppercase
-        }
+        source: "qrc:/res/images/logo.png"
+        smooth: true
     }
-
 }
 
