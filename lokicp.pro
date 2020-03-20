@@ -29,8 +29,17 @@ macx {
     SOURCES += src/process/MacOSLokinetProcessManager.cpp
 }
 unix:!macx {
-    HEADERS += src/process/LinuxLokinetProcessManager.hpp
-    SOURCES += src/process/LinuxLokinetProcessManager.cpp
+    'TODO: wtf is var here?!'
+    defined(SYSTEMD, var) {
+        message("systemd");
+        DEFINES+=SYSTEMD
+        HEADERS += src/process/SystemdLokinetProcessManager.hpp
+        SOURCES += src/process/SystemdLokinetProcessManager.cpp
+    } else {
+        message("linux");
+        HEADERS += src/process/LinuxLokinetProcessManager.hpp
+        SOURCES += src/process/LinuxLokinetProcessManager.cpp
+    }
 }
 win32 {
     HEADERS += src/process/WindowsLokinetProcessManager.hpp

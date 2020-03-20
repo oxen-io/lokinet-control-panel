@@ -281,6 +281,10 @@ WindowsLokinetProcessManager g_processManager;
 #include "MacOSLokinetProcessManager.hpp"
 MacOSLokinetProcessManager g_processManager;
 
+#elif defined(SYSTEMD)
+#include "SystemdLokinetProcessManager.hpp"
+SystemdLokinetProcessManager g_processManager;
+
 // tested: Linux, NetBSD, FreeBSD, Solaris
 // netbsd dev reimplemented pkill and all the other
 // FOSS kernels ship it
