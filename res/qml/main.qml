@@ -11,7 +11,7 @@ import "."
 ApplicationWindow {
     id: window
     title: qsTr("Lokinet Control Panel")
-    visible: platformDetails.isDebug()
+    visible: nohide
     flags: Qt.FramelessWindowHint
 
     color: Style.panelSeparatorColor
@@ -20,7 +20,7 @@ ApplicationWindow {
     // this isn't going to work well on a "sloppy focus" window managers, but
     // probably works well on the most common OSes
     onActiveChanged: {
-        if (!active && !platformDetails.isDebug() && !platformDetails.isLinux()) {
+        if (!active && !nohide) {
             window.visible = false;
         }
     }

@@ -15,6 +15,15 @@ int32_t main(int32_t argc, char *argv[])
     qDebug() << "Compile-time Qt Version:" <<  QT_VERSION_STR;
     qDebug() << "Run-time Qt Version:" <<  qVersion();
 
+    // crude CLI option parsing
+    bool nohide = false;
+    for (int i=0; argv[i] != nullptr; ++i) {
+        if (strcmp(argv[i], "--nohide") == 0) {
+            qDebug() << "nohide: true";
+            nohide = true;
+        }
+    }
+
     qmlRegisterType<LokinetApiClient>("LokinetApiClient", 1, 0, "LokinetApiClient");
     qmlRegisterType<QmlClipboardAdapter>("QClipboard", 1, 0, "QClipboard");
     qmlRegisterType<ApiPoller>("ApiPoller", 1, 0, "ApiPoller");
@@ -25,6 +34,7 @@ int32_t main(int32_t argc, char *argv[])
     app.setQuitOnLastWindowClosed(false);
 
     QQmlApplicationEngine engine;
+    engine.globalObject().setProperty("nohide", nohide);
     engine.load(QUrl(QStringLiteral("qrc:/res/qml/main.qml")));
 
     return app.exec();
