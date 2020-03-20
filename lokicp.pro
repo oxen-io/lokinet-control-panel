@@ -30,6 +30,7 @@ macx {
 }
 unix:!macx {
     'TODO: wtf is var here?!'
+    'invoke via: qmake SYSTEMD=true ..'
     defined(SYSTEMD, var) {
         message("systemd");
         DEFINES+=SYSTEMD
