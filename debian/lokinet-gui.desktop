@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Lokinet Control Panel
+Exec=/usr/bin/lokinet-gui --notray
+Terminal=false
+Type=Application
+Icon=lokinet-gui
+Comment=Control panel for Lokinet
+Categories=Network

@@ -1,3 +1,4 @@
+TARGET = lokicp
 TEMPLATE = app
 
 TARGET = lokinet-gui

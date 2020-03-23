@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#export DH_VERBOSE = 1
+
+%:
+	dh $@ --builddirectory=build-debian
+
+override_dh_auto_configure:
+	dh_auto_configure -- SYSTEMD=true ..
+
+override_dh_auto_install:
+	dh_auto_install
+	./debian/make-icons.sh
