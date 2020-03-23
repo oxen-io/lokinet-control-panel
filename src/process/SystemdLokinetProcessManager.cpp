@@ -26,32 +26,36 @@ SystemdStatus fromString(const QString& str) {
     return SystemdStatus::unknown;
 }
 
-bool SystemdLokinetProcessManager::doStartLokinetProcess()
+bool invoke(const QString& cmd, const QStringList& args)
 {
-    QStringList args = { "--noblock", "start", "lokinet.service" };
-    int result = QProcess::execute("systemctl", args);
+    int result = QProcess::execute(cmd, args);
     if (result)
     {
-        qDebug("Failed to 'systemctl start lokinet': %d", result);
+        qDebug() << "Failed to invoke " << cmd;
+        qDebug() << "    Args:";
+        for (const auto arg : args)
+        {
+            qDebug() << "        " << arg;
+        }
         return false;
     }
 
     return true;
 }
 
+bool SystemdLokinetProcessManager::doStopLokinetProcess()
+{
+    return invoke("systemctl", { "--no-block", "stop", "lokinet.service" });
+}
+
+bool SystemdLokinetProcessManager::doStartLokinetProcess()
+{
+    return invoke("systemctl", { "--no-block", "start", "lokinet.service" });
+}
+
 bool SystemdLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    // note that this will do its own graceful attempt before doing a forceful kill.
-    // "kill" instead of "stop" should perform an immediate, forceful kill
-    QStringList args = { "stop", "lokinet.service" };
-    int result = QProcess::execute("systemctl", args);
-    if (result)
-    {
-        qDebug("Failed to 'systemctl stop lokinet': %d", result);
-        return false;
-    }
-
-    return true;
+    return invoke("systemctl", { "--noblock", "kill", "lokinet.service" });
 }
 
 bool SystemdLokinetProcessManager::doGetProcessPid(int& pid)

@@ -139,6 +139,16 @@ protected:
     virtual bool doStartLokinetProcess() = 0;
     
     /**
+     * Subclasses may provide platform-specific means of stopping the
+     * lokinet process. Note, however, that this has an "intelligent default"
+     * which will use the 'llarp.admin.die' API call, which should cause
+     * lokinet to gracefully exit.
+     *
+     * @return true on successful request to stop, false otherwise
+     */
+    virtual bool doStopLokinetProcess();
+    
+    /**
      * Subclasses should provide platform-specific means of forcibly stopping
      * the lokinet process.
      *

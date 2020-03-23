@@ -15,6 +15,7 @@ class SystemdLokinetProcessManager : public LokinetProcessManager
 
 protected:
     
+    bool doStopLokinetProcess() override;
     bool doStartLokinetProcess() override;
     bool doForciblyStopLokinetProcess() override;
     bool doGetProcessPid(int& pid) override;
