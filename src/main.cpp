@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QIcon>
 
 #include "QmlClipboardAdapter.hpp"
 #include "LokinetApiClient.hpp"
@@ -38,6 +39,7 @@ int32_t main(int32_t argc, char *argv[])
     qmlRegisterType<BandwidthChartData>("BandwidthChartData", 1, 0, "BandwidthChartData");
 
     QApplication app(argc, argv);
+    app.setWindowIcon(QIcon(":/res/images/icon.png"));
     app.setQuitOnLastWindowClosed(false);
 
     QQmlApplicationEngine engine;
