@@ -29,10 +29,7 @@ ApplicationWindow {
 
     onClosing: {
         if (notray) {
-            if (! platformDetails.isDebug()) {
-                platformDetails.stopLokinetIfWeStartedIt();
-            }
-            Qt.quit();
+            window.exitApp();
         }
     }
 
@@ -43,6 +40,13 @@ ApplicationWindow {
     BootstrapDownloadDialog {
         id: bootstrapDialog
         visible: false
+    }
+
+    function exitApp() {
+        if (! platformDetails.isDebug()) {
+            platformDetails.stopLokinetIfWeStartedIt();
+        }
+        Qt.quit();
     }
 
     function display() {
@@ -113,10 +117,7 @@ ApplicationWindow {
             MenuItem {
                 text: qsTr("Exit")
                 onTriggered: {
-                    if (! platformDetails.isDebug()) {
-                        platformDetails.stopLokinetIfWeStartedIt();
-                    }
-                    Qt.quit();
+                    window.exitApp();
                 }
             }
 
