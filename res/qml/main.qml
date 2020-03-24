@@ -28,8 +28,12 @@ ApplicationWindow {
     }
 
     onClosing: {
-        if (notray)
+        if (notray) {
+            if (! platformDetails.isDebug()) {
+                platformDetails.stopLokinetIfWeStartedIt();
+            }
             Qt.quit();
+        }
     }
 
     ControlPanel {
