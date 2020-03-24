@@ -65,6 +65,22 @@ bool LokinetProcessManager::stopLokinetProcess()
         qDebug("warning, lokinet process is already stopping, we'll try to stop again anyway");
     }
 
+    bool success = doStopLokinetProcess();
+    if (not success)
+    {
+        qDebug() << "doStopLokinetProcess() failed";
+        return false;
+    }
+
+    // note that we don't touch m_didLaunchProcess here because we don't
+    // know whether or not lokinet will gracefully exit
+
+    setLastKnownStatus(ProcessStatus::Stopping);
+    return true;
+}
+
+bool LokinetProcessManager::doStopLokinetProcess()
+{
     bool success = m_apiClient.llarpAdminDie([](QNetworkReply* reply) {
         qDebug() << "llarp.admin.die response: " << reply->readAll();
     });
@@ -74,11 +90,7 @@ bool LokinetProcessManager::stopLokinetProcess()
         return false;
     }
 
-    // note that we don't touch m_didLaunchProcess here because we don't
-    // know whether or not lokinet will gracefully exit
-
-    setLastKnownStatus(ProcessStatus::Stopping);
-    return true;
+    return success;
 }
 
 bool LokinetProcessManager::forciblyStopLokinetProcess()
@@ -280,6 +292,10 @@ WindowsLokinetProcessManager g_processManager;
 #elif defined(Q_OS_MACOS)
 #include "MacOSLokinetProcessManager.hpp"
 MacOSLokinetProcessManager g_processManager;
+
+#elif defined(SYSTEMD)
+#include "SystemdLokinetProcessManager.hpp"
+SystemdLokinetProcessManager g_processManager;
 
 // tested: Linux, NetBSD, FreeBSD, Solaris
 // netbsd dev reimplemented pkill and all the other
