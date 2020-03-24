@@ -13,6 +13,8 @@ ApplicationWindow {
     title: qsTr("Lokinet Control Panel")
     visible: nohide
     flags: notray ? Qt.Window : Qt.FramelessWindowHint
+    maximumHeight: minimumHeight
+    maximumWidth: minimumWidth
 
     color: Style.panelSeparatorColor
 
