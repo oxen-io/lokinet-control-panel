@@ -134,6 +134,7 @@ ApplicationWindow {
             MenuSeparator { }
 
             MenuItem {
+                visible: !isSystemd
                 text: qsTr("Bootstrap Client from Web")
                 onTriggered: {
                     bootstrapDialog.visible = true;
