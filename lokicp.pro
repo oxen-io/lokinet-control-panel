@@ -29,8 +29,7 @@ macx {
     SOURCES += src/process/MacOSLokinetProcessManager.cpp
 }
 unix:!macx {
-    'TODO: wtf is var here?!'
-    'invoke via: qmake SYSTEMD=true ..'
+    'invoke this via: qmake SYSTEMD=true ..'
     defined(SYSTEMD, var) {
         message("systemd");
         DEFINES+=SYSTEMD
