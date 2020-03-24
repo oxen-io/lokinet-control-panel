@@ -47,5 +47,7 @@ int32_t main(int32_t argc, char *argv[])
     engine.globalObject().setProperty("notray", notray);
     engine.load(QUrl(QStringLiteral("qrc:/res/qml/main.qml")));
 
+    QCoreApplication::setApplicationName("Lokinet Control Panel");
+
     return app.exec();
 }
