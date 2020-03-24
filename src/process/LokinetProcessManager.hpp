@@ -95,13 +95,16 @@ public:
      * normal case but won't touch the process on exit if it was launched by some
      * other mechanism.
      *
+     * An exception is made for systemd mode, where we expect systemd to fully manage
+     * the lifetime of lokinet.
+     *
      * @param block determines whether or not we block until the managed process
      *        terminates.
      * @return false if any error occurs, true if we don't invoke
      *         managedStopLokinetProcess(), true if the process actually died
      *         within the timeout (MANAGED_KILL_WAIT)
      */
-    bool stopLokinetIfWeStartedIt(bool block = true);
+    virtual bool stopLokinetIfWeStartedIt(bool block = true);
 
     /**
      * Query the status of the process. This should query the OS for a realtime
