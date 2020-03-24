@@ -11,8 +11,10 @@ import "."
 ApplicationWindow {
     id: window
     title: qsTr("Lokinet Control Panel")
-    visible: platformDetails.isDebug()
-    flags: Qt.FramelessWindowHint
+    visible: nohide
+    flags: nohide ? Qt.Window : Qt.FramelessWindowHint
+    maximumHeight: minimumHeight
+    maximumWidth: minimumWidth
 
     color: Style.panelSeparatorColor
 
@@ -20,9 +22,14 @@ ApplicationWindow {
     // this isn't going to work well on a "sloppy focus" window managers, but
     // probably works well on the most common OSes
     onActiveChanged: {
-        if (!active && !platformDetails.isDebug() && !platformDetails.isLinux()) {
+        if (!active && !nohide) {
             window.visible = false;
         }
+    }
+
+    onClosing: {
+        if (notray)
+            Qt.quit();
     }
 
     ControlPanel {
@@ -79,7 +86,7 @@ ApplicationWindow {
     SystemTrayIcon {
         id: systray
         tooltip: qsTr("Loki Network")
-        visible: true
+        visible: !notray
         iconSource: "qrc:/res/images/icon.png"
 
         menu: Menu {
