@@ -41,13 +41,13 @@ int32_t main(int32_t argc, char *argv[])
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/res/images/icon.png"));
     app.setQuitOnLastWindowClosed(false);
+    QCoreApplication::setApplicationName("Lokinet Control Panel");
 
     QQmlApplicationEngine engine;
     engine.globalObject().setProperty("nohide", nohide);
     engine.globalObject().setProperty("notray", notray);
     engine.load(QUrl(QStringLiteral("qrc:/res/qml/main.qml")));
 
-    QCoreApplication::setApplicationName("Lokinet Control Panel");
 
     return app.exec();
 }
