@@ -56,7 +56,9 @@ ColumnLayout {
     }
 
     // dismiss panel
-    DismissPanel { }
+    DismissPanel {
+        visible: !notray
+    }
 
 
     Component.onCompleted: {

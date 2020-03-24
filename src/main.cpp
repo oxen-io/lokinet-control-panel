@@ -17,12 +17,19 @@ int32_t main(int32_t argc, char *argv[])
 
     // crude CLI option parsing
     bool nohide = false;
+    bool notray = false;
     for (int i=0; argv[i] != nullptr; ++i) {
-        if (strcmp(argv[i], "--nohide") == 0) {
-            qDebug() << "nohide: true";
-            nohide = true;
-        }
+        std::string arg = argv[i];
+        if (arg == "--nohide" || arg == "--no-hide") nohide = true;
+        if (arg == "--notray" || arg == "--no-tray") notray = true;
     }
+
+    // notray implies nohide
+    if (notray)
+        nohide = true;
+
+    qDebug() << "nohide: " << (nohide ? "T":"F");
+    qDebug() << "notray: " << (notray ? "T":"F");
 
     qmlRegisterType<LokinetApiClient>("LokinetApiClient", 1, 0, "LokinetApiClient");
     qmlRegisterType<QmlClipboardAdapter>("QClipboard", 1, 0, "QClipboard");
@@ -35,6 +42,7 @@ int32_t main(int32_t argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.globalObject().setProperty("nohide", nohide);
+    engine.globalObject().setProperty("notray", notray);
     engine.load(QUrl(QStringLiteral("qrc:/res/qml/main.qml")));
 
     return app.exec();

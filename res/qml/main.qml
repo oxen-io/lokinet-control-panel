@@ -12,7 +12,7 @@ ApplicationWindow {
     id: window
     title: qsTr("Lokinet Control Panel")
     visible: nohide
-    flags: Qt.FramelessWindowHint
+    flags: notray ? Qt.Window : Qt.FramelessWindowHint
 
     color: Style.panelSeparatorColor
 
@@ -23,6 +23,11 @@ ApplicationWindow {
         if (!active && !nohide) {
             window.visible = false;
         }
+    }
+
+    onClosing: {
+        if (notray)
+            Qt.quit();
     }
 
     ControlPanel {
@@ -79,7 +84,7 @@ ApplicationWindow {
     SystemTrayIcon {
         id: systray
         tooltip: qsTr("Loki Network")
-        visible: true
+        visible: !notray
         iconSource: "qrc:/res/images/icon.png"
 
         menu: Menu {
