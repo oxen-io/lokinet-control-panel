@@ -55,7 +55,8 @@ bool SystemdLokinetProcessManager::doStartLokinetProcess()
 
 bool SystemdLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    return invoke("systemctl", { "--noblock", "kill", "lokinet.service" });
+    // systemd's "stop" is a managed stop -- it will do its own forceful kill
+    return invoke("systemctl", { "--no-block", "stop", "lokinet.service" });
 }
 
 bool SystemdLokinetProcessManager::doGetProcessPid(int& pid)
