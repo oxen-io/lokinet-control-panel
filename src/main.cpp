@@ -8,6 +8,12 @@
 #include "PlatformDetails.hpp"
 #include "BandwidthChartData.hpp"
 
+#if defined(SYSTEMD)
+constexpr bool isSystemd = true;
+#else
+constexpr bool isSystemd = false;
+#endif
+
 int32_t main(int32_t argc, char *argv[])
 {
     Q_INIT_RESOURCE(resources);
@@ -46,6 +52,7 @@ int32_t main(int32_t argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.globalObject().setProperty("nohide", nohide);
     engine.globalObject().setProperty("notray", notray);
+    engine.globalObject().setProperty("isSystemd", isSystemd);
     engine.load(QUrl(QStringLiteral("qrc:/res/qml/main.qml")));
 
 
