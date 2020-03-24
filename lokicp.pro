@@ -1,5 +1,7 @@
 TEMPLATE = app
 
+TARGET = lokinet-gui
+
 QT += qml quick widgets charts
 
 CONFIG += c++14
