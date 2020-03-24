@@ -15,6 +15,7 @@ class SystemdLokinetProcessManager : public LokinetProcessManager
 
 protected:
     
+    bool stopLokinetIfWeStartedIt(bool) {return true;};
     bool doStopLokinetProcess() override;
     bool doStartLokinetProcess() override;
     bool doForciblyStopLokinetProcess() override;
