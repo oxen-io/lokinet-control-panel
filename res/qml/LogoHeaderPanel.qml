@@ -19,7 +19,7 @@ Container {
         // coerces Qt not to interpolate like an idiot
         mipmap: true
 
-    	anchors.fill: parent
+        anchors.fill: parent
 
         fillMode: Image.PreserveAspectFit
 
