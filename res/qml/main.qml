@@ -95,7 +95,7 @@ ApplicationWindow {
         id: systray
         tooltip: qsTr("Loki Network")
         visible: !notray
-        iconSource: "qrc:/res/images/icon.png"
+        iconSource: "qrc:/res/images/icon.svg"
 
         menu: Menu {
             id: systrayMenu
