@@ -16,13 +16,14 @@ Container {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
 
-		anchors.fill: parent
-        anchors.topMargin: 6
-        anchors.bottomMargin: 6
+        // coerces Qt not to interpolate like an idiot
+        mipmap: true
+
+        anchors.fill: parent
 
         fillMode: Image.PreserveAspectFit
 
-        source: "qrc:/res/images/logo.png"
+        source: "qrc:/res/images/banner.png"
         smooth: true
     }
 }
