@@ -1,3 +1,27 @@
+loki-network-control-panel (0.2.1-1~ubuntu2004) focal; urgency=medium
+
+  [ Jason Rhinelander ]
+  * remove unwanted TARGET from deb branches
+  * Add magic WTF variable
+
+  [ Stephen Shelton ]
+  * Update readme to reflect v0.2.0 changes
+  * Call stopLokinetIfWeStartedIt() when exiting window
+  * DRY
+  * Don't stop lokinet on exit in systemd mode
+
+  [ Jason Rhinelander ]
+  * Replace icon with official branding one
+
+  [ Stephen Shelton ]
+  * Reroll the banner again
+  * No hard tabs
+
+  [ Jason Rhinelander ]
+  * debian updates for 0.2.1
+
+ -- Jason Rhinelander <jason@imaginary.ca>  Thu, 26 Mar 2020 19:45:44 -0300
+
 loki-network-control-panel (0.2.0-1~ubuntu2004) focal; urgency=medium
 
   * Initial release
