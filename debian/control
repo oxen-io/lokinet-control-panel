@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Jason Rhinelander <jason@imaginary.ca>
 Build-Depends: debhelper (>= 10~),
     imagemagick,
+    librsvg2-bin,
     qtdeclarative5-dev,
     libqt5charts5-dev
 Standards-Version: 4.4.1
