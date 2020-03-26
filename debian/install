@@ -1,5 +1,8 @@
 build-debian/lokinet-gui usr/bin
 debian/lokinet-gui.desktop usr/share/applications
+build-debian/icons/scalable/lokinet-gui.png usr/share/icons/hicolor/scalable/apps
+build-debian/icons/256x256/lokinet-gui.png usr/share/icons/hicolor/256x256/apps
+build-debian/icons/192x192/lokinet-gui.png usr/share/icons/hicolor/192x192/apps
 build-debian/icons/128x128/lokinet-gui.png usr/share/icons/hicolor/128x128/apps
 build-debian/icons/96x96/lokinet-gui.png usr/share/icons/hicolor/96x96/apps
 build-debian/icons/64x64/lokinet-gui.png usr/share/icons/hicolor/64x64/apps
