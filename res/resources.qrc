@@ -17,7 +17,7 @@
 
         <!-- images -->
         <file>images/icon.svg</file>
-        <file>images/logo.png</file>
+        <file>images/banner.png</file>
         <file>images/connection_indicator.png</file>
         <file>images/connection_button.png</file>
         <file>images/connection_button_outline.png</file>
