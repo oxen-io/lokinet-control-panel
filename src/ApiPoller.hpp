@@ -5,12 +5,12 @@
 #include <functional>
 #include <mutex>
 #include <string>
- 
+
 #include <QObject>
 #include <QTimer>
 
 #include "HttpClient.hpp"
- 
+
 /**
  * The ApiPoller periodically requests a JSON-RPC endpoint from the Loki daemon.
  */
@@ -56,9 +56,10 @@ public:
      * to fire its *timeout* signal. This does not affect periodic polling.
      */
     Q_INVOKABLE void pollImmediately();
+    Q_INVOKABLE void pollOnce();
 
 signals:
-    
+
     /**
      * Emitted when a JSON-RPC seponse containing new status information is
      * received from the server
@@ -75,10 +76,13 @@ private:
      * Poll the Loki daemon.
      */
     void pollDaemon();
+    void watchDog();
 
     QTimer* m_timer;
+    bool m_responded;
+    QTimer* m_timeout_timer;
     HttpClient m_httpClient;
     std::string m_rpcPayload;
 };
- 
+
 #endif // __LOKI_STAT_FETCHER_H__
