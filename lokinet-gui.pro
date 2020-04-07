@@ -29,6 +29,7 @@ macx {
     LIBS += -framework Security -framework CoreFoundation
     HEADERS += src/process/MacOSLokinetProcessManager.hpp
     SOURCES += src/process/MacOSLokinetProcessManager.cpp
+    QT += svg
 }
 unix:!macx {
     'invoke this via: qmake SYSTEMD=true ..'
