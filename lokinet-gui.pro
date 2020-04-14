@@ -26,7 +26,6 @@ HEADERS += src/QmlClipboardAdapter.hpp \
 RESOURCES += res/resources.qrc
 
 macx {
-    LIBS += -framework Security -framework CoreFoundation
     HEADERS += src/process/MacOSLokinetProcessManager.hpp
     SOURCES += src/process/MacOSLokinetProcessManager.cpp
     QT += svg
