@@ -30,6 +30,7 @@ macx {
     HEADERS += src/process/MacOSLokinetProcessManager.hpp
     SOURCES += src/process/MacOSLokinetProcessManager.cpp
     QT += svg
+    ICON = res/images/icon.icns
 }
 unix:!macx {
     'invoke this via: qmake SYSTEMD=true ..'
