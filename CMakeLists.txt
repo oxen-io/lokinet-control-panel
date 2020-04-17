@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13)  # Has to be set before `project()`, and ignored on non-macos
+
 project(lokinet-gui
     VERSION 0.2.2
     DESCRIPTION "Lokinet graphical control panel"
@@ -30,13 +32,46 @@ target_link_libraries(lokinet-gui PRIVATE
 set_target_properties(lokinet-gui
     PROPERTIES
         CXX_STANDARD 14
+        CXX_EXTENSIONS OFF
         CXX_STANDARD_REQUIRED ON
 
         AUTORCC ON  # Enables processing *.qrc in sources
         AUTOMOC ON  # Does... whatever automoc is
     )
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+
+if(APPLE)
+    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/tools/mk-icns.sh ${CMAKE_CURRENT_SOURCE_DIR}/res/images/icon.svg ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/res/images/icon.svg)
+
+    target_sources(lokinet-gui PRIVATE
+        src/process/MacOSLokinetProcessManager.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns)
+
+    set_target_properties(lokinet-gui
+        PROPERTIES
+        MACOSX_BUNDLE TRUE
+        RESOURCE "${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns")
+
+    set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER org.lokinet.lokinet-gui)
+    set(MACOSX_BUNDLE_INFO_STRING "Lokinet control panel")
+    set(MACOSX_BUNDLE_ICON_FILE lokinet-gui.icns)
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION})
+    set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
+    set(MACOSX_BUNDLE_COPYRIGHT "© 2020, The Loki Project")
+
+    get_target_property(uic_location Qt5::uic IMPORTED_LOCATION)
+    get_filename_component(qt_dir ${uic_location} DIRECTORY)
+    add_custom_command(TARGET lokinet-gui
+        POST_BUILD
+        COMMAND "${qt_dir}/macdeployqt" lokinet-gui.app
+        )
+elseif(WIN32)
+    target_sources(lokinet-gui PRIVATE src/process/WindowsLokinetProcessManager.cpp)
+else()
     option(SYSTEMD "Enable systemd support" OFF)
     if(SYSTEMD)
         target_sources(lokinet-gui PRIVATE src/process/SystemdLokinetProcessManager.cpp)
@@ -44,11 +79,5 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     else()
         target_sources(lokinet-gui PRIVATE src/process/LinuxLokinetProcessManager.cpp)
     endif()
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    target_sources(lokinet-gui PRIVATE src/process/MacOSLokinetProcessManager.cpp)
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    target_sources(lokinet-gui PRIVATE src/process/WindowsLokinetProcessManager.cpp)
-else()
-    message(FATAL_ERROR "Don't have support for '${CMAKE_SYSTEM_NAME}' yet!")
 endif()
 
