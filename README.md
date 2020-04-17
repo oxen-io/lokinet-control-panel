@@ -8,7 +8,7 @@ There is also an option (`Bootstrap Client from Web`) in the system tray's conte
 
 ### Building
 
-To build, you'll need a handful of `Qt` packages available. On `Ubuntu` or similar, you can install these with:
+To build, you'll need `cmake` and a handful of `Qt` packages available. On `Ubuntu` or similar, you can install these with:
 
 ```bash
 sudo apt install qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qt-labs-platform qml-module-qtcharts libqt5charts5-dev
@@ -19,14 +19,14 @@ Then build and run:
 ```bash
 mkdir build
 cd build
-qmake "CONFIG+=debug" ..
+cmake ..
 make
 ./lokinet-gui
 ```
 
 ### Systemd
 
-The app can be compiled to support `systemd` for starting and stopping `lokinet`. To enable this, invoke `qmake` with `SYSTEMD=true`.
+The app can be compiled to support `systemd` for starting and stopping `lokinet`. To enable this, invoke `cmake` with `-DSYSTEMD=ON`.
 
 Note that interactions with systemd may require privilege escalation, which is handled through `polkit`. A graphical polkit backend must be running for this to work.
 
