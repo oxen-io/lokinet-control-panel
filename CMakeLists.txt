@@ -43,7 +43,7 @@ set_target_properties(lokinet-gui
 if(APPLE)
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/tools/mk-icns.sh ${CMAKE_CURRENT_SOURCE_DIR}/res/images/icon.svg ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/res/images/icon.svg)
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/res/images/icon.svg ${CMAKE_CURRENT_SOURCE_DIR}/tools/mk-icns.sh)
 
     target_sources(lokinet-gui PRIVATE
         src/process/MacOSLokinetProcessManager.cpp

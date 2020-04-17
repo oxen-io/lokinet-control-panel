@@ -9,7 +9,7 @@ set -e
 
 mkdir -p "${outdir}"
 for size in 16 32 64 128 256 512 1024; do
-    convert -resize "${size}x${size}" "$svg" -strip "png32:${outdir}/icon_${size}x${size}.png"
+    convert -background none -resize "${size}x${size}" "$svg" -strip "png32:${outdir}/icon_${size}x${size}.png"
 done
 mv "${outdir}/icon_1024x1024.png" "${outdir}/icon_512x512@2x.png"
 for size in 16 32 128 256; do
