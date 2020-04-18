@@ -84,3 +84,7 @@ else()
     endif()
 endif()
 
+install(TARGETS lokinet-gui
+    RUNTIME DESTINATION bin
+    BUNDLE DESTINATION .
+    RESOURCE DESTINATION .)
