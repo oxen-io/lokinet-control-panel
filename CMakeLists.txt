@@ -69,7 +69,7 @@ if(APPLE)
         get_filename_component(qt_dir ${uic_location} DIRECTORY)
         add_custom_command(TARGET lokinet-gui
             POST_BUILD
-            COMMAND "${qt_dir}/macdeployqt" lokinet-gui.app
+            COMMAND "${qt_dir}/macdeployqt" lokinet-gui.app -always-overwrite
             )
     endif()
 elseif(WIN32)
