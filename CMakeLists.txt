@@ -40,7 +40,7 @@ set_target_properties(lokinet-gui
     )
 
 if(APPLE)
-    option(MACOS_APP "Build a lokinet-gui.app bundle instead of a binary" OFF)
+    option(MACOS_APP "Build a LokinetGUI.app bundle instead of a binary" OFF)
 
     target_sources(lokinet-gui PRIVATE src/process/MacOSLokinetProcessManager.cpp)
 
@@ -54,9 +54,10 @@ if(APPLE)
         set_target_properties(lokinet-gui
             PROPERTIES
             MACOSX_BUNDLE TRUE
+            OUTPUT_NAME LokinetGUI
             RESOURCE "${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns")
 
-        set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
+        set(MACOSX_BUNDLE_BUNDLE_NAME LokinetGUI)
         set(MACOSX_BUNDLE_GUI_IDENTIFIER org.lokinet.lokinet-gui)
         set(MACOSX_BUNDLE_INFO_STRING "Lokinet control panel")
         set(MACOSX_BUNDLE_ICON_FILE lokinet-gui.icns)
@@ -69,7 +70,7 @@ if(APPLE)
         get_filename_component(qt_dir ${uic_location} DIRECTORY)
         add_custom_command(TARGET lokinet-gui
             POST_BUILD
-            COMMAND "${qt_dir}/macdeployqt" lokinet-gui.app -always-overwrite
+            COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite
             )
     endif()
 elseif(WIN32)
