@@ -30,6 +30,18 @@ The app can be compiled to support `systemd` for starting and stopping `lokinet`
 
 Note that interactions with systemd may require privilege escalation, which is handled through `polkit`. A graphical polkit backend must be running for this to work.
 
+### MacOS
+
+The above commands work to build a working executable, however if you also want to bundle it into a
+`.app` bundle invoke cmake as:
+
+    cmake -DMACOS_APP=ON ..
+
+which will produce a lokinet-gui.app executable app bundle directory containing the binary,
+resources, and dependencies.
+
+Note that building this way additionally requires imagemagick installed and built with SVG support.
+
 ### Usage
 
 By default, the app starts running in the background with access available through the system tray. Click on the system tray icon to interact with the app.

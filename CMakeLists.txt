@@ -39,36 +39,39 @@ set_target_properties(lokinet-gui
         AUTOMOC ON  # Does... whatever automoc is
     )
 
-
 if(APPLE)
-    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns
-        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/tools/mk-icns.sh ${CMAKE_CURRENT_SOURCE_DIR}/res/images/icon.svg ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/res/images/icon.svg ${CMAKE_CURRENT_SOURCE_DIR}/tools/mk-icns.sh)
+    option(MACOS_APP "Build a lokinet-gui.app bundle instead of a binary" OFF)
 
-    target_sources(lokinet-gui PRIVATE
-        src/process/MacOSLokinetProcessManager.cpp
-        ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns)
+    target_sources(lokinet-gui PRIVATE src/process/MacOSLokinetProcessManager.cpp)
 
-    set_target_properties(lokinet-gui
-        PROPERTIES
-        MACOSX_BUNDLE TRUE
-        RESOURCE "${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns")
+    if(MACOS_APP)
+        add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns
+            COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/tools/mk-icns.sh ${CMAKE_CURRENT_SOURCE_DIR}/res/images/icon.svg ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns
+            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/res/images/icon.svg ${CMAKE_CURRENT_SOURCE_DIR}/tools/mk-icns.sh)
 
-    set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
-    set(MACOSX_BUNDLE_GUI_IDENTIFIER org.lokinet.lokinet-gui)
-    set(MACOSX_BUNDLE_INFO_STRING "Lokinet control panel")
-    set(MACOSX_BUNDLE_ICON_FILE lokinet-gui.icns)
-    set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
-    set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION})
-    set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
-    set(MACOSX_BUNDLE_COPYRIGHT "© 2020, The Loki Project")
+        target_sources(lokinet-gui PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns)
 
-    get_target_property(uic_location Qt5::uic IMPORTED_LOCATION)
-    get_filename_component(qt_dir ${uic_location} DIRECTORY)
-    add_custom_command(TARGET lokinet-gui
-        POST_BUILD
-        COMMAND "${qt_dir}/macdeployqt" lokinet-gui.app
-        )
+        set_target_properties(lokinet-gui
+            PROPERTIES
+            MACOSX_BUNDLE TRUE
+            RESOURCE "${CMAKE_CURRENT_BINARY_DIR}/lokinet-gui.icns")
+
+        set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
+        set(MACOSX_BUNDLE_GUI_IDENTIFIER org.lokinet.lokinet-gui)
+        set(MACOSX_BUNDLE_INFO_STRING "Lokinet control panel")
+        set(MACOSX_BUNDLE_ICON_FILE lokinet-gui.icns)
+        set(MACOSX_BUNDLE_LONG_VERSION_STRING ${PROJECT_VERSION})
+        set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION})
+        set(MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION})
+        set(MACOSX_BUNDLE_COPYRIGHT "© 2020, The Loki Project")
+
+        get_target_property(uic_location Qt5::uic IMPORTED_LOCATION)
+        get_filename_component(qt_dir ${uic_location} DIRECTORY)
+        add_custom_command(TARGET lokinet-gui
+            POST_BUILD
+            COMMAND "${qt_dir}/macdeployqt" lokinet-gui.app
+            )
+    endif()
 elseif(WIN32)
     target_sources(lokinet-gui PRIVATE src/process/WindowsLokinetProcessManager.cpp)
 else()
