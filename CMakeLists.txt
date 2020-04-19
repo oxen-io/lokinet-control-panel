@@ -76,7 +76,7 @@ if(APPLE)
             )
         if(MACOS_SIGN)
             add_custom_target(sign ALL
-                codesign -s "${MACOS_SIGN}" --deep --strict --verbose=2 LokinetGUI.app
+                codesign -s "${MACOS_SIGN}" --deep --strict --force --verbose=2 LokinetGUI.app
                 VERBATIM
                 DEPENDS lokinet-gui
                 )
