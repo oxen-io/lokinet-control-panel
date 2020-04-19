@@ -41,6 +41,8 @@ set_target_properties(lokinet-gui
 
 if(APPLE)
     option(MACOS_APP "Build a LokinetGUI.app bundle instead of a binary" OFF)
+    set(MACOS_SIGN ""
+        CACHE STRING "enable codesigning -- use a 'Apple Distribution' key (or key description) from `security find-identity -v`")
 
     target_sources(lokinet-gui PRIVATE src/process/MacOSLokinetProcessManager.cpp)
 
@@ -72,6 +74,13 @@ if(APPLE)
             POST_BUILD
             COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite
             )
+        if(MACOS_SIGN)
+            add_custom_target(sign ALL
+                codesign -s "${MACOS_SIGN}" --deep --strict --verbose=2 LokinetGUI.app
+                VERBATIM
+                DEPENDS lokinet-gui
+                )
+        endif()
     endif()
 elseif(WIN32)
     target_sources(lokinet-gui PRIVATE src/process/WindowsLokinetProcessManager.cpp)
