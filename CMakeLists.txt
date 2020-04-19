@@ -70,15 +70,19 @@ if(APPLE)
 
         get_target_property(uic_location Qt5::uic IMPORTED_LOCATION)
         get_filename_component(qt_dir ${uic_location} DIRECTORY)
-        add_custom_command(TARGET lokinet-gui
-            POST_BUILD
-            COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite
-            )
         if(MACOS_SIGN)
-            add_custom_target(sign ALL
-                codesign -s "${MACOS_SIGN}" --deep --strict --options runtime --force -vvv LokinetGUI.app
-                VERBATIM
-                DEPENDS lokinet-gui
+            add_custom_command(TARGET lokinet-gui
+                POST_BUILD
+                COMMAND echo "Running qt magic macos deploy script"
+                COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite
+                COMMAND echo "Signing LokinetGUI.app and everything inside it"
+                COMMAND codesign -s "${MACOS_SIGN}" --deep --strict --options runtime --force -vvv LokinetGUI.app
+                )
+        else()
+            add_custom_command(TARGET lokinet-gui
+                POST_BUILD
+                COMMAND echo "Running qt magic macos deploy script"
+                COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite
                 )
         endif()
     endif()
