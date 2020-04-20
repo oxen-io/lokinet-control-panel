@@ -16,9 +16,13 @@ QtObject {
     readonly property color panelBackgroundColor: "#1a1c20"
     readonly property color panelSeparatorColor: "#101010"
 
+    readonly property color aboutBackgroundColor: "#231f20"
+
     readonly property color highlightAffirmative: "#32b10e"
     readonly property color highlightNeutral: "#746c53"
     readonly property color highlightNegative: "#cc163d"
+
+    readonly property color linkColor: "#2C9B0C"
 
     // app dimensions -- TODO: components should be sized dynamically,
     // this should either be defined/used in one place or implied by
