@@ -114,12 +114,6 @@ ApplicationWindow {
                     window.visible = false;
                 }
             }
-            MenuItem {
-                text: qsTr("Exit")
-                onTriggered: {
-                    window.exitApp();
-                }
-            }
 
             MenuSeparator { }
 
@@ -143,6 +137,27 @@ ApplicationWindow {
                 text: qsTr("Bootstrap Client from Web")
                 onTriggered: {
                     bootstrapDialog.visible = true;
+                }
+            }
+
+            MenuSeparator { }
+
+            MenuItem {
+                text: qsTr("About Lokinet")
+                onTriggered: {
+                    var component = Qt.createComponent("about.qml")
+                    if( component.status != Component.Ready ) {
+                      console.debug("Error:"+ component.errorString() );
+                      return
+                    }
+                    var aboutWindow = component.createObject(window)
+                    aboutWindow.show()
+                }
+            }
+            MenuItem {
+                text: qsTr("Exit")
+                onTriggered: {
+                    window.exitApp();
                 }
             }
         }
