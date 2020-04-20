@@ -74,7 +74,7 @@ if(APPLE)
             add_custom_command(TARGET lokinet-gui
                 POST_BUILD
                 COMMAND echo "Running qt magic macos deploy script"
-                COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite
+                COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite -qmldir=${PROJECT_SOURCE_DIR}/res
                 COMMAND echo "Signing LokinetGUI.app and everything inside it"
                 COMMAND codesign -s "${MACOS_SIGN}" --deep --strict --options runtime --force -vvv LokinetGUI.app
                 )
