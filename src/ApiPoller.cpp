@@ -10,9 +10,7 @@ constexpr auto LOKI_DAEMON_URL = "http://localhost:1190/";
 ApiPoller::ApiPoller() {
     m_timer = new QTimer();
     m_timer->setInterval(DEFAULT_POLLING_INTERVAL_MS);
-    m_timer->setSingleShot(true);
     connect(m_timer, &QTimer::timeout, this, &ApiPoller::pollDaemon);
-    m_timeout_timer = nullptr;
 }
 
 // ApiPoller Destructor
@@ -55,23 +53,6 @@ void ApiPoller::pollImmediately() {
     QTimer::singleShot(0, this, &ApiPoller::pollDaemon);
 }
 
-// ApiPoller::pollOnce
-void ApiPoller::pollOnce() {
-    if (m_timeout_timer != nullptr) {
-        m_timeout_timer->stop();
-        delete m_timeout_timer;
-        m_timeout_timer = nullptr;
-    }
-
-    this->m_responded = false;
-    QTimer::singleShot(500, this, &ApiPoller::pollDaemon);
-    m_timeout_timer = new QTimer();
-    m_timeout_timer->setInterval(500 * 10);
-    m_timeout_timer->setSingleShot(true);
-    connect(m_timeout_timer, &QTimer::timeout, this, &ApiPoller::watchDog);
-    m_timeout_timer->start();
-}
-
 // ApiPoller::pollDaemon
 void ApiPoller::pollDaemon() {
     if (m_rpcPayload.empty()) {
@@ -80,15 +61,6 @@ void ApiPoller::pollDaemon() {
     }
     m_httpClient.postJson(LOKI_DAEMON_URL, m_rpcPayload, [=](QNetworkReply* reply) {
         static bool lastAttemptWasError = false;
-        if (m_timeout_timer != nullptr) {
-            m_timeout_timer->stop();
-            delete m_timeout_timer;
-            m_timeout_timer = nullptr;
-        }
-        if (this->m_responded) {
-            return;
-        }
-        this->m_responded = true;
         if (reply->error()) {
             if (! lastAttemptWasError) {
                 qDebug() << "JSON-RPC error: " << reply->error();
@@ -105,17 +77,4 @@ void ApiPoller::pollDaemon() {
             emit statusAvailable(reply->readAll(), reply->error());
         }
     });
-}
-
-void ApiPoller::watchDog() {
-    if (!this->m_responded) {
-        if (m_timeout_timer != nullptr) {
-            m_timeout_timer->stop();
-            delete m_timeout_timer;
-            m_timeout_timer = nullptr;
-        }
-        // needs to be before emit, because emit will call pollOnce which sets it
-        this->m_responded = true;
-        emit statusAvailable("", QNetworkReply::TimeoutError);
-    }
 }

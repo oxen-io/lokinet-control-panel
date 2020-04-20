@@ -63,10 +63,14 @@ ColumnLayout {
 
     Component.onCompleted: {
         stateApiPoller.statusAvailable.connect(handleStateResults);
-        stateApiPoller.pollOnce();
+        stateApiPoller.pollImmediately();
+        stateApiPoller.setIntervalMs(500);
+        stateApiPoller.startPolling();
 
         statusApiPoller.statusAvailable.connect(handleStatusResults);
-        statusApiPoller.pollOnce();
+        statusApiPoller.pollImmediately();
+        statusApiPoller.setIntervalMs(500);
+        statusApiPoller.startPolling();
 
     }
 
@@ -91,7 +95,7 @@ ColumnLayout {
 
     function handleStateResults(payload, error) {
         var stats = null;
-
+        
         if (! error) {
             try {
                 stats = JSON.parse(payload);
@@ -183,7 +187,6 @@ ColumnLayout {
         if (newRunning !== isRunning) isRunning = newRunning;
         if (newLokiAddress !== lokiAddress) lokiAddress = newLokiAddress;
         if (newNumRouters !== numRoutersKnown) numRoutersKnown = newNumRouters;
-        stateApiPoller.pollOnce();
     }
 
     function handleStatusResults(payload, error) {
@@ -194,10 +197,7 @@ ColumnLayout {
             } catch (err) {
                 console.log("Couldn't parse 'status' JSON-RPC payload", err);
             }
-        } else {
-            console.log('handleStatusResults error', error);
         }
-        statusApiPoller.pollOnce();
     }
 
     function queryVersion() {
