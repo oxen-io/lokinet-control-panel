@@ -13,6 +13,7 @@
         <file>qml/UsagePanel.qml</file>
         <file>qml/DismissPanel.qml</file>
         <file>qml/UptimePanel.qml</file>
+        <file>qml/about.qml</file>
         <file>qml/BootstrapDownloadDialog.qml</file>
 
         <!-- images -->
@@ -22,5 +23,6 @@
         <file>images/connection_button.png</file>
         <file>images/connection_button_outline.png</file>
         <file>images/up_chevron.png</file>
+        <file>images/lokinet-brand_icon-only_black-background_stacked.svg</file>
     </qresource>
 </RCC>
