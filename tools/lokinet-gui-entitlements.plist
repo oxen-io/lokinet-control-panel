@@ -4,7 +4,7 @@
 <dict>
     <!-- apparently needed by some parts of Qt as of 5.14.2; Qt 5.15 is rumoured to improve things
          w.r.t. notarization and signing so possibly revisit this. -->
-    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <key>com.apple.security.cs.disable-library-validation</key>
     <true/>
 </dict>
 </plist>
