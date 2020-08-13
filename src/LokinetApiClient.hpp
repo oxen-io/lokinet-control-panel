@@ -4,7 +4,8 @@
 #include <QObject>
 #include <QJSValue>
 
-#include "HttpClient.hpp"
+#include <lokimq/lokimq.h>
+#include <optional>
  
 /**
  * A client that implements convenience wrappers around making specific
@@ -31,6 +32,8 @@ class LokinetApiClient : public QObject
 
 public:
 
+    using ReplyCallback = std::function<void(std::optional<std::string>)>;
+
     /**
      * Invoke an endpoint.
      *
@@ -41,7 +44,7 @@ public:
      * @param callback is a callback that will receive the reply or error
      * @return true on success, false otherwise
      */
-    bool invoke(const std::string& endpoint, HttpClient::ReplyCallback callback);
+    bool invoke(const std::string& endpoint, ReplyCallback callback);
     Q_INVOKABLE bool invoke(const std::string& endpoint, QJSValue callback);
 
     /**
@@ -64,13 +67,14 @@ public:
         return invoke("llarp.admin.status", callback);
     }
 
-    bool llarpAdminDie(HttpClient::ReplyCallback callback) {
+    bool llarpAdminDie(ReplyCallback callback) {
         return invoke("llarp.admin.die", callback);
     }
  
 private:
 
-    HttpClient m_httpClient;
+    lokimq::LokiMQ m_lmqClient;
+    std::optional<lokimq::ConnectionID> m_lmqConnection;
 
 };
  
