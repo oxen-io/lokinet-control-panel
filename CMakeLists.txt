@@ -8,8 +8,11 @@ project(lokinet-gui
     HOMEPAGE_URL https://github.com/loki-project/loki-network-control-panel
     LANGUAGES CXX)
 
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+  
 find_package(Qt5 COMPONENTS Qml Quick Widgets Charts REQUIRED)
 find_package(Threads)
+find_package(LokiMQ 1.2 REQUIRED)
 
 add_executable(lokinet-gui
     src/main.cpp
@@ -27,11 +30,12 @@ add_executable(lokinet-gui
 target_link_libraries(lokinet-gui PRIVATE
     Qt5::Core Qt5::Qml Qt5::Quick Qt5::Widgets Qt5::Charts
     Threads::Threads
+    lokimq
     )
 
 set_target_properties(lokinet-gui
     PROPERTIES
-        CXX_STANDARD 14
+        CXX_STANDARD 17
         CXX_EXTENSIONS OFF
         CXX_STANDARD_REQUIRED ON
 
