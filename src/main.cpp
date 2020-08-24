@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
+#include <QDebug>
 
 #include "QmlClipboardAdapter.hpp"
 #include "LokinetApiClient.hpp"

@@ -1,9 +1,11 @@
 #include "LokinetApiClient.hpp"
-
+#include <QJsonDocument>
 #include <stdexcept>
 #include <cstdio>
+#include <QDebug>
 
-bool LokinetApiClient::invoke(const std::string& endpoint, ReplyCallback callback) {
+bool LokinetApiClient::invoke(const std::string& endpoint, QJsonObject args, ReplyCallback callback) {
+  std::cout << "call " << endpoint;
   if(not m_lmqConnection.has_value())
   {
     m_lmqClient.start();
@@ -16,6 +18,8 @@ bool LokinetApiClient::invoke(const std::string& endpoint, ReplyCallback callbac
           m_lmqConnection = std::nullopt;
         });
   }
+  QJsonDocument doc(args);
+  const auto req = doc.toJson();
   m_lmqClient.request(
     *m_lmqConnection,
     std::string_view{endpoint},
@@ -29,18 +33,18 @@ bool LokinetApiClient::invoke(const std::string& endpoint, ReplyCallback callbac
       {
         cb(std::nullopt);
       }
-    });
+    }, req.toStdString());
     return true;
 }
 
-Q_INVOKABLE bool LokinetApiClient::invoke(const std::string& endpoint, QJSValue callback) {
+Q_INVOKABLE bool LokinetApiClient::invoke(const std::string& endpoint,QJsonObject callargs, QJSValue callback) {
 
     if (! callback.isUndefined() && ! callback.isCallable()) {
-      // qDebug() << "callback should be a function (if present)";
+      qWarning() << "callback should be a function (if present)";
         return false;
     }
 
-    return invoke(endpoint, [=](std::optional<std::string> reply) mutable {
+    return invoke(endpoint, callargs, [=](std::optional<std::string> reply) mutable {
         QJSValueList args;
         if(reply.has_value())
         {

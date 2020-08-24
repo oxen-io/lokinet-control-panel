@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QJSValue>
+#include <QJsonObject>
 
 #include <lokimq/lokimq.h>
 #include <optional>
@@ -44,8 +45,8 @@ public:
      * @param callback is a callback that will receive the reply or error
      * @return true on success, false otherwise
      */
-    bool invoke(const std::string& endpoint, ReplyCallback callback);
-    Q_INVOKABLE bool invoke(const std::string& endpoint, QJSValue callback);
+  bool invoke(const std::string& endpoint, QJsonObject args, ReplyCallback callback);
+  Q_INVOKABLE bool invoke(const std::string& endpoint, QJsonObject args ,QJSValue callback);
 
     /**
      * The following functions are conveniences for invoking particular API
@@ -54,21 +55,29 @@ public:
      * @param callback is an optional JS function to invoke on success
      * @return true if the asynchronous request could be made, false otherwise
      */
-
-    Q_INVOKABLE bool llarpAdminWakeup(QJSValue callback) {
+/*
+     Q_INVOKABLE bool llarpAdminWakeup(QJSValue callback) {
         return invoke("llarp.admin.wakeup", callback);
     }
-
+*/
+  
     Q_INVOKABLE bool llarpVersion(QJSValue callback) {
-        return invoke("llarp.version", callback);
+      return invoke("llarp.version", QJsonObject{}, callback);
     }
-
-    Q_INVOKABLE bool llarpAdminStatus(QJSValue callback) {
-        return invoke("llarp.admin.status", callback);
+  
+  Q_INVOKABLE bool llarpExit(QString exitAddress, QJSValue callback) {
+    if(exitAddress.isEmpty())
+    {
+      return invoke("llarp.exit", QJsonObject{{"unmap", true}}, callback);
     }
+    else
+    {
+      return invoke("llarp.exit", QJsonObject{{"exit", exitAddress}}, callback);
+    }
+  }
 
     bool llarpAdminDie(ReplyCallback callback) {
-        return invoke("llarp.admin.die", callback);
+      return invoke("llarp.halt", QJsonObject{}, callback);
     }
  
 private:
