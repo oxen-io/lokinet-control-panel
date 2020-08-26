@@ -1,11 +1,9 @@
 #include "ApiPoller.hpp"
-
+#include "lmq_settings.hpp"
 #include <string>
 
 #include <QObject>
 #include <QDebug>
-
-constexpr auto LOKI_DAEMON_URL = "http://localhost:1190/";
 
 // ApiPoller Constructor
 ApiPoller::ApiPoller() {
@@ -54,7 +52,7 @@ void ApiPoller::pollDaemon() {
     }
     if(not m_Conn.has_value())
     {
-      m_Conn = m_lmq.connect_remote(LOKI_DAEMON_URL, [](auto &&){},
+      m_Conn = m_lmq.connect_remote(LOKINET_RPC_URL, [](auto &&){},
                                     [=](auto,auto msg) {
                                       qInfo() << std::string{msg}.c_str();
                                       m_Conn = std::nullopt;

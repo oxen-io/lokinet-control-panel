@@ -1,4 +1,5 @@
 #include "LokinetApiClient.hpp"
+#include "lmq_settings.hpp"
 #include <QJsonDocument>
 #include <stdexcept>
 #include <cstdio>
@@ -11,7 +12,7 @@ bool LokinetApiClient::invoke(const std::string& endpoint, QJsonObject args, Rep
     m_lmqClient.start();
     m_lmqConnection =
       m_lmqClient.connect_remote(
-        "tcp://127.0.0.1:1190",
+        LOKINET_RPC_URL,
         [](auto){},
         [&](auto, std::string_view reason) {
           // qDebug() << "failed to connect to lokinet: "<< reason;

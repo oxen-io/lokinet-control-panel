@@ -65,16 +65,22 @@ public:
       return invoke("llarp.version", QJsonObject{}, callback);
     }
   
-  Q_INVOKABLE bool llarpExit(QString exitAddress, QJSValue callback) {
-    if(exitAddress.isEmpty())
+    Q_INVOKABLE bool llarpAddExit(QString exitAddress, QString exitToken, QJSValue callback)
+    {
+      if(exitToken.isEmpty())
+      {
+        return invoke("llarp.exit", QJsonObject{{"exit", exitAddress}}, callback);
+      }
+      else
+      {
+        return invoke("llarp.exit", QJsonObject{{"exit", exitAddress}, {"token", exitToken}}, callback);
+      }
+    }
+
+    Q_INVOKABLE bool llarpDelExit(QJSValue callback)
     {
       return invoke("llarp.exit", QJsonObject{{"unmap", true}}, callback);
     }
-    else
-    {
-      return invoke("llarp.exit", QJsonObject{{"exit", exitAddress}}, callback);
-    }
-  }
 
     bool llarpAdminDie(ReplyCallback callback) {
       return invoke("llarp.halt", QJsonObject{}, callback);

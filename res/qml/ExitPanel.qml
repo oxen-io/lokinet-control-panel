@@ -6,9 +6,12 @@ import QClipboard 1.0
 import "."
 
 Container {
-    property var address: ""
-
-    Layout.preferredHeight: 79
+  property var address: ""
+  property var authcode: ""
+  property var status: ""
+  property var busy: false
+  property var hasExit: false
+    Layout.preferredHeight: 162
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -45,16 +48,104 @@ Container {
         font.family: Style.weakTextFont
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
-        onAccepted: {
-          let lokiExit = text;
-          apiClient.llarpExit(lokiExit, function(result, error) {
-              if(error)
-                 console.log(error);
-               else
-                 console.log(JSON.stringify(result));
-          });
-          
-        }
     }
+    
+    Text {
+        id: authLabelText
+
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+
+        y: 62
+        text: "Auth Code"
+        font.family: Style.weakTextFont
+        color: Style.weakTextColor
+        font.pointSize: Style.weakTextSize
+        font.capitalization: Font.AllUppercase
+    }
+
+    TextInput {
+        id: authTextInput
+
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+
+        y: 84
+        text: authcode
+        font.family: Style.weakTextFont
+        color: Style.strongTextColor
+        font.pointSize: Style.weakTextSize
+    }
+
+    Text {
+      id: statusLabelText
+      anchors.left: parent.left
+      anchors.leftMargin: 20
+      anchors.right: parent.right
+      anchors.rightMargin: 20
+      y: 106
+      text: status
+      font.family: Style.weakTextFont
+      color: Style.weakTextColor
+      font.pointSize: Style.weakTextSize
+      font.capitalization: Font.AllUppercase
+    }
+
+    Button {
+      id: exitButton 
+      text: "Enable Exit"
+      checkable: true
+      font.family: Style.weakTextFont
+      font.pointSize: Style.weakTextSize
+      font.capitalization: Font.AllUppercase
+      y: 128
+      onClicked: {
+        if(busy)
+        {
+          return;
+        }
+        let exitAddr = exitTextInput.text;
+        let exitAuth = authTextInput.text;
+        console.log(exitAddr, exitAuth);
+        if(hasExit)
+        {
+          busy = true;
+          apiClient.llarpDelExit(function(result, error) {
+            status = "Exit Off";
+            busy = false;
+            hasExit = false;
+            exitButton.text = "Enable Exit";
+          });
+          return;
+        }
+        status = "Connecting...";
+        busy = true;
+        apiClient.llarpAddExit(exitAddr, exitAuth, function(result, error) {
+          busy = false;
+          if(error)
+          {
+            status = "Error: " +error;
+            checked = false;
+            return;
+          }
+          let j = JSON.parse(result);
+          if(j.error)
+          {
+            status = "Error: " + j.error;
+            checked = false;
+          }
+          if(j.result)
+          {
+            status = "Exit Enabled";
+            hasExit = true;
+            exitButton.text = "Disable Exit";
+          }
+        });
+      }
+    }    
 }
 
