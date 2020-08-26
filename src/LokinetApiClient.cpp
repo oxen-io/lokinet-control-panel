@@ -44,8 +44,7 @@ Q_INVOKABLE bool LokinetApiClient::invoke(const std::string& endpoint,QJsonObjec
       qWarning() << "callback should be a function (if present)";
         return false;
     }
-
-    return invoke(endpoint, callargs, [=](std::optional<std::string> reply) mutable {
+    return invoke(endpoint, callargs,[=](std::optional<std::string> reply) mutable {
         QJSValueList args;
         if(reply.has_value())
         {
@@ -57,7 +56,12 @@ Q_INVOKABLE bool LokinetApiClient::invoke(const std::string& endpoint,QJsonObjec
           args << QJSValue(false);
           args << QJSValue("no response given from lokinet");
         }
-        callback.call(args);
+        emit CallCallback(callback, args);
     });
 }
 
+
+LokinetApiClient::LokinetApiClient(QObject * parent) : QObject(parent)
+{
+  connect(this, &LokinetApiClient::CallCallback, this, [](auto callback, auto args){ callback.call(args); });
+}

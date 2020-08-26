@@ -35,6 +35,8 @@ public:
 
     using ReplyCallback = std::function<void(std::optional<std::string>)>;
 
+  LokinetApiClient(QObject * parent=nullptr);
+  
     /**
      * Invoke an endpoint.
      *
@@ -90,7 +92,9 @@ private:
 
     lokimq::LokiMQ m_lmqClient;
     std::optional<lokimq::ConnectionID> m_lmqConnection;
-
+signals:
+    void
+    CallCallback(QJSValue callback, QJSValueList args);
 };
  
 #endif // __LOKI_LOKINET_API_CLIENT_HPP__

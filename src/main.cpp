@@ -38,7 +38,7 @@ int32_t main(int32_t argc, char *argv[])
 
     qDebug() << "nohide: " << (nohide ? "T":"F");
     qDebug() << "notray: " << (notray ? "T":"F");
-
+    qRegisterMetaType<QJSValueList>("QJSValueList");
     qmlRegisterType<LokinetApiClient>("LokinetApiClient", 1, 0, "LokinetApiClient");
     qmlRegisterType<QmlClipboardAdapter>("QClipboard", 1, 0, "QClipboard");
     qmlRegisterType<ApiPoller>("ApiPoller", 1, 0, "ApiPoller");
