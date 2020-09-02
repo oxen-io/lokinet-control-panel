@@ -198,8 +198,8 @@ ColumnLayout {
     function handleStatusResults(payload, error) {
         if (! error) {
             try {
-                const responseObj = JSON.parse(payload);
-                lokiUptime = responseObj.result.uptime;
+              const responseObj = JSON.parse(payload);
+              lokiUptime = responseObj.result.uptime;
             } catch (err) {
                 console.log("Couldn't parse 'status' JSON-RPC payload", err);
             }

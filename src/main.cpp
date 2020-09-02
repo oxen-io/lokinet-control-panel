@@ -8,12 +8,15 @@
 #include "ApiPoller.hpp"
 #include "PlatformDetails.hpp"
 #include "BandwidthChartData.hpp"
+#include "lmq_settings.hpp"
 
 #if defined(SYSTEMD)
 constexpr bool isSystemd = true;
 #else
 constexpr bool isSystemd = false;
 #endif
+
+std::string RPCURL = LOKINET_RPC_URL;
 
 int32_t main(int32_t argc, char *argv[])
 {
@@ -30,6 +33,10 @@ int32_t main(int32_t argc, char *argv[])
         std::string arg = argv[i];
         if (arg == "--nohide" || arg == "--no-hide") nohide = true;
         if (arg == "--notray" || arg == "--no-tray") notray = true;
+        if (arg == "--rpc" and argv[i+1] != nullptr)
+        {
+          RPCURL = argv[i+1];
+        }
     }
 
     // notray implies nohide
