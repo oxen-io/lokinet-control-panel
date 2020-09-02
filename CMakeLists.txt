@@ -29,11 +29,12 @@ if(USE_SUBMODULES)
     check_submodule(external/loki-mq)
   endif()
   add_subdirectory(external/loki-mq)
+else()
+  find_package(LokiMQ 1.2 REQUIRED)  
 endif()
 
 find_package(Qt5 COMPONENTS Qml Quick Widgets Charts REQUIRED)
 find_package(Threads)
-find_package(LokiMQ 1.2 REQUIRED)
 
 add_executable(lokinet-gui
     src/main.cpp
