@@ -46,6 +46,7 @@ ColumnLayout {
 
     // exit panel
     ExitPanel {
+        address: lokiExit
         id: exit
     }
     
@@ -136,6 +137,7 @@ ColumnLayout {
         var newConnected = (! error && stats != null);
         var newRunning = false;
         var newLokiAddress = "";
+        var newLokiExit = "";
         var newNumRouters = 0;
         var txRate = 0;
         var rxRate = 0;
@@ -174,6 +176,19 @@ ColumnLayout {
             }
 
             try {
+              let exitMap = stats.result.services.default.exitMap;
+              if(exitMap)
+              {
+                for(var k in exitMap)
+                {
+                  newLokiExit = exitMap[k];
+                }
+              }
+            } catch (err) {
+                console.log("Couldn't pull exit address out of payload", err);
+            }
+
+            try {
                 newNumRouters = stats.result.numNodesKnown;
             } catch (err) {
                 console.log("Couldn't pull numNodesKnown out of payload", err);
@@ -193,6 +208,7 @@ ColumnLayout {
         if (newRunning !== isRunning) isRunning = newRunning;
         if (newLokiAddress !== lokiAddress) lokiAddress = newLokiAddress;
         if (newNumRouters !== numRoutersKnown) numRoutersKnown = newNumRouters;
+        if (newLokiExit !== lokiExit) lokiExit = newLokiExit;
     }
 
     function handleStatusResults(payload, error) {
