@@ -10,7 +10,7 @@ project(lokinet-gui
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-option(USE_SUBMODULES "use submodules for deps (ON/OFF)" OFF)
+option(USE_SUBMODULES "use submodules for deps (ON/OFF)" ON)
 
 if(USE_SUBMODULES)
   find_package(Git)
