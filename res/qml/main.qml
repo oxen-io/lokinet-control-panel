@@ -188,15 +188,17 @@ ApplicationWindow {
     ApiPoller {
         id: stateApiPoller
         Component.onCompleted: {
-            stateApiPoller.setApiEndpoint("llarp.admin.dumpstate");
+            stateApiPoller.setApiEndpoint("llarp.status");
         }
     }
-    ApiPoller {
+
+    ApiPoller { 
         id: statusApiPoller
         Component.onCompleted: {
-            statusApiPoller.setApiEndpoint("llarp.admin.status");
+            statusApiPoller.setApiEndpoint("llarp.version");
         }
     }
+    
     LokinetApiClient {
         id: apiClient
     }

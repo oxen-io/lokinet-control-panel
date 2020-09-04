@@ -12,6 +12,7 @@ ColumnLayout {
     property var isRunning: false
     property var lokiVersion: ""
     property var lokiAddress: ""
+    property var lokiExit: ""
     property int lokiUptime: 0
     property var numPathsBuilt: 0
     property var numRoutersKnown: 0
@@ -43,6 +44,11 @@ ColumnLayout {
         address: lokiAddress
     }
 
+    // exit panel
+    ExitPanel {
+        id: exit
+    }
+    
     // router stats
     RouteStatsPanel {
         paths: numPathsBuilt

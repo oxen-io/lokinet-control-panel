@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QJSValue>
+#include <QJsonObject>
 
 #include <lokimq/lokimq.h>
 #include <optional>
@@ -34,6 +35,8 @@ public:
 
     using ReplyCallback = std::function<void(std::optional<std::string>)>;
 
+  LokinetApiClient(QObject * parent=nullptr);
+  
     /**
      * Invoke an endpoint.
      *
@@ -44,8 +47,8 @@ public:
      * @param callback is a callback that will receive the reply or error
      * @return true on success, false otherwise
      */
-    bool invoke(const std::string& endpoint, ReplyCallback callback);
-    Q_INVOKABLE bool invoke(const std::string& endpoint, QJSValue callback);
+  bool invoke(const std::string& endpoint, QJsonObject args, ReplyCallback callback);
+  Q_INVOKABLE bool invoke(const std::string& endpoint, QJsonObject args ,QJSValue callback);
 
     /**
      * The following functions are conveniences for invoking particular API
@@ -54,28 +57,44 @@ public:
      * @param callback is an optional JS function to invoke on success
      * @return true if the asynchronous request could be made, false otherwise
      */
-
-    Q_INVOKABLE bool llarpAdminWakeup(QJSValue callback) {
+/*
+     Q_INVOKABLE bool llarpAdminWakeup(QJSValue callback) {
         return invoke("llarp.admin.wakeup", callback);
     }
-
+*/
+  
     Q_INVOKABLE bool llarpVersion(QJSValue callback) {
-        return invoke("llarp.version", callback);
+      return invoke("llarp.version", QJsonObject{}, callback);
+    }
+  
+    Q_INVOKABLE bool llarpAddExit(QString exitAddress, QString exitToken, QJSValue callback)
+    {
+      if(exitToken.isEmpty())
+      {
+        return invoke("llarp.exit", QJsonObject{{"exit", exitAddress}}, callback);
+      }
+      else
+      {
+        return invoke("llarp.exit", QJsonObject{{"exit", exitAddress}, {"token", exitToken}}, callback);
+      }
     }
 
-    Q_INVOKABLE bool llarpAdminStatus(QJSValue callback) {
-        return invoke("llarp.admin.status", callback);
+    Q_INVOKABLE bool llarpDelExit(QJSValue callback)
+    {
+      return invoke("llarp.exit", QJsonObject{{"unmap", true}}, callback);
     }
 
     bool llarpAdminDie(ReplyCallback callback) {
-        return invoke("llarp.admin.die", callback);
+      return invoke("llarp.halt", QJsonObject{}, callback);
     }
  
 private:
 
     lokimq::LokiMQ m_lmqClient;
     std::optional<lokimq::ConnectionID> m_lmqConnection;
-
+signals:
+    void
+    CallCallback(QJSValue callback, QJSValueList args);
 };
  
 #endif // __LOKI_LOKINET_API_CLIENT_HPP__
