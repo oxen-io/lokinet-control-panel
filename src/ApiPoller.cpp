@@ -6,7 +6,9 @@
 #include <QDebug>
 
 // ApiPoller Constructor
-ApiPoller::ApiPoller() {
+ApiPoller::ApiPoller() :
+  QObject(nullptr)
+{
     m_lmq.start();
     m_timer = new QTimer();
     m_timer->setInterval(DEFAULT_POLLING_INTERVAL_MS);
@@ -52,7 +54,7 @@ void ApiPoller::pollDaemon() {
     }
     if(not m_Conn.has_value())
     {
-      m_Conn = m_lmq.connect_remote(LOKINET_RPC_URL, [](auto &&){},
+      m_Conn = m_lmq.connect_remote(RPCURL, [](auto &&){},
                                     [=](auto,auto msg) {
                                       qInfo() << std::string{msg}.c_str();
                                       m_Conn = std::nullopt;

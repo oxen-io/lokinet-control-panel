@@ -9,10 +9,32 @@ project(lokinet-gui
     LANGUAGES CXX)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-  
+
+option(USE_SUBMODULES "use submodules for deps (ON/OFF)" ON)
+
+if(USE_SUBMODULES)
+  find_package(Git)
+  if(GIT_FOUND)
+    function(check_submodule relative_path)
+      execute_process(COMMAND git rev-parse "HEAD" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${relative_path} OUTPUT_VARIABLE localHead)
+      execute_process(COMMAND git rev-parse "HEAD:${relative_path}" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_VARIABLE checkedHead)
+      string(COMPARE EQUAL "${localHead}" "${checkedHead}" upToDate)
+      if (upToDate)
+        message(STATUS "Submodule '${relative_path}' is up-to-date")
+      else()
+        message(FATAL_ERROR "Submodule '${relative_path}' is not up-to-date. Please update with\ngit submodule update --init --recursive\nor run cmake with -DSUBMODULE_CHECK=OFF")
+      endif()
+    endfunction ()
+    message(STATUS "Checking submodules")
+    check_submodule(external/loki-mq)
+  endif()
+  add_subdirectory(external/loki-mq)
+else()
+  find_package(LokiMQ 1.2 REQUIRED)  
+endif()
+
 find_package(Qt5 COMPONENTS Qml Quick Widgets Charts REQUIRED)
 find_package(Threads)
-find_package(LokiMQ 1.2 REQUIRED)
 
 add_executable(lokinet-gui
     src/main.cpp

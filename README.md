@@ -14,9 +14,11 @@ To build, you'll need `cmake` and a handful of `Qt` packages available. On `Ubun
 sudo apt install qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qt-labs-platform qml-module-qtcharts libqt5charts5-dev
 ```
 
-Then build and run:
+Then clone, build and run:
 
 ```bash
+git clone --recursive https://github.com/loki-project/loki-network-control-panel
+cd loki-network-control-panel
 mkdir build
 cd build
 cmake ..
@@ -56,5 +58,10 @@ Prevents the window from being hidden automatically when it loses focus. Also ad
 --no-tray
 
 Implies --no-hide, and additionally removes the system tray. Closing the window exits the app.
+
+--rpc 
+
+Provide a custom rpc url for talking to lokinet, defaults to tcp://127.0.0.1:1190
+
 ```
 

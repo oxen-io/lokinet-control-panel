@@ -79,6 +79,7 @@ Container {
         font.family: Style.weakTextFont
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
+        echoMode: TextInput.Password
     }
 
     Text {
