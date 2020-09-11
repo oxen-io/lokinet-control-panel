@@ -35,9 +35,11 @@ Container {
         font.capitalization: Font.AllUppercase
     }
 
-    TextInput {
+    TextField {
         id: exitTextInput
-
+        background: Rectangle{
+          color: Style.textInputBackgroundColor
+        }
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.right: parent.right
@@ -66,9 +68,12 @@ Container {
         font.capitalization: Font.AllUppercase
     }
 
-    TextInput {
+    TextField {
         id: authTextInput
 
+        background: Rectangle{
+          color: Style.textInputBackgroundColor
+        }
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.right: parent.right
@@ -100,6 +105,15 @@ Container {
       id: exitButton 
       text: "Enable Exit"
       checkable: true
+      background: Rectangle{
+        color: Style.highlightAffirmative
+      }
+
+      anchors.left: parent.left
+      anchors.leftMargin: 20
+      anchors.right: parent.right
+      anchors.rightMargin: 20
+
       font.family: Style.weakTextFont
       font.pointSize: Style.weakTextSize
       font.capitalization: Font.AllUppercase
