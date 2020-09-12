@@ -73,7 +73,7 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
     {
         while (Process32Next(snapshot, &entry) == TRUE)
         {
-            if (wcscmp(entry.szExeFile, L"lokinet.exe") == 0)
+            if (stricmp(entry.szExeFile, "lokinet.exe") == 0)
             {  
                 pid = entry.th32ProcessID;
                 qDebug("lokinet pid: %d", pid);
