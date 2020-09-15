@@ -1,7 +1,7 @@
 local default_deps_base='libsystemd-dev qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qt-labs-platform qml-module-qtcharts libqt5charts5-dev liblokimq-dev';
 local default_deps_nocxx=default_deps_base;
 local default_deps='g++ ' + default_deps_nocxx; // g++ sometimes needs replacement
-local default_windows_deps='mingw-w64-binutils mingw-w64-gcc mingw-w64-crt mingw-w64-headers mingw-w64-winpthreads perl openssh zip bash'; // deps for windows cross compile
+local default_windows_deps='mingw-w64-binutils mingw-w64-gcc mingw-w64-crt mingw-w64-headers mingw-w64-winpthreads perl openssh zip bash binutils'; // deps for windows cross compile
 
 
 
@@ -63,6 +63,7 @@ local windows_cross_pipeline(name, image,
         arch='amd64',
         deps=default_windows_deps,
         build_type='Release',
+        lto=false,
         werror=false,
         cmake_extra='',
         toolchain='32',
@@ -82,14 +83,29 @@ local windows_cross_pipeline(name, image,
             environment: { SSH_KEY: { from_secret: "SSH_KEY" }, WINDOWS_BUILD_NAME: toolchain+"bit" },
             commands: [
                 'apk update && apk upgrade',
-                'apk add cmake git ninja pkgconf ccache patch make ' + deps,
+                'apk add cmake git ninja pkgconf ccache patch make g++ curl linux-headers python2 ' + deps,
+                'git clone https://github.com/openssl/openssl.git -b OpenSSL_1_1_1g',
+                'git clone https://code.qt.io/qt/qt5.git -b 5.12',
+                'git clone https://github.com/jedisct1/libsodium.git -b 1.0.18-RELEASE',
+                'git clone https://github.com/despair86/lokinet-gui-deployment-kit.git deploy',
+                'cd openssl',
+                'RC=i686-w64-mingw32-windres RANLIB=i686-w64-mingw32-ranlib CC=\'ccache i686-w64-mingw32-gcc\' LD=i686-w64-mingw32-ld ./Configure no-shared no-async mingw --prefix=/drone/src/ssleay-win32',
+                'make -j16; make install',
+                'cd /drone/src', // go back to build folder!
+                'mkdir qt5-build',
+                'cd qt5; perl init-repository --module-subset=default,-qtwebengine,-qtactiveqt',
+                'cd /drone/src/qt5-build',
+                '/drone/src/qt5/configure -prefix /drone/src/qt5-win32 -qt-zlib -qt-libjpeg -qt-libpng -qt-freetype -qt-pcre -qt-harfbuzz -opensource -confirm-license -platform linux-g++ -xplatform win32-g++ -release -device-option \'CROSS_COMPILE=ccache i686-w64-mingw32-\' -opengl desktop -no-angle -skip qtwebengine -optimize-size -strip -ssl -openssl-linked -qt-sqlite -sql-sqlite -qt-assimp -qt-tiff -qt-webp -recheck-all OPENSSL_PREFIX=/drone/src/ssleay-win32 \'OPENSSL_LIBS_DEBUG=-lssl -lcrypto\' \'OPENSSL_LIBS_RELEASE=-lssl -lcrypto\' \'OPENSSL_LIBS=-lws2_32 -lgdi32 -ladvapi32 -lcrypt32 -luser32\' OPENSSL_INCDIR=/drone/src/ssleay-win32/include OPENSSL_LIBDIR=/drone/src/ssleay-win32/lib -qt3d-simd sse2 -ccache -skip qtactiveqt -nomake examples -nomake tests',
+                'make -j16; make install',
+                'cd /drone/src/libsodium',
+                'CC=\'ccache i686-w64-mingw32-gcc\' ./configure --host=i686-w64-mingw32 --target=i686-w64-mingw32 --disable-shared --prefix=/drone/src/sodium-win32',
+                'make -j16; make install',
+                'cd /drone/src',
                 'mkdir build',
                 'cd build',
-                'cmake .. -G Ninja'. // TODO: make this work
-                    (if werror then '-DWARNINGS_AS_ERRORS=ON ' else '') +
-                cmake_extra,
-                'ninja -v',
-            ] + extra_cmds,
+                'PKG_CONFIG_PATH=/drone/src/sodium-win32/lib/pkgconfig cmake .. -G Ninja -DCMAKE_CROSSCOMPILE=ON -DCMAKE_EXE_LINKER_FLAGS=-fstack-protector -DCMAKE_TOOLCHAIN_FILE=$PWD/../mingw32.cmake -DCMAKE_BUILD_TYPE=Release -DQt5_DIR=/drone/src/qt5-win32/lib/cmake/Qt5 -DQt5Qml_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Qml -DQt5Network_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Network -DQt5Core_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Core -DQt5Quick_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Quick -DQt5Gui_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Gui -DQt5Widgets_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Widgets -DQt5Charts_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Charts -DBUILD_SHARED_LIBS=OFF'
+                //'ninja -v',
+            ]// + extra_cmds,
         }
     ],
 };
@@ -156,11 +172,6 @@ local deb_builder(image, distro, distro_branch, arch='amd64', imaginary_repo=tru
                     cmake_extra='-DCMAKE_C_COMPILER=gcc-8 -DCMAKE_CXX_COMPILER=g++-8'),
     debian_pipeline("Debian buster (armhf)", "arm32v7/debian:buster", arch="arm64"),
     
-    // Windows builds (WOW64 and native)
-    windows_cross_pipeline("win32 on alpine (amd64)", "alpine:edge",
-        toolchain='64', extra_cmds=[
-          '../contrib/ci/drone-static-upload.sh'
-    ]),
      windows_cross_pipeline("win32 on alpine (i386)", "i386/alpine:edge",
         toolchain='32', extra_cmds=[
           '../contrib/ci/drone-static-upload.sh'
@@ -173,11 +184,11 @@ local deb_builder(image, distro, distro_branch, arch='amd64', imaginary_repo=tru
     deb_builder("debian:sid", "sid", "debian/sid", arch='arm64'),
 
     // Macos builds:
-    mac_builder('macOS (Release)'),
-    mac_builder('macOS (Debug)', build_type='Debug'),
-    mac_builder('macOS (Static)',
-                extra_cmds=[
-                    '../contrib/ci/drone-check-static-libs.sh',
-                    '../contrib/ci/drone-static-upload.sh'
-                ]),
+    //mac_builder('macOS (Release)'),
+    //mac_builder('macOS (Debug)', build_type='Debug'),
+    //mac_builder('macOS (Static)',
+//                extra_cmds=[
+//                    '../contrib/ci/drone-check-static-libs.sh',
+//                    '../contrib/ci/drone-static-upload.sh'
+//                ]),
 ]
