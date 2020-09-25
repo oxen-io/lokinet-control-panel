@@ -8,6 +8,7 @@ import "."
 Container {
     property var paths: 0
     property var routers: 0
+    property var buildRatio: ""
 
     Layout.preferredHeight: 69
     Layout.preferredWidth: Style.appWidth
@@ -24,7 +25,7 @@ Container {
         anchors.rightMargin: 20
 
         y: 18
-        text: "Paths built"
+        text: "Active Paths"
         font.family: Style.weakTextFont
         color: Style.weakTextColor
         font.pointSize: Style.weakTextSize
@@ -37,7 +38,7 @@ Container {
         anchors.rightMargin: 20
 
         y: 40
-        text: ""+ paths
+        text: ""+ paths + " (" + buildRatio + " success)"
         font.family: Style.weakTextFont
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
