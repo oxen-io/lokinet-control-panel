@@ -51,7 +51,7 @@ Container {
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
     }
-    
+
     Text {
         id: authLabelText
 
@@ -146,6 +146,7 @@ Container {
             busy = false;
             hasExit = false;
             exitButton.text = "Enable Exit";
+            stautsLabelText.color = Style.weakTextColor;
           });
           return;
         }
@@ -156,6 +157,7 @@ Container {
           if(error)
           {
             status = "Error: " +error;
+            statusLabelText.color = Style.errorRed;
             checked = false;
             return;
           }
@@ -164,15 +166,16 @@ Container {
           {
             status = "Error: " + j.error;
             checked = false;
+            statusLabelText.color = Style.errorRed;
           }
           if(j.result)
           {
             status = "Exit Enabled";
             hasExit = true;
             exitButton.text = "Disable Exit";
+            stautsLabelText.color = Style.weakTextColor;
           }
         });
       }
-    }    
+    }
 }
-
