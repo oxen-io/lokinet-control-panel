@@ -101,6 +101,67 @@ Container {
       font.capitalization: Font.AllUppercase
     }
 
+
+    ListView {
+      model: ["Exit"]
+      delegate: SwitchDelegate {
+        text: "Enable Exit"
+        onToggled: {
+          if(busy)
+          {
+            return;
+          }
+          let exitAddr = exitTextInput.text;
+          let exitAuth = authTextInput.text;
+          console.log(exitAddr, exitAuth);
+          if(hasExit)
+          {
+            busy = true;
+            apiClient.llarpDelExit(function(result, error) {
+              status = "Exit Off";
+              busy = false;
+              hasExit = false;
+              stautsLabelText.color = Style.weakTextColor;
+            });
+            return;
+          }
+          status = "Connecting...";
+          busy = true;
+          apiClient.llarpAddExit(exitAddr, exitAuth, function(result, error) {
+            busy = false;
+            if(error)
+            {
+              status = "Error: " +error;
+              statusLabelText.color = Style.errorRed;
+              checked = false;
+              return;
+            }
+            let j = JSON.parse(result);
+            if(j.error)
+            {
+              status = "Error: " + j.error;
+              checked = false;
+              statusLabelText.color = Style.errorRed;
+            }
+            if(j.result)
+            {
+              status = "Exit Enabled";
+              hasExit = true;
+              stautsLabelText.color = Style.weakTextColor;
+            }
+          });
+        }
+      }
+
+      y: 160
+
+      anchors.left: parent.left
+      anchors.leftMargin: 20
+      anchors.right: parent.right
+      anchors.rightMargin: 20
+
+    }
+  /*
     Button {
       id: exitButton
       text: "Enable Exit"
@@ -178,4 +239,5 @@ Container {
         });
       }
     }
+    */
 }
