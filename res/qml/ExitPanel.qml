@@ -11,7 +11,7 @@ Container {
   property var status: ""
   property var busy: false
   property var hasExit: false
-    Layout.preferredHeight: 180
+    Layout.preferredHeight: 200
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -93,7 +93,7 @@ Container {
       anchors.leftMargin: 20
       anchors.right: parent.right
       anchors.rightMargin: 20
-      y: 120
+      y: 140
       text: status
       font.family: Style.weakTextFont
       color: Style.weakTextColor
@@ -129,7 +129,7 @@ Container {
 
       }
 
-      y: 144
+      y: 164
       onClicked: {
         if(busy)
         {
