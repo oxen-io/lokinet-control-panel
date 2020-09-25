@@ -11,7 +11,7 @@ Container {
   property var status: ""
   property var busy: false
   property var hasExit: false
-    Layout.preferredHeight: 180
+    Layout.preferredHeight: 200
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -51,7 +51,7 @@ Container {
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
     }
-    
+
     Text {
         id: authLabelText
 
@@ -93,7 +93,7 @@ Container {
       anchors.leftMargin: 20
       anchors.right: parent.right
       anchors.rightMargin: 20
-      y: 120
+      y: 140
       text: status
       font.family: Style.weakTextFont
       color: Style.weakTextColor
@@ -101,12 +101,17 @@ Container {
       font.capitalization: Font.AllUppercase
     }
 
-    Button {
-      id: exitButton 
-      text: "Enable Exit"
+    Switch {
+      id: exitButton
+      text: address.length > 0  ? "Disable Exit" : "Enable Exit"
       checkable: true
+      checked: address.length > 0
       background: Rectangle{
-        color: Style.highlightAffirmative
+        color : Style.panelBackgroundColor
+        opacity: enabled ? 1 : 0.3
+        // border.color: Style.lokiDarkGreen
+        // border.width: 2
+        // radius: 10
       }
 
       anchors.left: parent.left
@@ -114,10 +119,18 @@ Container {
       anchors.right: parent.right
       anchors.rightMargin: 20
 
-      font.family: Style.weakTextFont
-      font.pointSize: Style.weakTextSize
-      font.capitalization: Font.AllUppercase
-      y: 144
+      contentItem: Text{
+        text: exitButton.text
+        color: Style.lokiFontWhite
+        font.family: Style.weakTextFont
+        font.pointSize: Style.weakTextSize
+        font.capitalization: Font.AllUppercase
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+
+      }
+
+      y: 164
       onClicked: {
         if(busy)
         {
@@ -134,6 +147,7 @@ Container {
             busy = false;
             hasExit = false;
             exitButton.text = "Enable Exit";
+            stautsLabelText.color = Style.weakTextColor;
           });
           return;
         }
@@ -144,6 +158,7 @@ Container {
           if(error)
           {
             status = "Error: " +error;
+            statusLabelText.color = Style.errorRed;
             checked = false;
             return;
           }
@@ -152,15 +167,17 @@ Container {
           {
             status = "Error: " + j.error;
             checked = false;
+            statusLabelText.color = Style.errorRed;
           }
           if(j.result)
           {
+            stautsLabelText.color = Style.weakTextColor;
             status = "Exit Enabled";
             hasExit = true;
             exitButton.text = "Disable Exit";
           }
         });
       }
-    }    
-}
+    }
 
+}
