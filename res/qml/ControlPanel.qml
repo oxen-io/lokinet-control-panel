@@ -262,7 +262,7 @@ ColumnLayout {
         }
     }
 
-    Function handleStatusResults(payload, error) {
+    function handleStatusResults(payload, error) {
         if (! error) {
             try {
               const responseObj = JSON.parse(payload);
