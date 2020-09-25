@@ -102,11 +102,15 @@ Container {
     }
 
     Button {
-      id: exitButton 
+      id: exitButton
       text: "Enable Exit"
       checkable: true
       background: Rectangle{
-        color: Style.highlightAffirmative
+        color : Style.panelBackgroundColor
+        opacity: enabled ? 1 : 0.3
+        border.color: Style.lokiDarkGreen
+        border.width: 2
+        radius: 10
       }
 
       anchors.left: parent.left
@@ -114,9 +118,17 @@ Container {
       anchors.right: parent.right
       anchors.rightMargin: 20
 
-      font.family: Style.weakTextFont
-      font.pointSize: Style.weakTextSize
-      font.capitalization: Font.AllUppercase
+      contentItem: Text{
+        text: exitButton.text
+        color: Style.lokiFontWhite
+        font.family: Style.weakTextFont
+        font.pointSize: Style.weakTextSize
+        font.capitalization: Font.AllUppercase
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+
+      }
+
       y: 144
       onClicked: {
         if(busy)
