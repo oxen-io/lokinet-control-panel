@@ -13,6 +13,8 @@ ColumnLayout {
     property var lokiVersion: ""
     property var lokiAddress: ""
     property var lokiExit: ""
+    property var exitAuth: ""
+    property var hasExit: false
     property int lokiUptime: 0
     property var numPathsBuilt: 0
     property var numRoutersKnown: 0
@@ -48,9 +50,10 @@ ColumnLayout {
     // exit panel
     ExitPanel {
         address: lokiExit
+        authcode: exitAuth
         id: exit
     }
-    
+
     // router stats
     RouteStatsPanel {
         paths: numPathsBuilt
@@ -104,7 +107,7 @@ ColumnLayout {
 
     function handleStateResults(payload, error) {
         var stats = null;
-        
+
         if (! error) {
             try {
                 stats = JSON.parse(payload);
@@ -245,10 +248,21 @@ ColumnLayout {
           numPathsBuilt = newNumPaths;
         }
         pathRatio = Math.ceil(ratio * 100) + "%";
-        if (newLokiExit !== lokiExit) lokiExit = newLokiExit;
+        if (newLokiExit !== lokiExit)
+        {
+          lokiExit = newLokiExit;
+        }
+        // set auth code
+        if(stats.result.services.authCodes)
+        {
+          if(lokiExit in stats.result.services.default.authCodes)
+          {
+            exitAuth = stats.result.services.default.authCodes[lokiExit];
+          }
+        }
     }
 
-    function handleStatusResults(payload, error) {
+    Function handleStatusResults(payload, error) {
         if (! error) {
             try {
               const responseObj = JSON.parse(payload);
@@ -276,4 +290,3 @@ ColumnLayout {
         });
     }
 }
-

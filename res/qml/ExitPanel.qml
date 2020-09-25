@@ -101,77 +101,17 @@ Container {
       font.capitalization: Font.AllUppercase
     }
 
-
-    ListView {
-      model: ["Exit"]
-      delegate: SwitchDelegate {
-        text: "Enable Exit"
-        onToggled: {
-          if(busy)
-          {
-            return;
-          }
-          let exitAddr = exitTextInput.text;
-          let exitAuth = authTextInput.text;
-          console.log(exitAddr, exitAuth);
-          if(hasExit)
-          {
-            busy = true;
-            apiClient.llarpDelExit(function(result, error) {
-              status = "Exit Off";
-              busy = false;
-              hasExit = false;
-              stautsLabelText.color = Style.weakTextColor;
-            });
-            return;
-          }
-          status = "Connecting...";
-          busy = true;
-          apiClient.llarpAddExit(exitAddr, exitAuth, function(result, error) {
-            busy = false;
-            if(error)
-            {
-              status = "Error: " +error;
-              statusLabelText.color = Style.errorRed;
-              checked = false;
-              return;
-            }
-            let j = JSON.parse(result);
-            if(j.error)
-            {
-              status = "Error: " + j.error;
-              checked = false;
-              statusLabelText.color = Style.errorRed;
-            }
-            if(j.result)
-            {
-              status = "Exit Enabled";
-              hasExit = true;
-              stautsLabelText.color = Style.weakTextColor;
-            }
-          });
-        }
-      }
-
-      y: 160
-
-      anchors.left: parent.left
-      anchors.leftMargin: 20
-      anchors.right: parent.right
-      anchors.rightMargin: 20
-
-    }
-  /*
-    Button {
+    Switch {
       id: exitButton
-      text: "Enable Exit"
+      text: address.length > 0  ? "Disable Exit" : "Enable Exit"
       checkable: true
+      checked: address.length > 0
       background: Rectangle{
         color : Style.panelBackgroundColor
         opacity: enabled ? 1 : 0.3
-        border.color: Style.lokiDarkGreen
-        border.width: 2
-        radius: 10
+        // border.color: Style.lokiDarkGreen
+        // border.width: 2
+        // radius: 10
       }
 
       anchors.left: parent.left
@@ -231,13 +171,13 @@ Container {
           }
           if(j.result)
           {
+            stautsLabelText.color = Style.weakTextColor;
             status = "Exit Enabled";
             hasExit = true;
             exitButton.text = "Disable Exit";
-            stautsLabelText.color = Style.weakTextColor;
           }
         });
       }
     }
-    */
+
 }
