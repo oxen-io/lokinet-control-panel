@@ -87,31 +87,17 @@ Container {
         echoMode: TextInput.Password
     }
 
-    Text {
-      id: statusLabelText
-      anchors.left: parent.left
-      anchors.leftMargin: 20
-      anchors.right: parent.right
-      anchors.rightMargin: 20
-      y: 140
-      text: status
-      font.family: Style.weakTextFont
-      color: Style.weakTextColor
-      font.pointSize: Style.weakTextSize
-      font.capitalization: Font.AllUppercase
-    }
-
     Switch {
       id: exitButton
       text: address.length > 0  ? "Disable Exit" : "Enable Exit"
       checkable: true
       checked: address.length > 0
       background: Rectangle{
-        color : Style.panelBackgroundColor
-        opacity: enabled ? 1 : 0.3
-        // border.color: Style.lokiDarkGreen
-        // border.width: 2
-        // radius: 10
+        color: Style.panelBackgroundColor
+        opacity: exitButton.checked ? 1 : 0.3
+        border.color: Style.lokiDarkGreen
+        border.width: exitButton.checked ? 2 : 0
+        radius: 10
       }
 
       anchors.left: parent.left
@@ -130,7 +116,7 @@ Container {
 
       }
 
-      y: 164
+      y: 140
       onClicked: {
         if(busy)
         {
@@ -138,8 +124,7 @@ Container {
         }
         let exitAddr = exitTextInput.text;
         let exitAuth = authTextInput.text;
-        console.log(exitAddr, exitAuth);
-        if(hasExit)
+        if(hasExit || address.length > 0)
         {
           busy = true;
           apiClient.llarpDelExit(function(result, error) {
@@ -151,7 +136,7 @@ Container {
           });
           return;
         }
-        status = "Connecting...";
+        statusLabelText.color = Style.weakTextColor;
         busy = true;
         apiClient.llarpAddExit(exitAddr, exitAuth, function(result, error) {
           busy = false;
@@ -175,9 +160,24 @@ Container {
             status = "Exit Enabled";
             hasExit = true;
             exitButton.text = "Disable Exit";
+            // apiClient.llarpSetConfig({"network": { "exit-node": exitAddr + (exitAuth.length > 0 ? ":" + exitAuth : "") }}, function(error, result) {} )
           }
         });
       }
+    }
+
+    Text {
+      id: statusLabelText
+      anchors.left: parent.left
+      anchors.leftMargin: 20
+      anchors.right: parent.right
+      anchors.rightMargin: 20
+      y: 180
+      text: status
+      font.family: Style.weakTextFont
+      color: Style.weakTextColor
+      font.pointSize: Style.weakTextSize
+      font.capitalization: Font.AllUppercase
     }
 
 }
