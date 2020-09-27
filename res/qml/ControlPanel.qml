@@ -14,6 +14,7 @@ ColumnLayout {
     property var lokiAddress: ""
     property var lokiExit: ""
     property var exitAuth: ""
+    property var exitStatus: ""
     property var hasExit: false
     property int lokiUptime: 0
     property var numPathsBuilt: 0
@@ -51,6 +52,7 @@ ColumnLayout {
     ExitPanel {
         address: lokiExit
         authcode: exitAuth
+        status: exitStatus
         id: exit
     }
 
@@ -248,9 +250,13 @@ ColumnLayout {
           numPathsBuilt = newNumPaths;
         }
         pathRatio = Math.ceil(ratio * 100) + "%";
-        if (newLokiExit !== lokiExit)
+        if (lokiExit !== newLokiExit)
         {
-          lokiExit = newLokiExit;
+          if(newLokiExit.length > 0)
+          {
+            lokiExit = newLokiExit;
+            exitStatus = "Exit Obtained";
+          }
         }
         // set auth code
         if(stats.result.services.authCodes)

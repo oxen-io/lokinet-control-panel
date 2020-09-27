@@ -10,9 +10,9 @@ project(lokinet-gui
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-option(USE_SUBMODULES "use submodules for deps (ON/OFF)" ON)
+option(BUILD_STATIC_DEPS "build every dep statically (ON/OFF)" OFF)
 
-if(USE_SUBMODULES)
+if(BUILD_STATIC_DEPS)
   find_package(Git)
   if(GIT_FOUND)
     function(check_submodule relative_path)
@@ -28,6 +28,7 @@ if(USE_SUBMODULES)
     message(STATUS "Checking submodules")
     check_submodule(external/loki-mq)
   endif()
+  include(StaticBuild)
   add_subdirectory(external/loki-mq)
 else()
   find_package(LokiMQ 1.2 REQUIRED)  
