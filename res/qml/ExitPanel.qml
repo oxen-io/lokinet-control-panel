@@ -89,6 +89,7 @@ Container {
 
     Switch {
       id: exitButton
+      palette.dark: Style.lokiDarkGreen;
       text: address.length > 0  ? "Exit On" : "Exit off"
       checkable: true
       checked: address.length > 0
