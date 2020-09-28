@@ -88,7 +88,7 @@ local windows_cross_pipeline(name, image,
                 'cd /drone/src',
                 'mkdir build',
                 'cd build',
-                'PKG_CONFIG_PATH=/drone/src/sodium-win32/lib/pkgconfig cmake .. -G Ninja -DCMAKE_CROSSCOMPILE=ON -DCMAKE_EXE_LINKER_FLAGS=-fstack-protector -DCMAKE_TOOLCHAIN_FILE=$PWD/../mingw32.cmake -DCMAKE_BUILD_TYPE=Release -DQt5_DIR=/drone/src/qt5-win32/lib/cmake/Qt5 -DQt5Qml_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Qml -DQt5Network_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Network -DQt5Core_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Core -DQt5Quick_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Quick -DQt5Gui_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Gui -DQt5Widgets_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Widgets -DQt5Charts_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Charts -DBUILD_SHARED_LIBS=OFF'
+                'PKG_CONFIG_PATH=/drone/src/sodium-win32/lib/pkgconfig cmake .. -G Ninja -DCMAKE_CROSSCOMPILE=ON -DCMAKE_EXE_LINKER_FLAGS=-fstack-protector -DCMAKE_TOOLCHAIN_FILE=$PWD/../mingw32.cmake -DCMAKE_BUILD_TYPE=Release -DQt5_DIR=/drone/src/qt5-win32/lib/cmake/Qt5 -DQt5Qml_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Qml -DQt5Network_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Network -DQt5Core_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Core -DQt5Quick_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Quick -DQt5Gui_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Gui -DQt5Widgets_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Widgets -DQt5Charts_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Charts -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_DEPS=ON'
                 //'ninja -v',
             ]// + extra_cmds,
         }

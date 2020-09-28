@@ -109,7 +109,7 @@ if(APPLE)
         else()
             add_custom_command(TARGET lokinet-gui
                 POST_BUILD
-                COMMAND echo "Running qt magic macos deploy script"
+                COMMAND echo "Running qt magic macs deploy script"
                 COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite
                 )
         endif()
