@@ -89,7 +89,7 @@ Container {
 
     Switch {
       id: exitButton
-      text: address.length > 0  ? "Disable Exit" : "Enable Exit"
+      text: address.length > 0  ? "Exit On" : "Exit off"
       checkable: true
       checked: address.length > 0
       background: Rectangle{
