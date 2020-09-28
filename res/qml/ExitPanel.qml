@@ -135,6 +135,7 @@ Container {
             exitButton.text = "Enable Exit";
             stautsLabelText.color = Style.weakTextColor;
             console.log(hasExit, " has exit?");
+            checked = false;
           });
           hasExit = false;
           return;
@@ -170,6 +171,7 @@ Container {
               console.log(error, result);
             });
             console.log("Save exit");
+            checked = true;
           }
         });
       }
