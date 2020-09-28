@@ -24,7 +24,7 @@ bool LokinetApiClient::invoke(const std::string& endpoint, QJsonObject args, Rep
   m_lmqClient.request(
     *m_lmqConnection,
     std::string_view{endpoint},
-    [cb = std::move(callback)](bool success, std::vector<std::string> data)
+    [cb = callback](bool success, std::vector<std::string> data)
     {
       if(success and not data.empty())
       {
