@@ -3,8 +3,6 @@
 # Script used with Drone CI to upload build artifacts (because specifying all this in
 # .drone.jsonnet is too painful).
 
-
-
 set -o errexit
 
 if [ -z "$SSH_KEY" ]; then
@@ -14,9 +12,7 @@ if [ -z "$SSH_KEY" ]; then
 fi
 
 echo "$SSH_KEY" >ssh_key
-
 set -o xtrace  # Don't start tracing until *after* we write the ssh key
-
 chmod 600 ssh_key
 
 os="$DRONE_STAGE_OS-$DRONE_STAGE_ARCH"
@@ -33,13 +29,17 @@ else
     base="lokinet-gui-$os-$(date --date=@$DRONE_BUILD_CREATED +%Y%m%dT%H%M%SZ)-${DRONE_COMMIT:0:9}"
 fi
 
-mkdir -v "$base"
 if [ -e lokinet-gui.exe ]; then
-    cp -av lokinet-gui "$base"
+    cp -av lokinet-gui.exe ../deploy
+    rm -rf ../deploy/.git
+    rm ../deploy/README
+    echo "if you do not have a GPU installed or are using the basic video driver (vgasave, basicdisplay, rdpdd) \
+    rename 'opengl32sw.dll' to 'opengl32.dll' before starting up the lokinet gui. -rick" > ../deploy/README
     # zipit up yo
     archive="$base.zip"
-    zip -r "$archive" "$base"
+    zip -r "$archive" ../deploy
 else
+    mkdir -v "$base"
     cp -av lokinet-gui "$base"
     # tar dat shiz up yo
     archive="$base.tar.xz"
