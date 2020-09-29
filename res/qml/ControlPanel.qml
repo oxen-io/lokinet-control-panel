@@ -262,7 +262,11 @@ ColumnLayout {
         {
           if(lokiExit in stats.result.services.default.authCodes)
           {
-            exitAuth = stats.result.services.default.authCodes[lokiExit];
+            let auth = stats.result.services.default.authCodes[lokiExit];
+            if(auth !== exitAuth)
+            {
+              exitAuth = auth;
+            }
           }
         }
     }
