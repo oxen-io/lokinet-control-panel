@@ -31,7 +31,7 @@ if(BUILD_STATIC_DEPS)
   include(StaticBuild)
   add_subdirectory(external/loki-mq)
 else()
-  add_subdirectory(external/loki-mq)
+  find_package(LokiMQ 1.2 REQUIRED)
 endif()
 
 find_package(Qt5 COMPONENTS Qml Quick Widgets Charts REQUIRED)
@@ -109,7 +109,7 @@ if(APPLE)
         else()
             add_custom_command(TARGET lokinet-gui
                 POST_BUILD
-                COMMAND echo "Running qt magic macs deploy script"
+                COMMAND echo "Running qt magic macos deploy script"
                 COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite
                 )
         endif()
