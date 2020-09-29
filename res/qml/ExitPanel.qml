@@ -164,9 +164,12 @@ Container {
             console.log("exit result: ",j.result);
             statusLabelText.color = Style.weakTextColor;
             hasExit = true;
-            apiClient.llarpConfigSet("network", "exit-auth", exitAddr + (exitAuth.length > 0 ? ":" + exitAuth : ""), function(error, result) {
-              console.log(error, result);
-            });
+            if(exitAuth.length > 0)
+            {
+              apiClient.llarpConfigSet("network", "exit-auth", exitAddr + ":" + exitAuth, function(error, result) {
+                console.log(error, result);
+              });
+            }
             apiClient.llarpConfigSet("network", "exit-node", exitAddr, function(error, result) {
               console.log(error, result);
             });
