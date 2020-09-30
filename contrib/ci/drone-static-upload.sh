@@ -30,14 +30,14 @@ else
 fi
 
 if [ -e lokinet-gui.exe ]; then
-    cp -av lokinet-gui.exe ../deploy
-    rm -rf ../deploy/.git
-    rm ../deploy/README
+    cp -av lokinet-gui.exe ../gui
+    rm -rf ../gui/.git
+    rm ../gui/README
     echo "if you do not have a GPU installed or are using the basic video driver (vgasave, basicdisplay, rdpdd) \
-    rename 'opengl32sw.dll' to 'opengl32.dll' before starting up the lokinet gui. -rick" > ../deploy/README
+    rename 'opengl32sw.dll' to 'opengl32.dll' before starting up the lokinet gui. -rick" > ../gui/README
     # zipit up yo
     archive="$base.zip"
-    zip -r "$archive" ../deploy
+    zip -r "$archive" ../gui
 else
     mkdir -v "$base"
     cp -av lokinet-gui "$base"
