@@ -61,8 +61,8 @@ endif()
 set(cross_host "")
 set(cross_rc "")
 if(CMAKE_CROSSCOMPILING)
-  set(cross_host "--host=${ARCH_TRIPLET}")
-  if (ARCH_TRIPLET MATCHES mingw AND CMAKE_RC_COMPILER)
+  set(cross_host "--host=${LIBSODIUM_CROSS_TARGET}")
+  if (LIBSODIUM_CROSS_TARGET MATCHES mingw AND CMAKE_RC_COMPILER)
     set(cross_rc "WINDRES=${CMAKE_RC_COMPILER}")
   endif()
 endif()
@@ -112,10 +112,10 @@ build_external(sodium CONFIGURE_COMMAND ./configure ${cross_host} ${cross_rc} --
 add_static_target(sodium sodium_external libsodium.a)
 
 
-#if(ZMQ_VERSION VERSION_LESS 4.3.4 AND CMAKE_CROSSCOMPILING AND ARCH_TRIPLET MATCHES mingw)
-#  set(zmq_patch
-#    PATCH_COMMAND patch -p1 -i ${PROJECT_SOURCE_DIR}/contrib/cross/patches/libzmq-mingw-closesocket.patch)
-#endif()
+if(CMAKE_CROSSCOMPILING AND LIBSODIUM_CROSS_TARGET MATCHES mingw)
+  set(zmq_patch
+    PATCH_COMMAND patch -p1 -i ${PROJECT_SOURCE_DIR}/contrib/ci/libzmq-fix-mingw-unittest.patch)
+endif()
 
 build_external(zmq
   DEPENDS sodium_external
@@ -129,8 +129,8 @@ build_external(zmq
 add_static_target(libzmq zmq_external libzmq.a)
 
 set(libzmq_link_libs "sodium")
-if(CMAKE_CROSSCOMPILING AND ARCH_TRIPLET MATCHES mingw)
-  list(APPEND libzmq_link_libs iphlpapi)
+if(CMAKE_CROSSCOMPILING AND LIBSODIUM_CROSS_TARGET MATCHES mingw)
+  list(APPEND libzmq_link_libs ws2_32 iphlpapi)
 endif()
 
 set_target_properties(libzmq PROPERTIES

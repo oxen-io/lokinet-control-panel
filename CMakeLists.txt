@@ -31,7 +31,7 @@ if(BUILD_STATIC_DEPS)
   include(StaticBuild)
   add_subdirectory(external/loki-mq)
 else()
-  find_package(LokiMQ 1.2 REQUIRED)  
+  find_package(LokiMQ 1.2 REQUIRED)
 endif()
 
 find_package(Qt5 COMPONENTS Qml Quick Widgets Charts REQUIRED)
