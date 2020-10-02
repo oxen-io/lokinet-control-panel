@@ -7,10 +7,10 @@
 
 #include <lokimq/lokimq.h>
 #include <optional>
- 
+
 /**
  * A client that implements convenience wrappers around making specific
- * JSON-RPC requests to a lokinet daemon. 
+ * JSON-RPC requests to a lokinet daemon.
  *
  * These are meant to be invoked from QML; as such, they each take a `QJSValue`
  * object which should be a Javascript callback function. This function should
@@ -37,7 +37,7 @@ public:
   using ReplyCallback = std::function<void(std::optional<std::string>)>;
 
   LokinetApiClient();
-  
+
   /**
    * Invoke an endpoint.
    *
@@ -63,11 +63,11 @@ public:
   return invoke("llarp.admin.wakeup", callback);
   }
 */
-  
+
   Q_INVOKABLE bool llarpVersion(QJSValue callback) {
     return invoke("llarp.version", QJsonObject{}, callback);
   }
-  
+
   Q_INVOKABLE bool llarpAddExit(QString exitAddress, QString exitToken, QJSValue callback)
   {
     if(exitToken.isEmpty())
@@ -80,6 +80,14 @@ public:
     }
   }
 
+  Q_INVOKABLE bool llarpConfigSet(QString section, QString key, QString value, QJSValue callback)
+  {
+    QJsonObject obj, config;
+    config[key] = value;
+    obj[section] = config;
+    return invoke("llarp.config", QJsonObject{{"override", obj}, {"reload", true}}, callback);
+  }
+
   Q_INVOKABLE bool llarpDelExit(QJSValue callback)
   {
     return invoke("llarp.exit", QJsonObject{{"unmap", true}}, callback);
@@ -88,7 +96,7 @@ public:
   bool llarpAdminDie(ReplyCallback callback) {
     return invoke("llarp.halt", QJsonObject{}, callback);
   }
- 
+
 private:
     lokimq::LokiMQ m_lmqClient;
     std::optional<lokimq::ConnectionID> m_lmqConnection;
@@ -96,5 +104,5 @@ signals:
     void
     CallCallback(QJSValue callback, QJSValueList args);
 };
- 
+
 #endif // __LOKI_LOKINET_API_CLIENT_HPP__

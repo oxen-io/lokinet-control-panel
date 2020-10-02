@@ -89,7 +89,8 @@ Container {
 
     Switch {
       id: exitButton
-      text: address.length > 0  ? "Disable Exit" : "Enable Exit"
+      palette.dark: Style.lokiDarkGreen;
+      text: address.length > 0  ? "Exit On" : "Exit off"
       checkable: true
       checked: address.length > 0
       background: Rectangle{
@@ -124,21 +125,25 @@ Container {
         }
         let exitAddr = exitTextInput.text;
         let exitAuth = authTextInput.text;
-        if(hasExit || address.length > 0)
+        if(hasExit)
         {
           busy = true;
+          console.log("remove exit");
           apiClient.llarpDelExit(function(result, error) {
             status = "Exit Off";
             busy = false;
-            hasExit = false;
             exitButton.text = "Enable Exit";
             stautsLabelText.color = Style.weakTextColor;
+            console.log(hasExit, " has exit?");
+            checked = false;
           });
+          hasExit = false;
           return;
         }
         statusLabelText.color = Style.weakTextColor;
         busy = true;
         apiClient.llarpAddExit(exitAddr, exitAuth, function(result, error) {
+          console.log("add exit result", result, error);
           busy = false;
           if(error)
           {
@@ -156,11 +161,20 @@ Container {
           }
           if(j.result)
           {
-            stautsLabelText.color = Style.weakTextColor;
-            status = "Exit Enabled";
+            console.log("exit result: ",j.result);
+            statusLabelText.color = Style.weakTextColor;
             hasExit = true;
-            exitButton.text = "Disable Exit";
-            // apiClient.llarpSetConfig({"network": { "exit-node": exitAddr + (exitAuth.length > 0 ? ":" + exitAuth : "") }}, function(error, result) {} )
+            if(exitAuth.length > 0)
+            {
+              apiClient.llarpConfigSet("network", "exit-auth", exitAddr + ":" + exitAuth, function(error, result) {
+                console.log(error, result);
+              });
+            }
+            apiClient.llarpConfigSet("network", "exit-node", exitAddr, function(error, result) {
+              console.log(error, result);
+            });
+            console.log("Save exit");
+            checked = true;
           }
         });
       }

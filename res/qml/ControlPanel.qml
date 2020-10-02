@@ -15,7 +15,6 @@ ColumnLayout {
     property var lokiExit: ""
     property var exitAuth: ""
     property var exitStatus: ""
-    property var hasExit: false
     property int lokiUptime: 0
     property var numPathsBuilt: 0
     property var numRoutersKnown: 0
@@ -259,11 +258,15 @@ ColumnLayout {
           }
         }
         // set auth code
-        if(stats.result.services.authCodes)
+        if(stats.result.services.default.authCodes)
         {
           if(lokiExit in stats.result.services.default.authCodes)
           {
-            exitAuth = stats.result.services.default.authCodes[lokiExit];
+            let auth = stats.result.services.default.authCodes[lokiExit];
+            if(auth !== exitAuth)
+            {
+              exitAuth = auth;
+            }
           }
         }
     }
