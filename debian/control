@@ -3,16 +3,20 @@ Section: net
 Priority: optional
 Maintainer: Jason Rhinelander <jason@imaginary.ca>
 Build-Depends: debhelper (>= 10~),
+    cmake,
+    g++,
     imagemagick,
     librsvg2-bin,
     qtdeclarative5-dev,
-    libqt5charts5-dev
+    libqt5charts5-dev,
+    liblokimq-dev (>= 1.2.0),
+    libsystemd-dev
 Standards-Version: 4.4.1
 Homepage: https://github.com/loki-project/loki-network-control-panel
 
 Package: lokinet-gui
 Architecture: any
-Depends: lokinet (>= 0.7.0), ${shlibs:Depends}, ${misc:Depends}, qml-module-qtquick-controls,
+Depends: lokinet (>= 0.8.0), ${shlibs:Depends}, ${misc:Depends}, qml-module-qtquick-controls,
     qml-module-qtquick-controls2, qml-module-qtquick-dialogs, qml-module-qt-labs-platform, qml-module-qtcharts
 Description: Lokinet control panel
  This package contains a graphical (Qt-based) control panel for interacting
