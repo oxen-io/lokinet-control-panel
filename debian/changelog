@@ -1,3 +1,88 @@
+loki-network-control-panel (0.3.0-1~ubuntu1804) bionic; urgency=medium
+
+  [ Jason Rhinelander ]
+  * Fix scalable icon filename
+  * SVG workaround for Windows
+
+  [ Ryan Tharp ]
+  * Apply padding to logo per mktg
+  * add svg to mac platform to make svg systray icon work
+
+  [ Stephen Shelton ]
+  * Use lauchd to control process on MacOS
+  * Add mac (icns) icon
+
+  [ Jason Rhinelander ]
+  * Redo build system in cmake
+  * Update readme with qmake -> cmake
+  * Build a .app with all the crap on macos
+  * icns: no background, make cmake reconvert on script change
+  * Put lokinet-gui.app building behind a cmake option
+  * Tell macdeployqt to overwrite so you can make multiple times
+  * Add some install paths
+  * Change bundle name to CamelCase
+  * Add codesigning option
+  * Add --force to codesign
+  * Turn on hardening macos voodoo; verbose++
+  * codesign automatically (when set) and be more verbose
+  * Try -qmldir= to fix it
+  * Try an entitlement
+  * Try another entitlement
+
+  [ Jeff Becker ]
+  * move rpc to use lokimq
+  * redo lmq commit to not remove bootstrap code
+  * more exit ui jizz
+
+  [ jeff ]
+  * use a signal to prevent crash from race condition
+
+  [ Jeff Becker ]
+  * start wiring up drone. add lokimq submodule and associated stuffs for it
+  * use lokimq submodule when provided
+  * fix typo
+  * get loki exit address
+  * update readme to include --rpc flag and use of submodules
+  * use submodules by default
+  * style updates
+  * show active paths and path build success ration
+
+  [ Linux User ]
+  * finally, a cross-compile config
+
+  [ Rick V ]
+  * skeleton config that builds libssl and qt5
+
+  [ Jeff Becker ]
+  * pad exit panel widget elements a bit more
+  * make button round
+  * set error text red
+  * pad error message
+  * use checkswitch not button
+
+  [ Jeff ]
+  * use switch not button, fetch auth code from rpc and set it
+  * fix typo
+
+  [ Rick V ]
+  * hoist dependencies out of drone ci
+
+  [ Linux User ]
+  * add notes and make qt host platform configurable
+
+  [ Jeff ]
+  * add visual queue for having an exit and move status text below check button
+  * add static build cmake jizz
+
+  [ Rick V ]
+  * yey it builds now (#48)
+  * rename deployment zip to gui (this just gets unzipped by the installer) (#49)
+
+  [ Jason Rhinelander ]
+  * Bump version (#50)
+
+ -- Jason Rhinelander <jason@imaginary.ca>  Fri, 02 Oct 2020 17:20:13 -0300
+
 loki-network-control-panel (0.2.1-1~ubuntu1804) bionic; urgency=medium
 
   [ Jason Rhinelander ]
