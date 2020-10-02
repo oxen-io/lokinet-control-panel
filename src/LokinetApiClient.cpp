@@ -1,45 +1,67 @@
 #include "LokinetApiClient.hpp"
-
+#include "lmq_settings.hpp"
+#include <QJsonDocument>
 #include <stdexcept>
 #include <cstdio>
+#include <QDebug>
 
-bool LokinetApiClient::invoke(const std::string& endpoint, HttpClient::ReplyCallback callback) {
-
-    char buffer[1024];
-    int result = snprintf(
-            buffer,
-            sizeof(buffer),
-            R"JSON({
-                "jsonrpc": "2.0",
-                "method": "%s",
-                "params": {},
-                "id": "empty"
-            })JSON",
-            endpoint.c_str());
-
-    if (result < 0) {
-        qDebug() << "snprintf failed: " << result;
-        return false;
-    }
-
-    qDebug() << "invoking json rpc payload: " << buffer;
-
-    m_httpClient.postJson("http://localhost:1190", buffer, std::move(callback));
+bool LokinetApiClient::invoke(const std::string& endpoint, QJsonObject args, ReplyCallback callback) {
+  std::cout << "call " << endpoint;
+  if(not m_lmqConnection.has_value())
+  {
+    m_lmqClient.start();
+    m_lmqConnection =
+      m_lmqClient.connect_remote(
+        RPCURL,
+        [](auto){},
+        [&](auto, std::string_view reason) {
+          // qDebug() << "failed to connect to lokinet: "<< reason;
+          m_lmqConnection = std::nullopt;
+        });
+  }
+  QJsonDocument doc(args);
+  const auto req = doc.toJson();
+  m_lmqClient.request(
+    *m_lmqConnection,
+    std::string_view{endpoint},
+    [cb = std::move(callback)](bool success, std::vector<std::string> data)
+    {
+      if(success and not data.empty())
+      {
+        cb(std::move(data[0]));
+      }
+      else
+      {
+        cb(std::nullopt);
+      }
+    }, req.toStdString());
     return true;
 }
 
-Q_INVOKABLE bool LokinetApiClient::invoke(const std::string& endpoint, QJSValue callback) {
+Q_INVOKABLE bool LokinetApiClient::invoke(const std::string& endpoint,QJsonObject callargs, QJSValue callback) {
 
     if (! callback.isUndefined() && ! callback.isCallable()) {
-        qDebug() << "callback should be a function (if present)";
+      qWarning() << "callback should be a function (if present)";
         return false;
     }
-
-    return invoke(std::move(endpoint), [=](QNetworkReply* reply) mutable {
+    return invoke(endpoint, callargs,[=](std::optional<std::string> reply) mutable {
         QJSValueList args;
-        args << QJSValue(reply->readAll().data());
-        args << QJSValue(reply->error());
-        callback.call(args);
+        if(reply.has_value())
+        {
+          args << QJSValue(reply->c_str());
+          args << QJSValue(false);
+        }
+        else
+        {
+          args << QJSValue(false);
+          args << QJSValue("no response given from lokinet");
+        }
+        emit CallCallback(callback, args);
     });
 }
 
+
+LokinetApiClient::LokinetApiClient() : QObject(nullptr)
+{
+  connect(this, &LokinetApiClient::CallCallback, this, [](auto callback, auto args){ callback.call(args); });
+}

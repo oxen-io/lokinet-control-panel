@@ -6,7 +6,7 @@ import QClipboard 1.0
 import "."
 
 Container {
-    Layout.preferredHeight: 59
+    Layout.preferredHeight: 79
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -18,6 +18,9 @@ Container {
 
         // coerces Qt not to interpolate like an idiot
         mipmap: true
+
+        anchors.topMargin: 10
+        anchors.bottomMargin: 10
 
         anchors.fill: parent
 
