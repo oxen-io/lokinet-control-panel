@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13)  # Has to be set before `project()`, and ignored on non-macos
 
 project(lokinet-gui
-    VERSION 0.2.2
+    VERSION 0.3.0
     DESCRIPTION "Lokinet graphical control panel"
     HOMEPAGE_URL https://github.com/loki-project/loki-network-control-panel
     LANGUAGES CXX)
