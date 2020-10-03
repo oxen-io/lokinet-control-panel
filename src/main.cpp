@@ -1,18 +1,22 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
+#include <QDebug>
 
 #include "QmlClipboardAdapter.hpp"
 #include "LokinetApiClient.hpp"
 #include "ApiPoller.hpp"
 #include "PlatformDetails.hpp"
 #include "BandwidthChartData.hpp"
+#include "lmq_settings.hpp"
 
 #if defined(SYSTEMD)
 constexpr bool isSystemd = true;
 #else
 constexpr bool isSystemd = false;
 #endif
+
+std::string RPCURL = LOKINET_RPC_URL;
 
 int32_t main(int32_t argc, char *argv[])
 {
@@ -29,6 +33,10 @@ int32_t main(int32_t argc, char *argv[])
         std::string arg = argv[i];
         if (arg == "--nohide" || arg == "--no-hide") nohide = true;
         if (arg == "--notray" || arg == "--no-tray") notray = true;
+        if (arg == "--rpc" and argv[i+1] != nullptr)
+        {
+          RPCURL = argv[i+1];
+        }
     }
 
     // notray implies nohide
@@ -37,7 +45,7 @@ int32_t main(int32_t argc, char *argv[])
 
     qDebug() << "nohide: " << (nohide ? "T":"F");
     qDebug() << "notray: " << (notray ? "T":"F");
-
+    qRegisterMetaType<QJSValueList>("QJSValueList");
     qmlRegisterType<LokinetApiClient>("LokinetApiClient", 1, 0, "LokinetApiClient");
     qmlRegisterType<QmlClipboardAdapter>("QClipboard", 1, 0, "QClipboard");
     qmlRegisterType<ApiPoller>("ApiPoller", 1, 0, "ApiPoller");

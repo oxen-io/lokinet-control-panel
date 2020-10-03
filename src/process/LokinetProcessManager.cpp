@@ -81,8 +81,7 @@ bool LokinetProcessManager::stopLokinetProcess()
 
 bool LokinetProcessManager::doStopLokinetProcess()
 {
-    bool success = m_apiClient.llarpAdminDie([](QNetworkReply* reply) {
-        qDebug() << "llarp.admin.die response: " << reply->readAll();
+    bool success = m_apiClient.llarpAdminDie([](auto) {
     });
     if (!success)
     {

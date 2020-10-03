@@ -9,7 +9,7 @@
 #include <QObject>
 #include <QTimer>
 
-#include "HttpClient.hpp"
+#include <lokimq/lokimq.h>
  
 /**
  * The ApiPoller periodically requests a JSON-RPC endpoint from the Loki daemon.
@@ -67,7 +67,7 @@ signals:
      * @param error is a QNetworkReply::NetworkError enum representing the
      *              error, if any
      */
-    void statusAvailable(const QByteArray& payload, QNetworkReply::NetworkError error);
+  void statusAvailable(QString data);
 
 private:
 
@@ -77,8 +77,9 @@ private:
     void pollDaemon();
 
     QTimer* m_timer;
-    HttpClient m_httpClient;
-    std::string m_rpcPayload;
+    lokimq::LokiMQ m_lmq;
+    std::optional<lokimq::ConnectionID> m_Conn;
+    std::string m_rpcMethod;
 };
  
 #endif // __LOKI_STAT_FETCHER_H__
