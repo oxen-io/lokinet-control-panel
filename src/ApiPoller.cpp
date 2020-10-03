@@ -1,13 +1,15 @@
 #include "ApiPoller.hpp"
-
+#include "lmq_settings.hpp"
 #include <string>
 
 #include <QObject>
-
-constexpr auto LOKI_DAEMON_URL = "http://localhost:1190/";
+#include <QDebug>
 
 // ApiPoller Constructor
-ApiPoller::ApiPoller() {
+ApiPoller::ApiPoller() :
+  QObject(nullptr)
+{
+    m_lmq.start();
     m_timer = new QTimer();
     m_timer->setInterval(DEFAULT_POLLING_INTERVAL_MS);
     connect(m_timer, &QTimer::timeout, this, &ApiPoller::pollDaemon);
@@ -21,16 +23,7 @@ ApiPoller::~ApiPoller() {
 
 // ApiPoller::setApiEndpoint
 void ApiPoller::setApiEndpoint(const QString& endpoint) {
-    // we make the same API call every time, so build our payload once
-    char buffer[256];
-    snprintf(buffer, sizeof(buffer), R"JSON({
-            "jsonrpc": "2.0",
-            "method": "%s",
-            "params": {},
-            "id": "empty"
-        })JSON",
-        endpoint.toStdString().data());
-    m_rpcPayload = buffer;
+    m_rpcMethod = endpoint.toStdString();
 }
 
 // ApiPoller::setIntervalMs
@@ -55,26 +48,25 @@ void ApiPoller::pollImmediately() {
 
 // ApiPoller::pollDaemon
 void ApiPoller::pollDaemon() {
-    if (m_rpcPayload.empty()) {
-        qDebug() << "Warning: No endpoint; call ApiPoller::setApiEndpoint() before polling";
-        return;
+    if (m_rpcMethod.empty()) {
+      qDebug() << "Warning: No endpoint; call ApiPoller::setApiEndpoint() before polling";
+      return;
     }
-    m_httpClient.postJson(LOKI_DAEMON_URL, m_rpcPayload, [=](QNetworkReply* reply) {
-        static bool lastAttemptWasError = false;
-        if (reply->error()) {
-            if (! lastAttemptWasError) {
-                qDebug() << "JSON-RPC error: " << reply->error();
-                qDebug() << "         in response to query: " << m_rpcPayload.c_str();
-                if (reply->error() > 100)
-                {
-                    qDebug() << "         server replied: " << reply->readAll();
-                }
+    if(not m_Conn.has_value())
+    {
+      m_Conn = m_lmq.connect_remote(RPCURL, [](auto &&){},
+                                    [=](auto,auto msg) {
+                                      qInfo() << std::string{msg}.c_str();
+                                      m_Conn = std::nullopt;
+                                    });
+    }
+    m_lmq.request(*m_Conn, m_rpcMethod,
+        [=](bool success, std::vector<std::string> data)
+        {
+            if(success and not data.empty())
+            {
+              emit statusAvailable(QString::fromStdString(data[0]));
             }
-            lastAttemptWasError = true;
-            emit statusAvailable("", reply->error());
-        } else {
-            lastAttemptWasError = false;
-            emit statusAvailable(reply->readAll(), reply->error());
-        }
-    });
+        });
+        
 }

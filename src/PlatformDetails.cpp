@@ -3,6 +3,7 @@
 #include <QPoint>
 #include <QCursor>
 #include <QJSEngine>
+#include <QDebug>
 
 #include "process/LokinetProcessManager.hpp"
 
