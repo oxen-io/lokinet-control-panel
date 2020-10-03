@@ -12,12 +12,17 @@ ColumnLayout {
     property var isRunning: false
     property var lokiVersion: ""
     property var lokiAddress: ""
+    property var lokiExit: ""
+    property var exitAuth: ""
+    property var exitStatus: ""
+    property var hasExit: false
     property int lokiUptime: 0
     property var numPathsBuilt: 0
     property var numRoutersKnown: 0
     property var downloadUsage: 0
     property var uploadUsage: 0
     property var numPeersConnected: 0
+    property var pathRatio: ""
 
     LogoHeaderPanel {
     }
@@ -43,10 +48,19 @@ ColumnLayout {
         address: lokiAddress
     }
 
+    // exit panel
+    ExitPanel {
+        address: lokiExit
+        authcode: exitAuth
+        status: exitStatus
+        id: exit
+    }
+
     // router stats
     RouteStatsPanel {
         paths: numPathsBuilt
         routers: numRoutersKnown
+        buildRatio: pathRatio
     }
 
     // usage
@@ -95,7 +109,7 @@ ColumnLayout {
 
     function handleStateResults(payload, error) {
         var stats = null;
-        
+
         if (! error) {
             try {
                 stats = JSON.parse(payload);
@@ -130,10 +144,13 @@ ColumnLayout {
         var newConnected = (! error && stats != null);
         var newRunning = false;
         var newLokiAddress = "";
+        var newLokiExit = "";
         var newNumRouters = 0;
+        var newNumPaths = 0;
         var txRate = 0;
         var rxRate = 0;
         var peers = 0;
+        var ratio = 0;
         if (! error) {
             try {
                 forEachSession(function(s) {
@@ -168,16 +185,58 @@ ColumnLayout {
             }
 
             try {
+              let exitMap = stats.result.services.default.exitMap;
+              if(exitMap)
+              {
+                for(var k in exitMap)
+                {
+                  newLokiExit = exitMap[k];
+                }
+              }
+            } catch (err) {
+                console.log("Couldn't pull exit address out of payload", err);
+            }
+
+            try {
                 newNumRouters = stats.result.numNodesKnown;
             } catch (err) {
                 console.log("Couldn't pull numNodesKnown out of payload", err);
             }
 
-            try {
-                numPathsBuilt = stats.result.services.default.buildStats.success;
-            } catch (err) {
-                console.log("Couldn't pull buildStats out of payload", err);
+          try {
+            // compute all stats on all path builders on the default endpoint
+            var pathStats = {
+              paths: 0,
+              success: 0,
+              attempts: 0,
             }
+            var builders = [];
+            if(stats.result.services.default.snodeSessions)
+            {
+              for(var s of stats.result.services.default.snodeSessions)
+              {
+                builders.push(s);
+              }
+            }
+            if(stats.result.services.default.remoteSessions)
+            {
+              for(var s of stats.result.services.default.remoteSessions)
+              {
+                builders.push(s);
+              }
+            }
+            builders.push(stats.result.services.default);
+            for(var builder of builders)
+            {
+              pathStats.paths += builder.paths.length;
+              pathStats.success += builder.buildStats.success;
+              pathStats.attempts += builder.buildStats.attempts;
+            }
+            ratio = pathStats.success / ( pathStats.attempts + 1);
+            newNumPaths = pathStats.paths;
+          } catch (err) {
+            console.log("Couldn't pull buildStats out of payload", err);
+          }
         }
 
         // only update global state if there is actually a change.
@@ -187,13 +246,33 @@ ColumnLayout {
         if (newRunning !== isRunning) isRunning = newRunning;
         if (newLokiAddress !== lokiAddress) lokiAddress = newLokiAddress;
         if (newNumRouters !== numRoutersKnown) numRoutersKnown = newNumRouters;
+        if (newNumPaths !== numPathsBuilt) {
+          numPathsBuilt = newNumPaths;
+        }
+        pathRatio = Math.ceil(ratio * 100) + "%";
+        if (lokiExit !== newLokiExit)
+        {
+          if(newLokiExit.length > 0)
+          {
+            lokiExit = newLokiExit;
+            exitStatus = "Exit Obtained";
+          }
+        }
+        // set auth code
+        if(stats.result.services.authCodes)
+        {
+          if(lokiExit in stats.result.services.default.authCodes)
+          {
+            exitAuth = stats.result.services.default.authCodes[lokiExit];
+          }
+        }
     }
 
     function handleStatusResults(payload, error) {
         if (! error) {
             try {
-                const responseObj = JSON.parse(payload);
-                lokiUptime = responseObj.result.uptime;
+              const responseObj = JSON.parse(payload);
+              lokiUptime = responseObj.result.uptime;
             } catch (err) {
                 console.log("Couldn't parse 'status' JSON-RPC payload", err);
             }
@@ -217,4 +296,3 @@ ColumnLayout {
         });
     }
 }
-
