@@ -1,4 +1,4 @@
-loki-network-control-panel (0.3.0-1) unstable; urgency=medium
+loki-network-control-panel (0.3.0-1~ubuntu2010) groovy; urgency=medium
 
   [ Jason Rhinelander ]
   * Fix scalable icon filename
