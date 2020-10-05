@@ -57,7 +57,7 @@ target_link_libraries(lokinet-gui PRIVATE
     )
 
 if (WIN32)
-    set(CMAKE_EXE_LINKER_FLAGS "-mwindows")
+    set(CMAKE_EXE_LINKER_FLAGS "-mwindows -fstack-protector")
 endif()
 
 set_target_properties(lokinet-gui
