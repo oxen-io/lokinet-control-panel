@@ -56,6 +56,10 @@ target_link_libraries(lokinet-gui PRIVATE
     lokimq
     )
 
+if (WIN32)
+    set(CMAKE_EXE_LINKER_FLAGS "-mwindows")
+endif()
+
 set_target_properties(lokinet-gui
     PROPERTIES
         CXX_STANDARD 17
