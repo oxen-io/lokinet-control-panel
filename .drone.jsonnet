@@ -157,7 +157,7 @@ local deb_builder(image, distro, distro_branch, arch='amd64', imaginary_repo=tru
                     cmake_extra='-DCMAKE_C_COMPILER=gcc-8 -DCMAKE_CXX_COMPILER=g++-8'),
     debian_pipeline("Debian buster (armhf)", "arm32v7/debian:buster", arch="arm64"),
     
-     windows_cross_pipeline("win32 on alpine (i386)", "i386/alpine:edge",
+     windows_cross_pipeline("win32 on alpine (i386)", "i386/alpine:3.12",
         toolchain='32', extra_cmds=[
           '../contrib/ci/drone-static-upload.sh'
     ]),
