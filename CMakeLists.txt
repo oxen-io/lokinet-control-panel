@@ -2,20 +2,15 @@ cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13)  # Has to be set before `project()`, and ignored on non-macos
 
-if (NOT WIN32)
 project(lokinet-gui
     VERSION 0.3.0
     DESCRIPTION "Lokinet graphical control panel"
     HOMEPAGE_URL https://github.com/loki-project/loki-network-control-panel
     LANGUAGES CXX)
-else()
-project(lokinet-gui
-    VERSION 0.3.0
-    DESCRIPTION "Lokinet graphical control panel"
-    HOMEPAGE_URL https://github.com/loki-project/loki-network-control-panel
-    LANGUAGES CXX RC)
-endif()
 
+if(WIN32)
+  enable_language(RC)
+endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
