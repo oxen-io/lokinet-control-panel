@@ -18,17 +18,9 @@ WindowsLokinetProcessManager::WindowsLokinetProcessManager()
 bool WindowsLokinetProcessManager::doStartLokinetProcess()
 {
     // try searching one level up from CWD
-    bool success = QProcess::startDetached(LOKINET_EXE_STR);
-    if (! success)
-    {
-        // when upgraded from old installations (before 0.5.x), lokinet.exe would be one
-        // directory higher
-        success = QProcess::startDetached("net start lokinet");
-
-        if (success)
-            qDebug("QProcess::startDetached() failed");
-    }
-    
+    bool success = success = QProcess::startDetached("net start lokinet");
+    if (success)
+        qDebug("QProcess::startDetached() failed");
     return success;
 }
 
@@ -74,8 +66,7 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
 
 QString WindowsLokinetProcessManager::getDefaultBootstrapFileLocation()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
-        + "\\AppData\\Roaming\\.lokinet\\bootstrap.signed";
+    return "C:\\ProgramData\\.lokinet\\bootstrap.signed";
 }
 
 #endif // Q_OS_WIN
