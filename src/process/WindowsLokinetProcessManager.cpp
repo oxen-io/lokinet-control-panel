@@ -19,7 +19,7 @@ bool WindowsLokinetProcessManager::doStartLokinetProcess()
 {
     // try searching one level up from CWD
     bool success = QProcess::startDetached("net start lokinet");
-    if (success)
+    if (!success)
         qDebug("QProcess::startDetached() failed");
     return success;
 }
