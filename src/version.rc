@@ -95,7 +95,7 @@ END
 //
 
 // Uncomment if your toolchain does not provide a default-manifest.o
-3                       RT_MANIFEST             "app.xml"
+1                       RT_MANIFEST             "app.xml"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
