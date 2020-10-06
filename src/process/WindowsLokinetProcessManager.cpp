@@ -10,11 +10,6 @@
 #include <windows.h>
 #include <tlhelp32.h>
 
-// TODO: don't hard-code these paths
-#define LOKINET_DIR "C:\\Program Files\\Loki Project\\loki-network"
-#define LOKINET_PATH LOKINET_DIR "\\lokinet.exe"
-#define LOKINET_EXE_STR "\"" LOKINET_PATH "\""
-
 WindowsLokinetProcessManager::WindowsLokinetProcessManager()
 {
     ::CreateMutexA(nullptr, FALSE, "lokinet_qt5_ui");
@@ -28,9 +23,9 @@ bool WindowsLokinetProcessManager::doStartLokinetProcess()
     {
         // when upgraded from old installations (before 0.5.x), lokinet.exe would be one
         // directory higher
-        success = QProcess::startDetached("..\\lokinet.exe");
+        success = QProcess::startDetached("net start lokinet");
 
-        if (! success)
+        if (success)
             qDebug("QProcess::startDetached() failed");
     }
     
@@ -39,19 +34,7 @@ bool WindowsLokinetProcessManager::doStartLokinetProcess()
 
 bool WindowsLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    int p;
-    HANDLE lokinetProcess;
-    
-    if (doGetProcessPid(p))
-        lokinetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD)p);
-    else
-        return false;
-    
-    if (TerminateProcess(lokinetProcess, 0))
-        return true;
-    else
-        return false;
-
+    QProcess::startDetached("net stop lokinet");
     return true;
 }
 
