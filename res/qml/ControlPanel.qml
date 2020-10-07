@@ -15,6 +15,7 @@ ColumnLayout {
     property var lokiExit: ""
     property var exitAuth: ""
     property var exitStatus: ""
+    property var exitBusy: false
     property int lokiUptime: 0
     property var numPathsBuilt: 0
     property var numRoutersKnown: 0
@@ -52,6 +53,7 @@ ColumnLayout {
         address: lokiExit
         authcode: exitAuth
         status: exitStatus
+        busy: exitBusy
         id: exit
     }
 
@@ -249,6 +251,8 @@ ColumnLayout {
           numPathsBuilt = newNumPaths;
         }
         pathRatio = Math.ceil(ratio * 100) + "%";
+        if(exitBusy)
+          return;
         if (lokiExit !== newLokiExit)
         {
           if(newLokiExit.length > 0)
