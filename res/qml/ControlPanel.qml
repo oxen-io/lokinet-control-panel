@@ -229,9 +229,18 @@ ColumnLayout {
             builders.push(stats.result.services.default);
             for(var builder of builders)
             {
-              pathStats.paths += builder.paths.length;
-              pathStats.success += builder.buildStats.success;
-              pathStats.attempts += builder.buildStats.attempts;
+              if(builder)
+              {
+                if(builder.paths)
+                {
+                  pathStats.paths += builder.paths.length;
+                }
+                if(builder.buildStats)
+                {
+                  pathStats.success += builder.buildStats.success;
+                  pathStats.attempts += builder.buildStats.attempts;
+                }
+              }
             }
             ratio = pathStats.success / ( pathStats.attempts + 1);
             newNumPaths = pathStats.paths;
