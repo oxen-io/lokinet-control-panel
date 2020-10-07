@@ -158,6 +158,7 @@ Container {
             status = "Error: " + j.error;
             checked = false;
             statusLabelText.color = Style.errorRed;
+            return;
           }
           if(j.result)
           {
