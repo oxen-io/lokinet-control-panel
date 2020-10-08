@@ -8,7 +8,6 @@ ColumnLayout {
     anchors.fill: parent
     spacing: 1
 
-    property var isConnected: false
     property var isRunning: false
     property var lokiVersion: ""
     property var lokiAddress: ""
@@ -29,7 +28,6 @@ ColumnLayout {
 
     // connection button panel
     ConnectionButtonPanel {
-        connected: isConnected
         running: isRunning
     }
 
@@ -89,11 +87,10 @@ ColumnLayout {
 
     }
 
-    onIsConnectedChanged: function() {
-        if (! isConnected) {
+    onIsRunningChanged: function() {
+        if (! isRunning) {
             console.log("Detected disconnection");
             // zero-out values that would otherwise be stale in the UI
-            isRunning = false;
             lokiVersion = "";
             lokiAddress = "";
             lokiUptime = 0;
@@ -252,7 +249,6 @@ ColumnLayout {
         // only update global state if there is actually a change.
         // this prevents propagating state change events when there aren't
         // really changes in the first place
-        if (newConnected !== isConnected) isConnected = newConnected;
         if (newRunning !== isRunning) isRunning = newRunning;
         if (newLokiAddress !== lokiAddress) lokiAddress = newLokiAddress;
         if (newNumRouters !== numRoutersKnown) numRoutersKnown = newNumRouters;

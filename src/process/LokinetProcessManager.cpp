@@ -168,10 +168,8 @@ bool LokinetProcessManager::managedStopLokinetProcess()
 
         m_didLaunchProcess = false;
         m_managedThreadRunning = false;
-
     });
-    t.detach();
-
+    t.join();
     return true;
 }
 
