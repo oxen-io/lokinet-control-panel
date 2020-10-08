@@ -13,6 +13,7 @@
 class WindowsLokinetProcessManager : public LokinetProcessManager
 {
     Q_OBJECT
+    QString path;
 
 public:
     WindowsLokinetProcessManager();
