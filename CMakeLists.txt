@@ -8,6 +8,10 @@ project(lokinet-gui
     HOMEPAGE_URL https://github.com/loki-project/loki-network-control-panel
     LANGUAGES CXX)
 
+if(WIN32)
+  enable_language(RC)
+endif()
+
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 option(BUILD_STATIC_DEPS "build every dep statically (ON/OFF)" OFF)
@@ -119,7 +123,7 @@ if(APPLE)
         endif()
     endif()
 elseif(WIN32)
-    target_sources(lokinet-gui PRIVATE src/process/WindowsLokinetProcessManager.cpp)
+    target_sources(lokinet-gui PRIVATE src/process/WindowsLokinetProcessManager.cpp src/version.rc)
 else()
     option(SYSTEMD "Enable systemd support" OFF)
     if(SYSTEMD)
