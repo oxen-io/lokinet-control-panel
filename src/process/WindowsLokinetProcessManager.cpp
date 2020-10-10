@@ -7,18 +7,21 @@
 #ifdef Q_OS_WIN
 
 #include <cstdio>
+#include <cstdlib>
 #include <windows.h>
 #include <tlhelp32.h>
 
 WindowsLokinetProcessManager::WindowsLokinetProcessManager()
 {
     ::CreateMutexA(nullptr, FALSE, "lokinet_qt5_ui");
+    path = QString::fromStdString(std::string(::getenv("SYSTEMROOT")));
+    path.append("\\System32\\net.exe");
 }
 
 bool WindowsLokinetProcessManager::doStartLokinetProcess()
 {
     // try searching one level up from CWD
-    bool success = QProcess::startDetached("%SystemRoot%\\System32\\net.exe start lokinet");
+    bool success = QProcess::startDetached(path, {"start", "lokinet"});
     if (!success)
         qDebug("QProcess::startDetached() failed");
     return success;
@@ -26,7 +29,7 @@ bool WindowsLokinetProcessManager::doStartLokinetProcess()
 
 bool WindowsLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    QProcess::startDetached("%SystemRoot%\\System32\\net.exe stop lokinet");
+    QProcess::startDetached(path, {"stop", "lokinet"});
     return true;
 }
 
