@@ -22,7 +22,7 @@ cd loki-network-control-panel
 mkdir build
 cd build
 cmake ..
-make
+make -j4
 ./lokinet-gui
 ```
 
