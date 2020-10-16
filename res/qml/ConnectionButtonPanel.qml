@@ -84,7 +84,7 @@ Container {
         var base = "";
         if (running) {
             base = Style.highlightAffirmative;
-            tooltip = "Currently connected.\nPress to pause connection to the Loki Network.\n"
+            tooltip = "Currently connected to the Loki Network."
         } else {
             // not connected
             base = Style.highlightNegative

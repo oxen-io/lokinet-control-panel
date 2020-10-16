@@ -24,13 +24,14 @@ ColumnLayout {
     property var pathRatio: ""
 
     LogoHeaderPanel {
+        version: lokiVersion
     }
 
     // connection button panel
     ConnectionButtonPanel {
         running: isRunning
     }
-
+/*
     // version panel
     VersionPanel {
         version: lokiVersion
@@ -45,7 +46,7 @@ ColumnLayout {
     AddressPanel {
         address: lokiAddress
     }
-
+*/
     // exit panel
     ExitPanel {
         address: lokiExit
