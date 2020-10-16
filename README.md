@@ -34,12 +34,16 @@ Note that interactions with systemd may require privilege escalation, which is h
 
     cmake -DSYSTEMD=ON ..
 
+### Windows
+
+Nightly Windows builds are available via [Continous Integration](https://builds.lokinet.dev/loki-project/loki-network-control-panel/master/).
+
 ### MacOS
 
 The above commands work to build a working executable, however if you also want to bundle it into a
 `.app` bundle invoke cmake as:
 
-    cmake -DMACOS_APP=ON ..
+    cmake -DMACOS_APP=ON -DBUILD_STATIC_DEPS=ON ..
 
 which will produce a lokinet-gui.app executable app bundle directory containing the binary,
 resources, and dependencies.
