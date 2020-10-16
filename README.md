@@ -32,6 +32,8 @@ The app can be compiled to support `systemd` for starting and stopping `lokinet`
 
 Note that interactions with systemd may require privilege escalation, which is handled through `polkit`. A graphical polkit backend must be running for this to work.
 
+    cmake -DSYSTEMD=ON ..
+
 ### MacOS
 
 The above commands work to build a working executable, however if you also want to bundle it into a
