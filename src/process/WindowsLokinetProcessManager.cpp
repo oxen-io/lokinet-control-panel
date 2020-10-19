@@ -27,10 +27,14 @@ bool WindowsLokinetProcessManager::doStartLokinetProcess()
     return success;
 }
 
+bool WindowsLokinetProcessManager::doStopLokinetProcess()
+{
+    return QProcess::startDetached(path, {"stop", "lokinet"});
+}
+
 bool WindowsLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    QProcess::startDetached(path, {"stop", "lokinet"});
-    return true;
+    return doStopLokinetProcess();
 }
 
 bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
@@ -52,9 +56,10 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
         while (Process32Next(snapshot, &entry) == TRUE)
         {
             if (stricmp(entry.szExeFile, "lokinet.exe") == 0)
-            {  
+            {
                 pid = entry.th32ProcessID;
                 qDebug("lokinet pid: %d", pid);
+                CloseHandle(snapshot);
                 return true;
             }
         }
@@ -69,7 +74,7 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
 
 QString WindowsLokinetProcessManager::getDefaultBootstrapFileLocation()
 {
-    return "C:\\ProgramData\\.lokinet\\bootstrap.signed";
+    return "C:\\ProgramData\\lokinet\\bootstrap.signed";
 }
 
 #endif // Q_OS_WIN
