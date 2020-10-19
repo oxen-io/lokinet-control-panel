@@ -22,6 +22,7 @@ protected:
     
     bool doStartLokinetProcess() override;
     bool doForciblyStopLokinetProcess() override;
+    bool doStopLokinetProcess() override;
     bool doGetProcessPid(int& pid) override;
     QString getDefaultBootstrapFileLocation() override;
 
