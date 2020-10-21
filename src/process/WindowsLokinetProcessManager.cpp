@@ -74,7 +74,7 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
 
 QString WindowsLokinetProcessManager::getDefaultBootstrapFileLocation()
 {
-    return "C:\\ProgramData\\lokinet\\bootstrap.signed";
+    return "C:\\ProgramData\\.lokinet\\bootstrap.signed";
 }
 
 #endif // Q_OS_WIN
