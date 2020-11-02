@@ -71,13 +71,13 @@ Container {
     Text {
         x: 20
         y: 10
-        text: "Usage"
+        text: "Up: " + makeRake(up) + " Down: " + makeRate(down)
         font.family: Style.weakTextFont
         color: Style.weakTextColor
         font.pointSize: Style.weakTextSize
         font.capitalization: Font.AllUppercase
     }
-
+/*
     // Download
     Text {
         x: 20
@@ -113,6 +113,7 @@ Container {
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
     }
+  */
 
     ChartView {
         id: chart
