@@ -67,26 +67,53 @@ Container {
       return "" + Math.round(value) + units[unit_idx] + "/s";
     }
 
-    // "Usage" label
     Text {
-        x: 20
-        y: 10
-        text: "Up: " + makeRate(up) + "  \tDown: " + makeRate(down)
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+        text: "Upload"
         font.family: Style.weakTextFont
         color: Style.weakTextColor
         font.pointSize: Style.weakTextSize
         font.capitalization: Font.AllUppercase
     }
-/*
-    // Download
     Text {
-        x: 20
-        y: 32
-        text: "Download"
-        font.family: Style.strongTextFont
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+        y: 20
+        text: ""+ makeRate(up)
+        font.family: Style.weakTextFont
         color: Style.strongTextColor
-        font.pointSize: Style.strongTextSize
+        font.pointSize: Style.weakTextSize
     }
+
+    Text {
+        anchors.left: parent.left
+        anchors.leftMargin: 170
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+        text: "Download"
+        font.family: Style.weakTextFont
+        color: Style.weakTextColor
+        font.pointSize: Style.weakTextSize
+        font.capitalization: Font.AllUppercase
+    }
+    Text {
+        anchors.left: parent.left
+        anchors.leftMargin: 170
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+        y: 20
+        text: ""+ makeRate(down)
+        font.family: Style.weakTextFont
+        color: Style.strongTextColor
+        font.pointSize: Style.weakTextSize
+    }
+
+  /*
     Text {
         x: 20
         y: 54
@@ -128,8 +155,8 @@ Container {
 
         // these weird numbers come from an attempt to work around ChartView's
         // nasty permanent margins
-        x: -10
-        y: 20
+        x: -20
+        y: 50
         width: Style.appWidth + 20
         height: 189
 
