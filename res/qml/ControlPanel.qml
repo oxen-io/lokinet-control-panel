@@ -41,12 +41,12 @@ ColumnLayout {
     UptimePanel {
         uptime: lokiUptime
     }
-
+*/
     // address panel
     AddressPanel {
         address: lokiAddress
     }
-*/
+
     // exit panel
     ExitPanel {
         address: lokiExit
