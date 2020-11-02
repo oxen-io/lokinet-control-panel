@@ -9,7 +9,7 @@ import "."
 Container {
     property string version: ""
 
-    Layout.preferredHeight: 79
+    Layout.preferredHeight: 64
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {

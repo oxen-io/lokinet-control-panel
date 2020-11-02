@@ -22,6 +22,8 @@
         <file>images/connection_indicator.png</file>
         <file>images/connection_button.png</file>
         <file>images/connection_button_outline.png</file>
+        <file>images/connection_button_small.png</file>
+        <file>images/connection_button_outline_small.png</file>
         <file>images/up_chevron.png</file>
     </qresource>
 </RCC>
