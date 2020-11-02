@@ -129,7 +129,7 @@ Container {
         // these weird numbers come from an attempt to work around ChartView's
         // nasty permanent margins
         x: -10
-        y: 50
+        y: 20
         width: Style.appWidth + 20
         height: 189
 
