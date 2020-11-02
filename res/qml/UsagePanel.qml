@@ -58,7 +58,7 @@ Container {
     function makeRate(value)
     {
       var unit_idx = 0;
-      var units = ["B", "KB", "MB"];
+      var units = [" B", "KB", "MB"];
       while(value > 1024.0 && ( unit_idx + 1 ) < units.length)
       {
         value /= 1024.0;
@@ -71,7 +71,7 @@ Container {
     Text {
         x: 20
         y: 10
-        text: "Up: " + makeRake(up) + " Down: " + makeRate(down)
+        text: "Up: " + makeRate(up) + "  \tDown: " + makeRate(down)
         font.family: Style.weakTextFont
         color: Style.weakTextColor
         font.pointSize: Style.weakTextSize
@@ -129,7 +129,7 @@ Container {
         // these weird numbers come from an attempt to work around ChartView's
         // nasty permanent margins
         x: -10
-        y: 70
+        y: 50
         width: Style.appWidth + 20
         height: 189
 
