@@ -58,13 +58,16 @@ Container {
     function makeRate(value)
     {
       var unit_idx = 0;
-      var units = [" B", "KB", "MB"];
+      var units = ["B", "KB", "MB"];
       while(value > 1024.0 && ( unit_idx + 1 ) < units.length)
       {
         value /= 1024.0;
         unit_idx += 1;
       }
-      return "" + Math.round(value) + units[unit_idx] + "/s";
+      return "" + (
+        value < 10 ? Math.round(value * 100) / 100 :
+        value < 100 ? Math.round(value * 10) / 10 :
+        Math.round(value)) + " " + units[unit_idx] + "/s";
     }
 
     Text {
