@@ -75,6 +75,7 @@ Container {
         anchors.leftMargin: 20
         anchors.right: parent.right
         anchors.rightMargin: 20
+        y: 18
         text: "Upload"
         font.family: Style.weakTextFont
         color: Style.weakTextColor
@@ -86,7 +87,7 @@ Container {
         anchors.leftMargin: 20
         anchors.right: parent.right
         anchors.rightMargin: 20
-        y: 20
+        y: 40
         text: ""+ makeRate(up)
         font.family: Style.weakTextFont
         color: Style.strongTextColor
@@ -99,6 +100,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
         text: "Download"
+        y: 18
         font.family: Style.weakTextFont
         color: Style.weakTextColor
         font.pointSize: Style.weakTextSize
@@ -109,7 +111,7 @@ Container {
         anchors.leftMargin: 170
         anchors.right: parent.right
         anchors.rightMargin: 20
-        y: 20
+        y: 40
         text: ""+ makeRate(down)
         font.family: Style.weakTextFont
         color: Style.strongTextColor
