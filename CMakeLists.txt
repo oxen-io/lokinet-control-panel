@@ -5,7 +5,6 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)  # Has to be set before `project()`, and 
 project(lokinet-gui
     VERSION 0.3.0
     DESCRIPTION "Lokinet graphical control panel"
-    HOMEPAGE_URL https://github.com/loki-project/loki-network-control-panel
     LANGUAGES CXX)
 
 if(WIN32)

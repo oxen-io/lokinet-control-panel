@@ -1,4 +1,4 @@
-local default_deps_base='libsystemd-dev qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qt-labs-platform qml-module-qtcharts libqt5charts5-dev liblokimq-dev';
+local default_deps_base='libsystemd-dev qtbase5-dev qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qt-labs-platform qml-module-qtcharts libqt5charts5-dev liblokimq-dev';
 local default_deps_nocxx=default_deps_base;
 local default_deps='g++ ' + default_deps_nocxx; // g++ sometimes needs replacement
 local default_windows_deps='mingw-w64-binutils mingw-w64-gcc mingw-w64-crt mingw-w64-headers mingw-w64-winpthreads perl openssh zip bash binutils'; // deps for windows cross compile
