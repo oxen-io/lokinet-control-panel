@@ -1,12 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13)  # Has to be set before `project()`, and ignored on non-macos
+set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)  # Has to be set before `project()`, and ignored on non-macos
 
 project(lokinet-gui
-    VERSION 0.3.0
+    VERSION 0.3.1
     DESCRIPTION "Lokinet graphical control panel"
-    HOMEPAGE_URL https://github.com/loki-project/loki-network-control-panel
     LANGUAGES CXX)
+
+if(WIN32)
+  enable_language(RC)
+endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
@@ -55,6 +58,10 @@ target_link_libraries(lokinet-gui PRIVATE
     Threads::Threads
     lokimq
     )
+
+if (WIN32)
+    set(CMAKE_EXE_LINKER_FLAGS "-mwindows -fstack-protector")
+endif()
 
 set_target_properties(lokinet-gui
     PROPERTIES
@@ -115,7 +122,7 @@ if(APPLE)
         endif()
     endif()
 elseif(WIN32)
-    target_sources(lokinet-gui PRIVATE src/process/WindowsLokinetProcessManager.cpp)
+    target_sources(lokinet-gui PRIVATE src/process/WindowsLokinetProcessManager.cpp src/version.rc)
 else()
     option(SYSTEMD "Enable systemd support" OFF)
     if(SYSTEMD)
