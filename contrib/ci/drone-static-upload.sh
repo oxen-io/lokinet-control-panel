@@ -37,7 +37,9 @@ if [ -e lokinet-gui.exe ]; then
     rename 'opengl32sw.dll' to 'opengl32.dll' before starting up the lokinet gui. -rick" > ../gui/README
     # zipit up yo
     archive="$base.zip"
-    zip -r "$archive" ../gui
+    cd ..
+    zip -r "build/$archive" gui
+    cd build
 else
     mkdir -v "$base"
     cp -av lokinet-gui "$base"
