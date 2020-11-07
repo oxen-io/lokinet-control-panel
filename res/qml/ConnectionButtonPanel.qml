@@ -16,7 +16,7 @@ Container {
     onRunningChanged: updateState();
     onHoveringChanged: updateState();
 
-    Layout.preferredHeight: 199
+    Layout.preferredHeight: 198
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -84,7 +84,7 @@ Container {
         var base = "";
         if (running) {
             base = Style.highlightAffirmative;
-            tooltip = "Currently connected.\nPress to pause connection to the Loki Network.\n"
+            tooltip = "Currently connected to the Loki Network."
         } else {
             // not connected
             base = Style.highlightNegative

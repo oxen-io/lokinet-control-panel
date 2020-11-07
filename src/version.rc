@@ -111,3 +111,5 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
+
+IDI_ICON1               ICON    DISCARDABLE     "lokinet.ico"
