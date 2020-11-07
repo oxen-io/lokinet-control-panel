@@ -7,52 +7,34 @@
 #ifdef Q_OS_WIN
 
 #include <cstdio>
+#include <cstdlib>
 #include <windows.h>
 #include <tlhelp32.h>
-
-// TODO: don't hard-code these paths
-#define LOKINET_DIR "C:\\Program Files\\Loki Project\\loki-network"
-#define LOKINET_PATH LOKINET_DIR "\\lokinet.exe"
-#define LOKINET_EXE_STR "\"" LOKINET_PATH "\""
 
 WindowsLokinetProcessManager::WindowsLokinetProcessManager()
 {
     ::CreateMutexA(nullptr, FALSE, "lokinet_qt5_ui");
+    path = QString::fromStdString(std::string(::getenv("SYSTEMROOT")));
+    path.append("\\System32\\net.exe");
 }
 
 bool WindowsLokinetProcessManager::doStartLokinetProcess()
 {
     // try searching one level up from CWD
-    bool success = QProcess::startDetached(LOKINET_EXE_STR);
-    if (! success)
-    {
-        // when upgraded from old installations (before 0.5.x), lokinet.exe would be one
-        // directory higher
-        success = QProcess::startDetached("..\\lokinet.exe");
-
-        if (! success)
-            qDebug("QProcess::startDetached() failed");
-    }
-    
+    bool success = QProcess::startDetached(path, {"start", "lokinet"});
+    if (!success)
+        qDebug("QProcess::startDetached() failed");
     return success;
+}
+
+bool WindowsLokinetProcessManager::doStopLokinetProcess()
+{
+    return QProcess::startDetached(path, {"stop", "lokinet"});
 }
 
 bool WindowsLokinetProcessManager::doForciblyStopLokinetProcess()
 {
-    int p;
-    HANDLE lokinetProcess;
-    
-    if (doGetProcessPid(p))
-        lokinetProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD)p);
-    else
-        return false;
-    
-    if (TerminateProcess(lokinetProcess, 0))
-        return true;
-    else
-        return false;
-
-    return true;
+    return doStopLokinetProcess();
 }
 
 bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
@@ -74,9 +56,10 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
         while (Process32Next(snapshot, &entry) == TRUE)
         {
             if (stricmp(entry.szExeFile, "lokinet.exe") == 0)
-            {  
+            {
                 pid = entry.th32ProcessID;
                 qDebug("lokinet pid: %d", pid);
+                CloseHandle(snapshot);
                 return true;
             }
         }
@@ -91,8 +74,7 @@ bool WindowsLokinetProcessManager::doGetProcessPid(int& pid)
 
 QString WindowsLokinetProcessManager::getDefaultBootstrapFileLocation()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
-        + "\\AppData\\Roaming\\.lokinet\\bootstrap.signed";
+    return "C:\\ProgramData\\lokinet\\bootstrap.signed";
 }
 
 #endif // Q_OS_WIN

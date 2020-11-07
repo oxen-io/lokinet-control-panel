@@ -8,14 +8,13 @@ ColumnLayout {
     anchors.fill: parent
     spacing: 1
 
-    property var isConnected: false
     property var isRunning: false
     property var lokiVersion: ""
     property var lokiAddress: ""
     property var lokiExit: ""
     property var exitAuth: ""
     property var exitStatus: ""
-    property var hasExit: false
+    property var exitBusy: false
     property int lokiUptime: 0
     property var numPathsBuilt: 0
     property var numRoutersKnown: 0
@@ -25,14 +24,14 @@ ColumnLayout {
     property var pathRatio: ""
 
     LogoHeaderPanel {
+        version: lokiVersion
     }
 
     // connection button panel
     ConnectionButtonPanel {
-        connected: isConnected
         running: isRunning
     }
-
+/*
     // version panel
     VersionPanel {
         version: lokiVersion
@@ -42,7 +41,7 @@ ColumnLayout {
     UptimePanel {
         uptime: lokiUptime
     }
-
+*/
     // address panel
     AddressPanel {
         address: lokiAddress
@@ -53,6 +52,7 @@ ColumnLayout {
         address: lokiExit
         authcode: exitAuth
         status: exitStatus
+        busy: exitBusy
         id: exit
     }
 
@@ -88,11 +88,10 @@ ColumnLayout {
 
     }
 
-    onIsConnectedChanged: function() {
-        if (! isConnected) {
+    onIsRunningChanged: function() {
+        if (! isRunning) {
             console.log("Detected disconnection");
             // zero-out values that would otherwise be stale in the UI
-            isRunning = false;
             lokiVersion = "";
             lokiAddress = "";
             lokiUptime = 0;
@@ -228,9 +227,18 @@ ColumnLayout {
             builders.push(stats.result.services.default);
             for(var builder of builders)
             {
-              pathStats.paths += builder.paths.length;
-              pathStats.success += builder.buildStats.success;
-              pathStats.attempts += builder.buildStats.attempts;
+              if(builder)
+              {
+                if(builder.paths)
+                {
+                  pathStats.paths += builder.paths.length;
+                }
+                if(builder.buildStats)
+                {
+                  pathStats.success += builder.buildStats.success;
+                  pathStats.attempts += builder.buildStats.attempts;
+                }
+              }
             }
             ratio = pathStats.success / ( pathStats.attempts + 1);
             newNumPaths = pathStats.paths;
@@ -242,7 +250,6 @@ ColumnLayout {
         // only update global state if there is actually a change.
         // this prevents propagating state change events when there aren't
         // really changes in the first place
-        if (newConnected !== isConnected) isConnected = newConnected;
         if (newRunning !== isRunning) isRunning = newRunning;
         if (newLokiAddress !== lokiAddress) lokiAddress = newLokiAddress;
         if (newNumRouters !== numRoutersKnown) numRoutersKnown = newNumRouters;
@@ -250,6 +257,8 @@ ColumnLayout {
           numPathsBuilt = newNumPaths;
         }
         pathRatio = Math.ceil(ratio * 100) + "%";
+        if(exitBusy)
+          return;
         if (lokiExit !== newLokiExit)
         {
           if(newLokiExit.length > 0)
@@ -259,11 +268,15 @@ ColumnLayout {
           }
         }
         // set auth code
-        if(stats.result.services.authCodes)
+        if(stats.result.services.default.authCodes)
         {
           if(lokiExit in stats.result.services.default.authCodes)
           {
-            exitAuth = stats.result.services.default.authCodes[lokiExit];
+            let auth = stats.result.services.default.authCodes[lokiExit];
+            if(auth !== exitAuth)
+            {
+              exitAuth = auth;
+            }
           }
         }
     }

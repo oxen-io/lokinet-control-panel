@@ -10,7 +10,7 @@ SRCDIR=$PWD
 QT_HOST_PLATFORM=linux-g++
 
 git clone https://github.com/openssl/openssl.git -b OpenSSL_1_1_1g
-git clone https://code.qt.io/qt/qt5.git -b 5.12
+git clone https://code.qt.io/qt/qt5.git -b 5.15
 #git clone https://github.com/jedisct1/libsodium.git -b 1.0.18-RELEASE
 git clone https://github.com/despair86/lokinet-gui-deployment-kit.git gui
 cd openssl
