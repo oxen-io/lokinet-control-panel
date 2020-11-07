@@ -1,3 +1,100 @@
+loki-network-control-panel (0.3.1-1~deb10) buster; urgency=medium
+
+  [ Jeff ]
+  * change exit label text to be more clear about state
+  * make enabled switch bg color green
+  * config saving works
+  * make slider checked when we have exit
+  * only save auth codes in config when we have them
+  * dont always set auth code field
+
+  [ Rick V ]
+  * emit windows subsystem app (no stdstreams here)
+  * strip leading .. from zip
+  * ship propolice stack protector (libsodium requires it)
+
+  [ Linux User ]
+  * remove stack protection, leave it in libsodium
+  * keep %ebp live
+
+  [ Rick V ]
+  * put it in the link flags
+  * Update StaticBuild.cmake
+  * fuck go back
+  * try going through the SCM
+  * Update WindowsLokinetProcessManager.cpp
+  * Update WindowsLokinetProcessManager.cpp
+
+  [ Linux User ]
+  * run gui as admin
+  * description
+
+  [ Rick V ]
+  * Update WindowsLokinetProcessManager.cpp
+
+  [ Linux User ]
+  * use our manifest
+  * enable language separately
+  * id 1
+  * typo
+
+  [ Jeff Becker ]
+  * misc fixes for gui
+
+  [ Jason Rhinelander ]
+  * Bump macos target to 10.15
+
+  [ Jeff Becker ]
+  * check for null
+
+  [ Rick V ]
+  * Update WindowsLokinetProcessManager.cpp
+
+  [ Jeff Becker ]
+  * get rid of connected and not running as a concept for now
+
+  [ Rick V ]
+  * arguments go separately
+
+  [ Jeff ]
+  * Update README.md
+  * make gui smaller
+  * update readme
+  * update readme again
+
+  [ Jeff Becker ]
+  * windows fixes and dos2win
+  * add win32 icon (probably)
+  * re-add loki address copy to clipboard widget
+  * make connection icon smaller
+
+  [ Jason Rhinelander ]
+  * Change GUI mac version to 10.12
+  * Update bundled lokimq version for 10.12 compat
+
+  [ Jeff Becker ]
+  * shorten usage panel
+
+  [ Jeff ]
+  * style tweaks
+  * style tweaks
+  * more bullshittery with style and arrangment
+
+  [ Jason Rhinelander ]
+  * Make speed rounding more precise; add space
+  * Shift text down a bit
+
+  [ Rick V ]
+  * Update build-win32-deps.sh
+  * Update .drone.jsonnet
+
+  [ Jason Rhinelander ]
+  * Change qt5-default -> qtbase5-dev in drone builds
+  * Remove project homepage url
+  * Bump gui version
+
+ -- Jason Rhinelander <jason@imaginary.ca>  Fri, 06 Nov 2020 21:35:03 -0400
+
 loki-network-control-panel (0.3.0-1~deb10) buster; urgency=medium
 
   [ Jason Rhinelander ]
