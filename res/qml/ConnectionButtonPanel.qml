@@ -7,18 +7,16 @@ import "."
 
 Container {
     id: connectionButtonPanel
-    property var connected: false
     property var running: false
 
     property color tint: null
     property bool hovering: false
     property string tooltip: ""
 
-    onConnectedChanged: updateState();
     onRunningChanged: updateState();
     onHoveringChanged: updateState();
 
-    Layout.preferredHeight: 199
+    Layout.preferredHeight: 198
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -63,18 +61,10 @@ Container {
             hovering = false;
         }
         onPressed: {
-            if (! connected) {
-                platformDetails.startLokinetProcess();
+            if (! running) {
+              running = platformDetails.startLokinetProcess();
             } else {
-                if (! running) {
-                    apiClient.llarpAdminWakeup(function(response, err) {
-                        if (err) {
-                            console.log("Received error when trying to wakeup lokinet daemon: ", err);
-                        }
-                    });
-                } else {
-                    platformDetails.managedStopLokinetProcess();
-                }
+              running = !platformDetails.managedStopLokinetProcess();
             }
         }
     }
@@ -87,19 +77,14 @@ Container {
     }
 
     function updateState() {
-        console.log("updateState(), connected: "+ connected);
 
         // highlight on hover
         const lighter = (hovering ? 1.25 : 1.0);
 
         var base = "";
-        if (connected && running) {
+        if (running) {
             base = Style.highlightAffirmative;
-            tooltip = "Currently connected.\nPress to pause connection to the Loki Network.\n(not yet implemented)"
-        } else if (connected) {
-            // connected, but not running
-            base = Style.highlightNeutral;
-            tooltip = "Currently paused.\nPress to resume connection to the Loki Network."
+            tooltip = "Currently connected to the Loki Network."
         } else {
             // not connected
             base = Style.highlightNegative

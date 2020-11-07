@@ -123,8 +123,8 @@ build_external(zmq
   CONFIGURE_COMMAND ./configure ${cross_host} --prefix=${DEPS_DESTDIR} --enable-static --disable-shared
     --disable-curve-keygen --enable-curve --disable-drafts --disable-libunwind --with-libsodium
     --without-pgm --without-norm --without-vmci --without-docs --with-pic --disable-Werror
-    "CC=${deps_cc}" "CXX=${deps_cxx}" "CFLAGS=-O2 -fstack-protector ${flto}" "CXXFLAGS=-O2 -fstack-protector ${flto}"
-    "sodium_CFLAGS=-I${DEPS_DESTDIR}/include" "sodium_LIBS=-L${DEPS_DESTDIR}/lib -lsodium"
+    "CC=${deps_cc}" "CXX=${deps_cxx}" "CFLAGS=-O2 -fno-omit-frame-pointer ${flto}" "CXXFLAGS=-O2 -fno-omit-frame-pointer ${flto}"
+    "LDFLAGS=-fstack-protector" "sodium_CFLAGS=-I${DEPS_DESTDIR}/include" "sodium_LIBS=-L${DEPS_DESTDIR}/lib -lsodium"
 )
 add_static_target(libzmq zmq_external libzmq.a)
 
