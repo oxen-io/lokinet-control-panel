@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)  # Has to be set before `project()`, and ignored on non-macos
 
 project(lokinet-gui
-    VERSION 0.3.0
+    VERSION 0.3.1
     DESCRIPTION "Lokinet graphical control panel"
     LANGUAGES CXX)
 
