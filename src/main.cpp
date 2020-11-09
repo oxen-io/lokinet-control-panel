@@ -52,6 +52,9 @@ int32_t main(int32_t argc, char *argv[])
     qmlRegisterType<PlatformDetails>("PlatformDetails", 1, 0, "PlatformDetails");
     qmlRegisterType<BandwidthChartData>("BandwidthChartData", 1, 0, "BandwidthChartData");
 
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/res/images/icon.svg"));
     app.setQuitOnLastWindowClosed(false);
