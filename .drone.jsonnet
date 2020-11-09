@@ -84,7 +84,7 @@ local windows_cross_pipeline(name, image,
             commands: [
                 'apk update && apk upgrade',
                 'apk add cmake git ninja pkgconf ccache patch make g++ curl linux-headers python2 ' + deps,
-                './build-win32-deps.sh',
+                './contrib/build-win32-deps.sh',
                 'cd /drone/src',
                 'mkdir build',
                 'cd build',
