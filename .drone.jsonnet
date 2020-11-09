@@ -126,12 +126,15 @@ local deb_builder(image, distro, distro_branch, arch='amd64', imaginary_repo=tru
                         git checkout $${distro_branch}
                     fi
                 |||,
+                # Ignore merge conflicts in .drone.jsonnet:
+                'git config merge.ours.driver true',
+                'echo .drone.jsonnet merge=ours >>.gitattributes',
+
                 'git merge ${DRONE_COMMIT}',
                 'export DEBEMAIL="${DRONE_COMMIT_AUTHOR_EMAIL}" DEBFULLNAME="${DRONE_COMMIT_AUTHOR_NAME}"',
                 'gbp dch -S -s "HEAD^" --spawn-editor=never -U low',
                 'eatmydata mk-build-deps --install --remove --tool "apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y"',
                 'export DEB_BUILD_OPTIONS="parallel=$$(nproc)"',
-                'grep -q lib debian/lokinet-qt.install || echo "/usr/lib/lib*.so*" >>debian/lokinet-qt.install',
                 'debuild -e CCACHE_DIR -b',
                 'pwd',
                 'find ./contrib/ci',
