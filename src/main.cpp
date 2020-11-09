@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QIcon>
 #include <QDebug>
+#include <QtGlobal>
 
 #include "QmlClipboardAdapter.hpp"
 #include "LokinetApiClient.hpp"
@@ -53,7 +54,9 @@ int32_t main(int32_t argc, char *argv[])
     qmlRegisterType<BandwidthChartData>("BandwidthChartData", 1, 0, "BandwidthChartData");
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+#endif
 
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/res/images/icon.svg"));
