@@ -1,7 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 # this script is invoked by ci and people who want to build
 # their own qt5 gui for windows
 # change the make commands if you have more or less compute
+
+set -e
 
 JOBS=$(nproc)
 echo "Building with -j$JOBS"
