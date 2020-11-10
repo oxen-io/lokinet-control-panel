@@ -1,3 +1,15 @@
+loki-network-control-panel (0.3.2-1~pre1~ubuntu2004) focal; urgency=medium
+
+  * Build from main repo
+  * Enable high dpi support with pass-through scaling
+  * Rounding policy is only available in Qt >= 5.14
+  * win32 build fixes/updates
+  * Exit on error
+  * Move build-win32-deps.sh to contrib/
+  * Fix deb builds
+
+ -- Jason Rhinelander <jason@imaginary.ca>  Tue, 10 Nov 2020 19:39:16 -0400
+
 loki-network-control-panel (0.3.1-1~ubuntu2004) focal; urgency=medium
 
   [ Jeff ]
