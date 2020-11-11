@@ -11,7 +11,7 @@ Container {
   property var status: ""
   property var busy: false
   property var hasExit: false
-    Layout.preferredHeight: 200
+    Layout.preferredHeight: 167
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -27,7 +27,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        y: 18
+        y: 3
         text: "Exit Node"
         font.family: Style.weakTextFont
         color: Style.weakTextColor
@@ -45,7 +45,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        y: 40
+        y: 25
         text: address
         font.family: Style.weakTextFont
         color: Style.strongTextColor
@@ -60,7 +60,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        y: 80
+        y: 62
         text: "Auth Code"
         font.family: Style.weakTextFont
         color: Style.weakTextColor
@@ -79,7 +79,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        y: 100
+        y: 82
         text: authcode
         font.family: Style.weakTextFont
         color: Style.strongTextColor
@@ -117,7 +117,7 @@ Container {
 
       }
 
-      y: 140
+      y: 112
       onClicked: {
         if(busy)
         {
@@ -187,7 +187,7 @@ Container {
       anchors.leftMargin: 20
       anchors.right: parent.right
       anchors.rightMargin: 20
-      y: 180
+      y: 150
       text: status
       font.family: Style.weakTextFont
       color: Style.weakTextColor
