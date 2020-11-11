@@ -16,7 +16,7 @@ Container {
     onRunningChanged: updateState();
     onHoveringChanged: updateState();
 
-    Layout.preferredHeight: 198
+    Layout.preferredHeight: 168
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
