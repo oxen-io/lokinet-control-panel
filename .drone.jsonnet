@@ -1,4 +1,4 @@
-local default_deps_base='libsystemd-dev qtbase5-dev qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qt-labs-platform qml-module-qtcharts libqt5charts5-dev liblokimq-dev';
+local default_deps_base='libsystemd-dev qtbase5-dev qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qt-labs-platform qml-module-qtcharts libqt5charts5-dev libqt5svg5-dev liblokimq-dev';
 local default_deps_nocxx=default_deps_base;
 local default_deps='g++ ' + default_deps_nocxx; // g++ sometimes needs replacement
 local default_windows_deps='mingw-w64-binutils mingw-w64-gcc mingw-w64-crt mingw-w64-headers mingw-w64-winpthreads perl openssh zip bash binutils'; // deps for windows cross compile
@@ -88,7 +88,8 @@ local windows_cross_pipeline(name, image,
                 'cd /drone/src',
                 'mkdir build',
                 'cd build',
-                'cmake .. -G Ninja -DCMAKE_CROSSCOMPILING=ON -DCMAKE_EXE_LINKER_FLAGS=-fstack-protector -DCMAKE_TOOLCHAIN_FILE=$PWD/../mingw32.cmake -DCMAKE_BUILD_TYPE=Release -DQt5_DIR=/drone/src/qt5-win32/lib/cmake/Qt5 -DQt5Qml_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Qml -DQt5Network_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Network -DQt5Core_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Core -DQt5Quick_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Quick -DQt5Gui_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Gui -DQt5Widgets_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Widgets -DQt5Charts_DIR=/drone/src/qt5-win32/lib/cmake/Qt5Charts -DQt5QmlModels_DIR=/drone/src/qt5-win32/lib/cmake/Qt5QmlModels -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_DEPS=ON',
+                'cmake .. -G Ninja -DCMAKE_CROSSCOMPILING=ON -DCMAKE_EXE_LINKER_FLAGS=-fstack-protector -DCMAKE_TOOLCHAIN_FILE=$PWD/../mingw32.cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DBUILD_STATIC_DEPS=ON ' +
+                    std.join(" ", ['-DQt5' + x + '_DIR=/drone/src/qt5-win32/lib/cmake/Qt5' + x for x in ['', 'Qml', 'Network', 'Core', 'Quick', 'Gui', 'Widgets', 'Charts', 'QmlModels', 'Svg']]),
                 'ninja -v'
             ] + extra_cmds,
         }

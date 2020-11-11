@@ -19,9 +19,8 @@
         <!-- images -->
         <file>images/icon.svg</file>
         <file>images/banner.png</file>
-        <file>images/connection_indicator.png</file>
-        <file>images/connection_button.png</file>
-        <file>images/connection_button_outline.png</file>
+        <file>images/connection_button.svg</file>
+        <file>images/connection_button_outline.svg</file>
         <file>images/up_chevron.png</file>
     </qresource>
 </RCC>
