@@ -1,3 +1,15 @@
+loki-network-control-panel (0.3.3-1~deb10) buster; urgency=medium
+
+  * Condense UI elements to shrink the control panel
+  * Redraw vectorized connection button and shrink it
+  * Link to QtSvg (needed for macos)
+  * Bump version
+  * Add qt5svg dep to linux builds
+  * Split up impossibly long line
+  * DRY cmake Qt dir args, and add Svg to them
+
+ -- Jason Rhinelander <jason@imaginary.ca>  Wed, 11 Nov 2020 23:30:07 -0400
+
 loki-network-control-panel (0.3.2-1~pre1~deb10) buster; urgency=medium
 
   * Build from main repo
