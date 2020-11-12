@@ -9,6 +9,7 @@ Build-Depends: debhelper (>= 10~),
     librsvg2-bin,
     qtdeclarative5-dev,
     libqt5charts5-dev,
+    libqt5svg5-dev,
     liblokimq-dev (>= 1.2.0),
     libsystemd-dev
 Standards-Version: 4.4.1
