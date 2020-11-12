@@ -10,21 +10,21 @@ Container {
     property var routers: 0
     property var buildRatio: ""
 
-    Layout.preferredHeight: 69
+    Layout.preferredHeight: 45
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
         color: Style.panelBackgroundColor
     }
 
-    // "Paths built"
+    // "Active Paths"
     Text {
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        y: 18
+        y: 3
         text: "Active Paths"
         font.family: Style.weakTextFont
         color: Style.weakTextColor
@@ -37,7 +37,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        y: 40
+        y: 22
         text: ""+ paths + " (" + buildRatio + " success)"
         font.family: Style.weakTextFont
         color: Style.strongTextColor
@@ -51,7 +51,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        y: 18
+        y: 3
         text: "Lokinet routers"
         font.family: Style.weakTextFont
         color: Style.weakTextColor
@@ -64,7 +64,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        y: 40
+        y: 22
         text: ""+ routers
         font.family: Style.weakTextFont
         color: Style.strongTextColor
