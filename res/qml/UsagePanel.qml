@@ -30,7 +30,7 @@ Container {
         recalculateGraphScale(chartData.getHighestSample());
     }
 
-    Layout.preferredHeight: 249
+    Layout.preferredHeight: 177
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -75,7 +75,7 @@ Container {
         anchors.leftMargin: 20
         anchors.right: parent.right
         anchors.rightMargin: 20
-        y: 18
+        y: 3
         text: "Upload"
         font.family: Style.weakTextFont
         color: Style.weakTextColor
@@ -87,11 +87,12 @@ Container {
         anchors.leftMargin: 20
         anchors.right: parent.right
         anchors.rightMargin: 20
-        y: 40
+        y: 22
         text: ""+ makeRate(up)
         font.family: Style.weakTextFont
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
+        z: 1
     }
 
     Text {
@@ -100,7 +101,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
         text: "Download"
-        y: 18
+        y: 3
         font.family: Style.weakTextFont
         color: Style.weakTextColor
         font.pointSize: Style.weakTextSize
@@ -111,11 +112,12 @@ Container {
         anchors.leftMargin: 170
         anchors.right: parent.right
         anchors.rightMargin: 20
-        y: 40
+        y: 22
         text: ""+ makeRate(down)
         font.family: Style.weakTextFont
         color: Style.strongTextColor
         font.pointSize: Style.weakTextSize
+        z: 1
     }
 
   /*
@@ -161,8 +163,8 @@ Container {
         // these weird numbers come from an attempt to work around ChartView's
         // nasty permanent margins
         x: -20
-        y: 50
-        width: Style.appWidth + 20
+        y: 25
+        width: Style.appWidth + 75
         height: 189
 
         ValueAxis {

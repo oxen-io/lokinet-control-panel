@@ -8,7 +8,7 @@ import "."
 Container {
     property var address: ""
 
-    Layout.preferredHeight: 79
+    Layout.preferredHeight: 45
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -24,7 +24,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        y: 18
+        y: 3
         text: "Lokinet Address"
         font.family: Style.weakTextFont
         color: Style.weakTextColor
@@ -40,7 +40,7 @@ Container {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
-        y: 40
+        y: 21
         text: address
         font.family: Style.weakTextFont
         color: Style.strongTextColor

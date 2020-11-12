@@ -16,7 +16,7 @@ Container {
     onRunningChanged: updateState();
     onHoveringChanged: updateState();
 
-    Layout.preferredHeight: 198
+    Layout.preferredHeight: 110
     Layout.preferredWidth: Style.appWidth
 
     contentItem: Rectangle {
@@ -28,7 +28,9 @@ Container {
     Image {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        source: "qrc:/res/images/connection_button_outline.png"
+        source: "qrc:/res/images/connection_button_outline.svg"
+        sourceSize.width: 0.9 * parent.height
+        sourceSize.height: 0.9 * parent.height
     }
 
     // white connection image; we will colorize with LevelAdjust to indicate
@@ -38,7 +40,9 @@ Container {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         smooth: true
-        source: "qrc:/res/images/connection_button.png"
+        source: "qrc:/res/images/connection_button.svg"
+        sourceSize.width: 0.9 * parent.height
+        sourceSize.height: 0.9 * parent.height
     }
 
     // colorize connectionButtonImage
