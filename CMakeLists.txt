@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)  # Has to be set before `project()`, and ignored on non-macos
 
 project(lokinet-gui
-    VERSION 0.3.1
+    VERSION 0.3.3
     DESCRIPTION "Lokinet graphical control panel"
     LANGUAGES CXX)
 
@@ -37,7 +37,7 @@ else()
   find_package(LokiMQ 1.2 REQUIRED)
 endif()
 
-find_package(Qt5 COMPONENTS Qml Quick Widgets Charts REQUIRED)
+find_package(Qt5 COMPONENTS Qml Quick Widgets Charts Svg REQUIRED)
 find_package(Threads)
 
 add_executable(lokinet-gui
@@ -54,7 +54,7 @@ add_executable(lokinet-gui
     )
 
 target_link_libraries(lokinet-gui PRIVATE
-    Qt5::Core Qt5::Qml Qt5::Quick Qt5::Widgets Qt5::Charts
+    Qt5::Core Qt5::Qml Qt5::Quick Qt5::Widgets Qt5::Charts Qt5::Svg
     Threads::Threads
     lokimq
     )
