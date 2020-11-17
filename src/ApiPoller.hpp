@@ -8,9 +8,8 @@
  
 #include <QObject>
 #include <QTimer>
-
 #include <lokimq/lokimq.h>
- 
+
 /**
  * The ApiPoller periodically requests a JSON-RPC endpoint from the Loki daemon.
  */
@@ -77,7 +76,6 @@ private:
     void pollDaemon();
 
     QTimer* m_timer;
-    lokimq::LokiMQ m_lmq;
     std::optional<lokimq::ConnectionID> m_Conn;
     std::string m_rpcMethod;
 };

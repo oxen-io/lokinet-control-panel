@@ -98,7 +98,6 @@ public:
   }
 
 private:
-    lokimq::LokiMQ m_lmqClient;
     std::optional<lokimq::ConnectionID> m_lmqConnection;
 signals:
     void
