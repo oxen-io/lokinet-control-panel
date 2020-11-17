@@ -10,7 +10,8 @@ Build-Depends: debhelper (>= 10~),
     qtdeclarative5-dev,
     libqt5charts5-dev,
     libqt5svg5-dev,
-    liblokimq-dev (>= 1.2.0),
+    liblokimq-dev (>= 1.2.2),
+    pkg-config,
     libsystemd-dev
 Standards-Version: 4.4.1
 Homepage: https://github.com/loki-project/loki-network-control-panel
