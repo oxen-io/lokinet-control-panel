@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QJSValue>
 #include <QJsonObject>
-
+#include <functional>
 #include <optional>
 
 /**
