@@ -11,7 +11,7 @@ There is also an option (`Bootstrap Client from Web`) in the system tray's conte
 To build, you'll need `cmake` and a handful of `Qt` packages available. On `Ubuntu` or similar, you can install these with:
 
 ```bash
-sudo apt install qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qt-labs-platform qml-module-qtcharts libqt5charts5-dev
+sudo apt install qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qt-labs-platform qml-module-qtcharts libqt5charts5-dev libqt5svg5-dev
 ```
 
 Then clone, build and run:
