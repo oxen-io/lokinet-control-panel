@@ -29,11 +29,11 @@ int32_t main(int32_t argc, char *argv[])
 
     // crude CLI option parsing
     bool nohide = false;
-    bool notray = false;
+    bool notray = true;
     for (int i=0; argv[i] != nullptr; ++i) {
         std::string arg = argv[i];
         if (arg == "--nohide" || arg == "--no-hide") nohide = true;
-        if (arg == "--notray" || arg == "--no-tray") notray = true;
+        if (arg == "--tray") notray = false;
         if (arg == "--rpc" and argv[i+1] != nullptr)
         {
           RPCURL = argv[i+1];
