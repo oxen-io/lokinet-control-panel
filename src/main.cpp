@@ -17,7 +17,8 @@ constexpr bool isSystemd = true;
 constexpr bool isSystemd = false;
 #endif
 
-std::string RPCURL = LOKINET_RPC_URL;
+lokimq::LokiMQ lmq{};
+std::string RPCURL{LOKINET_RPC_URL};
 
 int32_t main(int32_t argc, char *argv[])
 {
@@ -57,6 +58,8 @@ int32_t main(int32_t argc, char *argv[])
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 #endif
+    
+    lmq.start();
 
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/res/images/icon.svg"));
