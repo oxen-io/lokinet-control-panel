@@ -34,7 +34,9 @@ if(BUILD_STATIC_DEPS)
   include(StaticBuild)
   add_subdirectory(external/loki-mq)
 else()
-  find_package(LokiMQ 1.2 REQUIRED)
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(lokimq REQUIRED liblokimq>=1.2.2 IMPORTED_TARGET)
+  add_library(lokimq::lokimq ALIAS PkgConfig::lokimq)
 endif()
 
 find_package(Qt5 COMPONENTS Qml Quick Widgets Charts Svg REQUIRED)
@@ -56,7 +58,7 @@ add_executable(lokinet-gui
 target_link_libraries(lokinet-gui PRIVATE
     Qt5::Core Qt5::Qml Qt5::Quick Qt5::Widgets Qt5::Charts Qt5::Svg
     Threads::Threads
-    lokimq
+    lokimq::lokimq
     )
 
 if (WIN32)
