@@ -184,7 +184,7 @@ ColumnLayout {
             }
 
             try {
-              let exitMap = stats.result.services.default.exitMap;
+              var exitMap = stats.result.services.default.exitMap;
               if(exitMap)
               {
                 for(var k in exitMap)
@@ -275,7 +275,7 @@ ColumnLayout {
         {
           if(lokiExit in stats.result.services.default.authCodes)
           {
-            let auth = stats.result.services.default.authCodes[lokiExit];
+            var auth = stats.result.services.default.authCodes[lokiExit];
             if(auth !== exitAuth)
             {
               exitAuth = auth;

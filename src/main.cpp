@@ -18,6 +18,7 @@ constexpr bool isSystemd = false;
 #endif
 
 lokimq::LokiMQ lmq{};
+lokimq::ConnectionID lmq_conn;
 std::string RPCURL{LOKINET_RPC_URL};
 
 int32_t main(int32_t argc, char *argv[])
@@ -60,7 +61,7 @@ int32_t main(int32_t argc, char *argv[])
 #endif
     
     lmq.start();
-
+    lmq_conn = lmq.connect_remote(RPCURL, nullptr, nullptr);
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/res/images/icon.svg"));
     app.setQuitOnLastWindowClosed(false);
