@@ -5,7 +5,6 @@
 #include <QJSValue>
 #include <QJsonObject>
 
-#include <lokimq/lokimq.h>
 #include <optional>
 
 /**
@@ -96,9 +95,6 @@ public:
   bool llarpAdminDie(ReplyCallback callback) {
     return invoke("llarp.halt", QJsonObject{}, callback);
   }
-
-private:
-    std::optional<lokimq::ConnectionID> m_lmqConnection;
 signals:
     void
     CallCallback(QJSValue callback, QJSValueList args);
