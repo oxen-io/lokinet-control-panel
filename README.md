@@ -52,18 +52,12 @@ Note that building this way additionally requires imagemagick installed and buil
 
 ### Usage
 
-By default, the app starts running in the background with access available through the system tray. Click on the system tray icon to interact with the app.
-
-Additionally, the following command-line arguments are supported:
+The following command-line arguments are supported:
 
 ```
---no-hide
+--tray
 
-Prevents the window from being hidden automatically when it loses focus. Also adds normal window chroming.
-
---no-tray
-
-Implies --no-hide, and additionally removes the system tray. Closing the window exits the app.
+Runs the gui in tray mode.
 
 --rpc 
 
