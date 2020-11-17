@@ -33,8 +33,15 @@ if(BUILD_STATIC_DEPS)
   endif()
   include(StaticBuild)
   add_subdirectory(external/loki-mq)
+elseif(LOKIMQ_LIBRARIES) # Private option for the macos bundled gui build
+  add_library(lokimq INTERFACE)
+  target_link_libraries(lokimq INTERFACE ${LOKIMQ_LIBRARIES})
+  target_include_directories(lokimq INTERFACE ${LOKIMQ_INCLUDE_DIRS})
+  add_library(lokimq::lokimq ALIAS lokimq)
 else()
-  find_package(LokiMQ 1.2 REQUIRED)
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(lokimq REQUIRED liblokimq>=1.2.2 IMPORTED_TARGET)
+  add_library(lokimq::lokimq ALIAS PkgConfig::lokimq)
 endif()
 
 find_package(Qt5 COMPONENTS Qml Quick Widgets Charts Svg REQUIRED)
@@ -56,7 +63,7 @@ add_executable(lokinet-gui
 target_link_libraries(lokinet-gui PRIVATE
     Qt5::Core Qt5::Qml Qt5::Quick Qt5::Widgets Qt5::Charts Qt5::Svg
     Threads::Threads
-    lokimq
+    lokimq::lokimq
     )
 
 if (WIN32)
