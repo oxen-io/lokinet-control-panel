@@ -212,21 +212,24 @@ ColumnLayout {
             var builders = [];
             if(stats.result.services.default.snodeSessions)
             {
-              for(var s of stats.result.services.default.snodeSessions)
+              for(var idx = 0; idx < stats.result.services.default.snodeSessions.length; idx++)
               {
+                var s = stats.result.services.default.snodeSessions[idx];
                 builders.push(s);
               }
             }
             if(stats.result.services.default.remoteSessions)
             {
-              for(var s of stats.result.services.default.remoteSessions)
+              for(var idx = 0; idx < stats.result.services.default.remoteSessions.length; idx++)
               {
+                var s = stats.result.services.default.remoteSessions[idx];
                 builders.push(s);
               }
             }
             builders.push(stats.result.services.default);
-            for(var builder of builders)
+            for(var idx = 0; idx < builders.length; idx++)
             {
+              var builder = builders[idx];
               if(builder)
               {
                 if(builder.paths)
