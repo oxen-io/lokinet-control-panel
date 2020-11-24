@@ -7,22 +7,10 @@
 
 bool LokinetApiClient::invoke(const std::string& endpoint, QJsonObject args, ReplyCallback callback) {
   std::cout << "call " << endpoint;
-  if(not m_lmqConnection.has_value())
-  {
-    m_lmqClient.start();
-    m_lmqConnection =
-      m_lmqClient.connect_remote(
-        RPCURL,
-        [](auto){},
-        [&](auto, std::string_view reason) {
-          // qDebug() << "failed to connect to lokinet: "<< reason;
-          m_lmqConnection = std::nullopt;
-        });
-  }
   QJsonDocument doc(args);
   const auto req = doc.toJson();
-  m_lmqClient.request(
-    *m_lmqConnection,
+  lmq.request(
+    lmq_conn,
     std::string_view{endpoint},
     [cb = callback](bool success, std::vector<std::string> data)
     {
