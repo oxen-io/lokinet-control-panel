@@ -89,7 +89,7 @@ Container {
 
     Switch {
       id: exitButton
-      palette.dark: Style.lokiDarkGreen;
+      // palette.dark: Style.lokiDarkGreen;
       text: address.length > 0  ? "Exit On" : "Exit off"
       checkable: true
       checked: address.length > 0
@@ -123,8 +123,8 @@ Container {
         {
           return;
         }
-        let exitAddr = exitTextInput.text;
-        let exitAuth = authTextInput.text;
+        var exitAddr = exitTextInput.text;
+        var exitAuth = authTextInput.text;
         if(hasExit)
         {
           busy = true;
@@ -152,7 +152,7 @@ Container {
             checked = false;
             return;
           }
-          let j = JSON.parse(result);
+          var j = JSON.parse(result);
           if(j.error)
           {
             status = "Error: " + j.error;

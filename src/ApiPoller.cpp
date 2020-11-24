@@ -9,7 +9,6 @@
 ApiPoller::ApiPoller() :
   QObject(nullptr)
 {
-    m_lmq.start();
     m_timer = new QTimer();
     m_timer->setInterval(DEFAULT_POLLING_INTERVAL_MS);
     connect(m_timer, &QTimer::timeout, this, &ApiPoller::pollDaemon);
@@ -52,15 +51,7 @@ void ApiPoller::pollDaemon() {
       qDebug() << "Warning: No endpoint; call ApiPoller::setApiEndpoint() before polling";
       return;
     }
-    if(not m_Conn.has_value())
-    {
-      m_Conn = m_lmq.connect_remote(RPCURL, [](auto &&){},
-                                    [=](auto,auto msg) {
-                                      qInfo() << std::string{msg}.c_str();
-                                      m_Conn = std::nullopt;
-                                    });
-    }
-    m_lmq.request(*m_Conn, m_rpcMethod,
+    lmq.request(lmq_conn, m_rpcMethod,
         [=](bool success, std::vector<std::string> data)
         {
             if(success and not data.empty())
