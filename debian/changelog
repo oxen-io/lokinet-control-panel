@@ -1,3 +1,39 @@
+loki-network-control-panel (0.3.4-2) unstable; urgency=medium
+
+  [ Jason Rhinelander ]
+  * Add qt5 svg dep
+
+  [ Jeff Becker ]
+  * older qt versions do have for of loops because of course they dont, revert to old style for loops
+  * update readme, add qt5 svg dep
+  * make notray no more, use --tray if you want to run the gui as a tray icon
+  * make lmq object a global singleton in the gui
+
+  [ Jeff ]
+  * Update README.md
+
+  [ Jason Rhinelander ]
+  * Always use pkgconfig to search for lokimq
+  * Allow specifying lokimq libs/includes externally
+
+  [ Jeff Becker ]
+  * fixes for lokimq globalization
+  * forgtten header
+  * older qt does not have the let keyword because of course it doesnt
+
+  [ Jason Rhinelander ]
+  * Old cmake compatibility
+  * Update required lokimq version + add pkg-config dep
+  * Remove entitlements (no longer needed for Qt 5.15)
+
+  [ Jeff Becker ]
+  * when doing dev build on mac add qmdir flag so it works
+
+  [ Jason Rhinelander ]
+  * Version bump
+
+ -- Jason Rhinelander <jason@imaginary.ca>  Tue, 24 Nov 2020 00:11:07 -0400
+
 loki-network-control-panel (0.3.3-1) unstable; urgency=medium
 
   * Condense UI elements to shrink the control panel
