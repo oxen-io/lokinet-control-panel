@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)  # Has to be set before `project()`, and ignored on non-macos
 
 project(lokinet-gui
-    VERSION 0.3.3
+    VERSION 0.3.4
     DESCRIPTION "Lokinet graphical control panel"
     LANGUAGES CXX)
 
@@ -34,7 +34,16 @@ if(BUILD_STATIC_DEPS)
   include(StaticBuild)
   add_subdirectory(external/loki-mq)
 else()
-  find_package(LokiMQ 1.2 REQUIRED)
+  add_library(lokimq INTERFACE)
+  if(LOKIMQ_LIBRARIES) # Private option for the macos bundled gui build
+    target_link_libraries(lokimq INTERFACE ${LOKIMQ_LIBRARIES})
+    target_include_directories(lokimq INTERFACE ${LOKIMQ_INCLUDE_DIRS})
+  else()
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(lokimq REQUIRED liblokimq>=1.2.2 IMPORTED_TARGET)
+    target_link_libraries(lokimq INTERFACE PkgConfig::lokimq)
+  endif()
+  add_library(lokimq::lokimq ALIAS lokimq)
 endif()
 
 find_package(Qt5 COMPONENTS Qml Quick Widgets Charts Svg REQUIRED)
@@ -56,7 +65,7 @@ add_executable(lokinet-gui
 target_link_libraries(lokinet-gui PRIVATE
     Qt5::Core Qt5::Qml Qt5::Quick Qt5::Widgets Qt5::Charts Qt5::Svg
     Threads::Threads
-    lokimq
+    lokimq::lokimq
     )
 
 if (WIN32)
@@ -110,14 +119,13 @@ if(APPLE)
                 COMMAND echo "Running qt magic macos deploy script"
                 COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite -qmldir=${PROJECT_SOURCE_DIR}/res
                 COMMAND echo "Signing LokinetGUI.app and everything inside it"
-                COMMAND codesign -s "${MACOS_SIGN}" --deep --strict --options runtime
-                    --entitlements ${PROJECT_SOURCE_DIR}/tools/lokinet-gui-entitlements.plist --force -vvv LokinetGUI.app
+                COMMAND codesign -s "${MACOS_SIGN}" --deep --strict --options runtime --force -vvv LokinetGUI.app
                 )
         else()
             add_custom_command(TARGET lokinet-gui
                 POST_BUILD
                 COMMAND echo "Running qt magic macos deploy script"
-                COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite
+                COMMAND "${qt_dir}/macdeployqt" LokinetGUI.app -always-overwrite -qmldir=${PROJECT_SOURCE_DIR}/res
                 )
         endif()
     endif()

@@ -184,7 +184,7 @@ ColumnLayout {
             }
 
             try {
-              let exitMap = stats.result.services.default.exitMap;
+              var exitMap = stats.result.services.default.exitMap;
               if(exitMap)
               {
                 for(var k in exitMap)
@@ -212,21 +212,24 @@ ColumnLayout {
             var builders = [];
             if(stats.result.services.default.snodeSessions)
             {
-              for(var s of stats.result.services.default.snodeSessions)
+              for(var idx = 0; idx < stats.result.services.default.snodeSessions.length; idx++)
               {
+                var s = stats.result.services.default.snodeSessions[idx];
                 builders.push(s);
               }
             }
             if(stats.result.services.default.remoteSessions)
             {
-              for(var s of stats.result.services.default.remoteSessions)
+              for(var idx = 0; idx < stats.result.services.default.remoteSessions.length; idx++)
               {
+                var s = stats.result.services.default.remoteSessions[idx];
                 builders.push(s);
               }
             }
             builders.push(stats.result.services.default);
-            for(var builder of builders)
+            for(var idx = 0; idx < builders.length; idx++)
             {
+              var builder = builders[idx];
               if(builder)
               {
                 if(builder.paths)
@@ -272,7 +275,7 @@ ColumnLayout {
         {
           if(lokiExit in stats.result.services.default.authCodes)
           {
-            let auth = stats.result.services.default.authCodes[lokiExit];
+            var auth = stats.result.services.default.authCodes[lokiExit];
             if(auth !== exitAuth)
             {
               exitAuth = auth;
