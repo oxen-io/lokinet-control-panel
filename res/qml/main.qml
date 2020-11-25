@@ -27,11 +27,14 @@ ApplicationWindow {
         }
     }
 
-  /*
+  
     onClosing: {
-      window.exitApp();
+      if(platformDetails.isLinux())
+      {
+        window.exitApp();
+      }
     }
-  */
+  
   
     ControlPanel {
         id: controlPanel
@@ -93,7 +96,7 @@ ApplicationWindow {
     SystemTrayIcon {
         id: systray
         tooltip: qsTr("Loki Network")
-        visible: true
+        visible: !platformDetails.isLinux()
         iconSource: "qrc:/res/images/icon.svg"
 
         menu: Menu {
