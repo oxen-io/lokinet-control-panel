@@ -29,10 +29,7 @@ ApplicationWindow {
 
   
     onClosing: {
-      if(platformDetails.isLinux())
-      {
-        window.exitApp();
-      }
+      window.exitApp();
     }
   
   
@@ -102,7 +99,7 @@ ApplicationWindow {
 
         menu: Menu {
             id: systrayMenu
-            enabled: platformDetails.hasSysTray();
+            enabled: true
 
             MenuItem {
                 text: qsTr("Show")
