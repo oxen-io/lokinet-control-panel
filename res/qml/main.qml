@@ -29,10 +29,7 @@ ApplicationWindow {
 
   
     onClosing: {
-      if(platformDetails.isLinux())
-      {
-        window.exitApp();
-      }
+      window.exitApp();
     }
   
   
