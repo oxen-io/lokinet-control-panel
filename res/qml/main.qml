@@ -99,7 +99,7 @@ ApplicationWindow {
 
         menu: Menu {
             id: systrayMenu
-            enabled: platformDetails.hasSysTray();
+            enabled: true
 
             MenuItem {
                 text: qsTr("Show")
