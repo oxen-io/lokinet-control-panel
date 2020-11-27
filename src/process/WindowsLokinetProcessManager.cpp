@@ -24,7 +24,8 @@ bool WindowsLokinetProcessManager::doStartLokinetProcess()
     bool success = QProcess::startDetached(path, {"start", "lokinet"});
     if (!success)
         qDebug("QProcess::startDetached() failed");
-    return success;
+    int pid = -1;
+    return success and doGetProcessPid(pid) and pid != -1;
 }
 
 bool WindowsLokinetProcessManager::doStopLokinetProcess()
