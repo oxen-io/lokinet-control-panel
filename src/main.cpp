@@ -18,7 +18,7 @@ constexpr bool isSystemd = false;
 #endif
 
 lokimq::LokiMQ lmq{};
-lokimq::ConnectionID lmq_conn;
+std::optional<lokimq::ConnectionID> lmq_conn;
 std::string RPCURL{LOKINET_RPC_URL};
 
 int32_t main(int32_t argc, char *argv[])
@@ -57,7 +57,20 @@ int32_t main(int32_t argc, char *argv[])
 #endif
     
     lmq.start();
-    lmq_conn = lmq.connect_remote(RPCURL, nullptr, nullptr);
+    lmq.add_timer([]() {
+      if(lmq_conn.has_value())
+        return;
+      lmq.connect_remote(
+        RPCURL,
+        [](lokimq::ConnectionID conn)
+        {
+          lmq_conn = conn;
+        },
+        [](auto, auto)
+        {
+          lmq_conn = std::nullopt;
+        });
+    }, std::chrono::milliseconds{500});
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/res/images/icon.svg"));
     app.setQuitOnLastWindowClosed(false);
