@@ -262,12 +262,16 @@ ColumnLayout {
         pathRatio = Math.ceil(ratio * 100) + "%";
         if(exitBusy)
           return;
+        if(exit.exitSetByDaemon)
+          return;
         if (lokiExit !== newLokiExit)
         {
           if(newLokiExit.length > 0)
           {
             lokiExit = newLokiExit;
             exitStatus = "Exit Obtained";
+            exit.exitSetByDaemon = true;
+            exit.hasExit = true;
           }
         }
         // set auth code
