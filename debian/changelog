@@ -1,3 +1,19 @@
+loki-network-control-panel (0.3.5-1) unstable; urgency=medium
+
+  [ Jeff Becker ]
+  * hide to tray
+  * since "linux has no tray" (wayland at least) don't show tray on linux
+  * fix race conditions in exit logic
+  * add initial systray detection
+  * exit on close
+  * systray always enabled but not always visible
+  * fix macos bootstrap.signed path
+  * check for lokinet pid
+  * blocking call to service manager on windows
+  * lazy open lmq connection
+
+ -- Jason Rhinelander <jason@imaginary.ca>  Wed, 16 Dec 2020 13:34:50 -0400
+
 loki-network-control-panel (0.3.4-2) unstable; urgency=medium
 
   [ Jason Rhinelander ]
