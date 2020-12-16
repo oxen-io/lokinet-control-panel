@@ -7,6 +7,7 @@
 #include <sstream>
 #include <memory>
 #include <mutex>
+#include <future>
 
 using namespace std::literals::chrono_literals;
 
@@ -81,8 +82,11 @@ bool LokinetProcessManager::stopLokinetProcess()
 
 bool LokinetProcessManager::doStopLokinetProcess()
 {
-    bool success = m_apiClient.llarpAdminDie([](auto) {
+    std::promise<void> waiter;
+    const auto success = m_apiClient.llarpAdminDie([&waiter](auto) {
+      waiter.set_value();
     });
+    waiter.get_future().get();
     if (!success)
     {
         qDebug("Failed to stop lokinet process with llarp.admin.die API call");

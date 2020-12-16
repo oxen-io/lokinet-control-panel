@@ -9,8 +9,12 @@ bool LokinetApiClient::invoke(const std::string& endpoint, QJsonObject args, Rep
   std::cout << "call " << endpoint;
   QJsonDocument doc(args);
   const auto req = doc.toJson();
+  if(not lmq_conn.has_value())
+  {
+    return false;
+  }
   lmq.request(
-    lmq_conn,
+    *lmq_conn,
     std::string_view{endpoint},
     [cb = callback](bool success, std::vector<std::string> data)
     {

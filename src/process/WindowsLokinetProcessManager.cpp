@@ -21,15 +21,14 @@ WindowsLokinetProcessManager::WindowsLokinetProcessManager()
 bool WindowsLokinetProcessManager::doStartLokinetProcess()
 {
     // try searching one level up from CWD
-    bool success = QProcess::startDetached(path, {"start", "lokinet"});
-    if (!success)
-        qDebug("QProcess::startDetached() failed");
-    return success;
+    const bool success = QProcess::execute(path, {"start", "lokinet"}) == 0;
+    int pid = -1;
+    return success and doGetProcessPid(pid) and pid != -1;
 }
 
 bool WindowsLokinetProcessManager::doStopLokinetProcess()
 {
-    return QProcess::startDetached(path, {"stop", "lokinet"});
+    return QProcess::execute(path, {"stop", "lokinet"}) == 0;
 }
 
 bool WindowsLokinetProcessManager::doForciblyStopLokinetProcess()
