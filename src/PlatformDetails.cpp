@@ -26,6 +26,39 @@ Q_INVOKABLE bool PlatformDetails::isLinux() {
 #endif
 }
 
+// PlatformDetails::hasSysTray
+Q_INVOKABLE bool PlatformDetails::hasSysTray() {
+  if(isWindows())
+    return true;
+  if(isMacOS())
+    return true;
+  if(isGayland())
+  {
+    // pretty much every sane environment has a systray but not gayland (GNOME WAYLAND) because $reasons.
+    return false;
+  }
+  if(isLinux())
+    return true;
+  // we don't know what we are runnning on let's assume we dont have a tray
+  return false;
+}
+
+// PlatformDetails::isGayland
+Q_INVOKABLE bool PlatformDetails::isGayland() {
+#if defined(Q_OS_LINUX)
+  if(const auto wayland = ::getenv("WAYLAND_DISPLAY"); wayland)
+  {
+    if(const auto desktop = ::getenv("XDG_CURRENT_DESKTOP"); desktop)
+    {
+      return std::string{desktop} == "GNOME";
+    }
+  }
+	return false;
+#else
+	return false;
+#endif
+}
+
 // PlatformDetails::isMacOS
 Q_INVOKABLE bool PlatformDetails::isMacOS() {
 #if defined(Q_OS_MACOS)
