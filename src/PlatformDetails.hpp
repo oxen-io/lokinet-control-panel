@@ -16,9 +16,16 @@ class PlatformDetails : public QObject
 
 public:
 
+    ///  return if we are on windows
     Q_INVOKABLE static bool isWindows();
+    /// return if we are on linux
     Q_INVOKABLE static bool isLinux();
+    /// return if we are on gnome wayland
+    Q_INVOKABLE static bool isGayland();
+    /// return if we are on macos
     Q_INVOKABLE static bool isMacOS();
+    /// return if we have a system tray or not
+    Q_INVOKABLE static bool hasSysTray();
 
     Q_INVOKABLE static bool isDebug();
 

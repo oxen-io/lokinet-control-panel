@@ -11,6 +11,8 @@ Container {
   property var status: ""
   property var busy: false
   property var hasExit: false
+  property var exitSetByDaemon: false
+  
     Layout.preferredHeight: 167
     Layout.preferredWidth: Style.appWidth
 
@@ -90,9 +92,9 @@ Container {
     Switch {
       id: exitButton
       // palette.dark: Style.lokiDarkGreen;
-      text: address.length > 0  ? "Exit On" : "Exit off"
-      checkable: true
-      checked: address.length > 0
+      text: hasExit > 0  ? "Exit On" : "Exit off"
+      checkable: !busy
+      checked: hasExit
       background: Rectangle{
         color: Style.panelBackgroundColor
         opacity: exitButton.checked ? 1 : 0.3
@@ -125,19 +127,16 @@ Container {
         }
         var exitAddr = exitTextInput.text;
         var exitAuth = authTextInput.text;
-        if(hasExit)
+        console.log("hasExit="+hasExit+" checked="+checked);
+        if(hasExit || !checked)
         {
-          busy = true;
           console.log("remove exit");
-          apiClient.llarpDelExit(function(result, error) {
-            status = "Exit Off";
-            busy = false;
-            exitButton.text = "Enable Exit";
-            stautsLabelText.color = Style.weakTextColor;
-            console.log(hasExit, " has exit?");
-            checked = false;
-          });
+          apiClient.llarpDelExit(function(result, error) { });
+          statusLabelText.text = "Exit Off";
+          exitButton.text = "Enable Exit";
+          statusLabelText.color = Style.weakTextColor;
           hasExit = false;
+          checked = false;
           return;
         }
         statusLabelText.color = Style.weakTextColor;
@@ -150,6 +149,7 @@ Container {
             status = "Error: " +error;
             statusLabelText.color = Style.errorRed;
             checked = false;
+            hasExit = false;
             return;
           }
           var j = JSON.parse(result);
@@ -157,6 +157,7 @@ Container {
           {
             status = "Error: " + j.error;
             checked = false;
+            hasExit = false;
             statusLabelText.color = Style.errorRed;
             return;
           }
@@ -164,6 +165,8 @@ Container {
           {
             console.log("exit result: ",j.result);
             statusLabelText.color = Style.weakTextColor;
+            statusLabelText.text = "Exit enabled";
+            exitButton.text = "Disable Exit";
             hasExit = true;
             if(exitAuth.length > 0)
             {

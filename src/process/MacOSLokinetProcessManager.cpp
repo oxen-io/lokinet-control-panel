@@ -100,4 +100,10 @@ bool MacOSLokinetProcessManager::doGetProcessPid(int& pid)
     return true;
 }
 
+
+QString MacOSLokinetProcessManager::getDefaultBootstrapFileLocation()
+{
+  return "/var/lib/lokinet/bootstrap.signed";
+}
+
 #endif // Q_OS_MACOS
