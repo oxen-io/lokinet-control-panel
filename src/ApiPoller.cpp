@@ -51,13 +51,17 @@ void ApiPoller::pollDaemon() {
       qDebug() << "Warning: No endpoint; call ApiPoller::setApiEndpoint() before polling";
       return;
     }
-    lmq.request(lmq_conn, m_rpcMethod,
+    if(lmq_conn.has_value())
+    {
+      lmq.request(
+        *lmq_conn,
+        m_rpcMethod,
         [=](bool success, std::vector<std::string> data)
         {
-            if(success and not data.empty())
-            {
-              emit statusAvailable(QString::fromStdString(data[0]));
-            }
+          if(success and not data.empty())
+          {
+            emit statusAvailable(QString::fromStdString(data[0]));
+          }
         });
-        
+    }
 }

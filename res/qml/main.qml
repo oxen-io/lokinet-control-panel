@@ -11,7 +11,7 @@ import "."
 ApplicationWindow {
     id: window
     title: qsTr("Lokinet Control Panel")
-    visible: nohide
+    visible: true
     flags: nohide ? Qt.Window : Qt.FramelessWindowHint
     maximumHeight: minimumHeight
     maximumWidth: minimumWidth
@@ -27,12 +27,12 @@ ApplicationWindow {
         }
     }
 
+  
     onClosing: {
-        if (notray) {
-            window.exitApp();
-        }
+      window.exitApp();
     }
-
+  
+  
     ControlPanel {
         id: controlPanel
     }
@@ -49,8 +49,7 @@ ApplicationWindow {
         Qt.quit();
     }
 
-    function display() {
-
+    function openSysTray() {
         var rect = platformDetails.getAbsoluteCursorPosition();
         console.log("mouse cursor at: "+ rect.x +", "+ rect.y);
 
@@ -80,11 +79,12 @@ ApplicationWindow {
         var winX = (right ? (rect.x - window.width) : rect.x);
         var winY = (bottom ? (rect.y - window.height) : rect.y);
 
-        window.x = winX;
-        window.y = winY;
-
-        console.log("updated window popup position: "+ window.x + ", "+ window.y);
-
+        // systrayMenu.x = winX;
+        // systrayMenu.y = winY;
+        systrayMenu.visible = true;
+    }
+  
+    function display() {
         window.show();
         window.raise();
         window.requestActivate();
@@ -94,7 +94,7 @@ ApplicationWindow {
     SystemTrayIcon {
         id: systray
         tooltip: qsTr("Loki Network")
-        visible: !notray
+        visible: platformDetails.hasSysTray();
         iconSource: "qrc:/res/images/icon.svg"
 
         menu: Menu {
@@ -109,7 +109,7 @@ ApplicationWindow {
             }
             MenuItem {
                 text: qsTr("Hide")
-                visible: (platformDetails.isDebug() || platformDetails.isLinux())
+                // visible: (platformDetails.isDebug() || platformDetails.isLinux())
                 onTriggered: {
                     window.visible = false;
                 }
@@ -161,11 +161,12 @@ ApplicationWindow {
 
                 // right click
                 case SystemTrayIcon.Context:
-                    systrayMenu.open();
+                    window.openSysTray();
                     break;
-
                 // left click
                 case SystemTrayIcon.Trigger:
+                    window.display();
+                    break;
                 case SystemTrayIcon.DoubleClick:
 
                     // Qt on MacOS only gives us one event to work with, namely
