@@ -42,7 +42,7 @@ Container {
 
         fillMode: Image.PreserveAspectFit
 
-        source: "qrc:/res/images/banner.png"
+        source: "qrc:/res/images/banner.svg"
         smooth: true
     }
 }
