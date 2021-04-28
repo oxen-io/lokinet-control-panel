@@ -1,12 +1,12 @@
 #pragma once
 
 
-#include <lokimq/lokimq.h>
+#include <oxenmq/oxenmq.h>
 
 
 constexpr auto LOKINET_RPC_URL = "tcp://127.0.0.1:1190";
 
 extern std::string RPCURL;
 
-extern lokimq::LokiMQ lmq;
-extern std::optional<lokimq::ConnectionID> lmq_conn;
+extern oxenmq::OxenMQ lmq;
+extern std::optional<oxenmq::ConnectionID> lmq_conn;

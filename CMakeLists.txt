@@ -34,16 +34,16 @@ if(BUILD_STATIC_DEPS)
   include(StaticBuild)
   add_subdirectory(external/loki-mq)
 else()
-  add_library(lokimq INTERFACE)
-  if(LOKIMQ_LIBRARIES) # Private option for the macos bundled gui build
-    target_link_libraries(lokimq INTERFACE ${LOKIMQ_LIBRARIES})
-    target_include_directories(lokimq INTERFACE ${LOKIMQ_INCLUDE_DIRS})
+  add_library(oxenmq INTERFACE)
+  if(OXENMQ_LIBRARIES) # Private option for the macos bundled gui build
+    target_link_libraries(oxenmq INTERFACE ${OXENMQ_LIBRARIES})
+    target_include_directories(oxenmq INTERFACE ${OXENMQ_INCLUDE_DIRS})
   else()
     find_package(PkgConfig REQUIRED)
-    pkg_check_modules(lokimq REQUIRED liblokimq>=1.2.2 IMPORTED_TARGET)
-    target_link_libraries(lokimq INTERFACE PkgConfig::lokimq)
+    pkg_check_modules(oxenmq REQUIRED liboxenmq>=1.2.2 IMPORTED_TARGET)
+    target_link_libraries(oxenmq INTERFACE PkgConfig::oxenmq)
   endif()
-  add_library(lokimq::lokimq ALIAS lokimq)
+  add_library(oxenmq::oxenmq ALIAS oxenmq)
 endif()
 
 find_package(Qt5 COMPONENTS Qml Quick Widgets Charts Svg REQUIRED)
@@ -65,7 +65,7 @@ add_executable(lokinet-gui
 target_link_libraries(lokinet-gui PRIVATE
     Qt5::Core Qt5::Qml Qt5::Quick Qt5::Widgets Qt5::Charts Qt5::Svg
     Threads::Threads
-    lokimq::lokimq
+    oxenmq
     )
 
 if (WIN32)

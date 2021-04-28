@@ -17,8 +17,8 @@ constexpr bool isSystemd = true;
 constexpr bool isSystemd = false;
 #endif
 
-lokimq::LokiMQ lmq{};
-std::optional<lokimq::ConnectionID> lmq_conn;
+oxenmq::OxenMQ lmq{};
+std::optional<oxenmq::ConnectionID> lmq_conn;
 std::string RPCURL{LOKINET_RPC_URL};
 
 int32_t main(int32_t argc, char *argv[])
@@ -62,7 +62,7 @@ int32_t main(int32_t argc, char *argv[])
         return;
       lmq.connect_remote(
         RPCURL,
-        [](lokimq::ConnectionID conn)
+        [](oxenmq::ConnectionID conn)
         {
           lmq_conn = conn;
         },

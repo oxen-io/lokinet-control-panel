@@ -2,7 +2,7 @@
 
 ![Screenshot](../media/images/lokinet_ui_screenshot.png?raw=true)
 
-This repository contains a cross-platform GUI for controlling and observing stats from a locally-running `lokinet`. See also [loki-network](https://github.com/loki-project/loki-network).
+This repository contains a cross-platform GUI for controlling and observing stats from a locally-running `lokinet`. See also [loki-network](https://github.com/oxen-io/loki-network).
 
 There is also an option (`Bootstrap Client from Web`) in the system tray's context menu (except when compiled with `SYSTEMD=true`, as is the case in the Debian packages). This will download a bootstrap file which will allow the `lokinet` client to join the lokinet network.
 
@@ -36,7 +36,7 @@ Note that interactions with systemd may require privilege escalation, which is h
 
 ### Windows
 
-Nightly Windows builds are available via [Continous Integration](https://builds.lokinet.dev/loki-project/loki-network-control-panel/master/).
+Nightly Windows builds are available via [Continous Integration](https://builds.lokinet.dev/oxen-io/loki-network-control-panel/master/).
 
 ### MacOS
 
