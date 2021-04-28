@@ -1,3 +1,17 @@
+loki-network-control-panel (0.3.6-1~ubuntu1804) bionic; urgency=medium
+
+  [ jahway603 ]
+  * fixed broken weblink
+
+  [ Jeff Becker ]
+  * lokimq -> oxenmq
+  * bump submodule
+  * use clang-11 on sid
+  * use clang-11 on sid
+  * rebrand
+
+ -- Jason Rhinelander <jason@imaginary.ca>  Tue, 27 Apr 2021 22:36:31 -0300
+
 loki-network-control-panel (0.3.5-1~ubuntu1804) bionic; urgency=medium
 
   [ Jeff Becker ]
