@@ -1,4 +1,4 @@
-loki-network-control-panel (0.3.6-1) unstable; urgency=medium
+loki-network-control-panel (0.3.6-1~deb11) bullseye; urgency=medium
 
   [ jahway603 ]
   * fixed broken weblink
