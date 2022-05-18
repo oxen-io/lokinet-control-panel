@@ -14,3 +14,7 @@ override_dh_auto_configure:
 override_dh_auto_install:
 	dh_auto_install
 	./debian/make-icons.sh
+
+# Ubuntu's default zstd compression for control, data is not well supported outside Ubuntu:
+override_dh_builddeb:
+	dh_builddeb -- -Zxz
